@@ -112,7 +112,7 @@ author:
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-       url: "mailto:taehun5508@gmail.com"
+      url: "mailto:taehun5508@gmail.com"
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
@@ -140,7 +140,7 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-       url: https://github.com/minchoCoin
+      url: https://github.com/minchoCoin
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url: 
