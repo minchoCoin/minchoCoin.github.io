@@ -1,1 +1,1 @@
-# minchoCoin.github.io
+# this is my minchocoin page
