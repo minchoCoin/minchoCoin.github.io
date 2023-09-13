@@ -18,13 +18,13 @@ minimal_mistakes_skin    :  "default" # "air" , "aqua", "contrast", "dark", "dir
 locale                   : "ko-KR"
 title                    : "programming archive"
 title_separator          : "-"
-subtitle                 : hello world! # site tagline that appears below site title in masthead
+subtitle                 : "hello world!" # site tagline that appears below site title in masthead
 name                     : "Taehun Kim"
 description              : "An amazing website."
 url                      : "https://minchocoin.github.io/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : "/posts" # the subpath of your site, e.g. "/blog"
-repository               : minchoCoin/minchoCoin.github.io # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : /assets/images/technology-1283624_1280.jpg # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+baseurl                  :  "/posts" # the subpath of your site, e.g. "/blog"
+repository               : "minchoCoin/minchoCoin.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+teaser                   : "/assets/images/technology-1283624_1280.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
@@ -32,7 +32,7 @@ words_per_minute         : 250
 comments:
   provider               : "disqus" #, "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
   disqus:
-    shortname            : minchocoin # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : "minchocoin" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -105,7 +105,7 @@ analytics:
 # Site Author
 author:
   name             : "Taehun Kim"
-  avatar           : /assets/images/laptop-2838918_1280.jpg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/laptop-2838918_1280.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Just Do it"
   location         : "Somewhere"
   email            :
@@ -140,7 +140,7 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: https://github.com/minchoCoin
+      url: "https://github.com/minchoCoin"
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url: 
