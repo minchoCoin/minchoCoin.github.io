@@ -1,7 +1,7 @@
 ---
 title: "test categories"
 layout: archive
-permalink: /test
+permalink: /categories/test
 ---
 
 

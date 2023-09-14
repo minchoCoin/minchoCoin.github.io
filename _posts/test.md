@@ -8,6 +8,10 @@ tags:
 
 toc: true
 toc_label: "My Table of Contents"
+permalink: categories/test
+author_profile: true
+sidebar_main: true
+
 ---
 1. Lorem
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum, massa eget fringilla semper, nunc felis ultrices nunc, sit amet lacinia nisi orci eget nisl. Nullam sed convallis turpis, a consequat sapien. Donec malesuada nunc id libero fermentum, sed condimentum purus ornare. Phasellus consequat pharetra turpis, tristique pretium massa mattis eget. Praesent eget dui iaculis, pulvinar metus sodales, blandit nisi. Praesent eu urna metus. Cras pharetra velit pharetra tincidunt congue. Nulla aliquam nulla eget metus venenatis, nec dapibus nisl varius. Suspendisse vitae purus mauris. Nunc ac est elit. Maecenas ac posuere urna. Pellentesque eu augue vestibulum, vestibulum arcu id, venenatis erat. Ut at varius leo. Praesent sed urna tincidunt urna porta pellentesque at et orci.
