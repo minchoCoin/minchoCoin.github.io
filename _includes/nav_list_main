@@ -18,13 +18,13 @@
                 <!--Cpp 카테고리 글들을 모아둔 페이지인 /categories/cpp 주소의 글로 링크 연결-->
                 <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
                 {% for category in site.categories %}
-                    {% if category[0] == "test" %}
+                    {% if category[0] == "test_cat" %}
                         <li><a href="/categories/test" class="">test1 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% for category in site.categories %}
-                    {% if category[0] == "test2" %}
+                    {% if category[0] == "test2_cat" %}
                         <li><a href="/categories/test2" class="">test2 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
