@@ -19,7 +19,13 @@
                 <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
                 {% for category in site.categories %}
                     {% if category[0] == "test" %}
-                        <li><a href="/categories/test" class="">test123 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/test" class="">test1 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% for category in site.categories %}
+                    {% if category[0] == "test2" %}
+                        <li><a href="/categories/test2" class="">test2 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
