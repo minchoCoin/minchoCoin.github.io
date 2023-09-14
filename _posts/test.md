@@ -8,7 +8,6 @@ tags:
 
 toc: true
 toc_label: "My Table of Contents"
-permalink: categories/test
 author_profile: true
 sidebar_main: true
 
