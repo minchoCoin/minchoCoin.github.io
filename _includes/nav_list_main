@@ -37,7 +37,7 @@
 
                 {% for category in site.categories %}
                     {% if category[0] == "programmers" %}
-                        <li><a href="/categories/programmers" class="">test2 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/programmers" class="">프로그래머스 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
