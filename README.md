@@ -90,6 +90,7 @@ tags:
     - test_tag
 
 toc: true
+toc_sticky: true
 toc_label: "My Table of Contents"
 author_profile: true
 sidebar_main: true
