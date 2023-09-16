@@ -6,6 +6,7 @@
  - https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
 
  - https://github.com/dvhart/dvhart.github.io/commit/05b076b63fd6b758c020770a4f8d9ca0cd2ef28e
+  - https://github.com/mmistakes/minimal-mistakes/issues/892
 ## 새로운 리스트 만들기(메모)
  - origin: https://ansohxxn.github.io/blog/category/
 
