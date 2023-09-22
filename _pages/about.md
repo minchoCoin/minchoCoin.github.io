@@ -8,4 +8,12 @@ sidebar_main: true
 layout: single
 ---
 # Taehun Kim
+## Contact
+ - <taehun5508@gmail.com>
+## Education
+### Pusan National University
+#### Computer Science and Engineering •2019 - present
+
+## Github
+ - [https://github.com/minchoCoin](https://github.com/minchoCoin)
 
