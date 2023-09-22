@@ -68,6 +68,12 @@
                         <li><a href="/categories/microc-os-stm32" class="">microC-OS-iii-STM32 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
+
+                {% for category in site.categories %}
+                    {% if category[0] == "stm32f107vc" %}
+                        <li><a href="/categories/stm32f107vc" class="">STM32F107VC 실험 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
             <span class="nav__sub-title">test_subtitle</span>
             <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
