@@ -37,6 +37,12 @@
                         <li><a href="/categories/hon-gong-machine" class="">혼자공부하는 머신러닝+딥러닝 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
+
+                {% for category in site.categories %}
+                    {% if category[0] == "alzza-deeplearning" %}
+                        <li><a href="/categories/alzza-deeplearning" class="">파이썬 날코딩으로 알고 짜는 딥러닝 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
 
             <span class="nav__sub-title">컴퓨터 과학</span>
@@ -65,7 +71,7 @@
 
                 {% for category in site.categories %}
                     {% if category[0] == "microc-os-stm32" %}
-                        <li><a href="/categories/microc-os-stm32" class="">microC-OS-iii-STM32 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/microc-os-stm32" class="">μC-OS-III-STM32 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
 
