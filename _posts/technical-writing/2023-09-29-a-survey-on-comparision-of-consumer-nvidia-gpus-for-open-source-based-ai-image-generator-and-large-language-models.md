@@ -13,7 +13,7 @@ author_profile: true
 
 
 ---
-저자 : 전기 컴퓨터공학부 정보컴퓨터공학전공 김태훈
+저자 : 전기컴퓨터공학부 정보컴퓨터공학전공 김태훈
 
 <span style="font-size:150%">A Survey on comparison of consumer NVIDIA GPUs for Open Source based AI Image Generator and Large Language Models(LLM)</span> <br>
 
