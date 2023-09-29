@@ -192,32 +192,31 @@ Table5에서 알 수 있듯, LLaMA를 실행하여 Tokens/sec을 측정하였을
 [1] 대형 언어 모델, 위키 백과 [https://ko.wikipedia.org/wiki/%EB%8C%80%ED%98%95_%EC%96%B8%EC%96%B4_%EB%AA%A8%EB%8D%B8](https://ko.wikipedia.org/wiki/%EB%8C%80%ED%98%95_%EC%96%B8%EC%96%B4_%EB%AA%A8%EB%8D%B8) <br>
 [2] Aditya Ramesh , Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea Voss, Alec Radford, Mark Chen, Ilya Sutskever, “Zero-Shot Text-to-Image Generation”, arXiv:2102.12092v2 [cs.CV] 26 Feb 2021, [https://arxiv.org/pdf/2102.12092.pdf](https://arxiv.org/pdf/2102.12092.pdf)<br>
 [3] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, Mark Chen, Hierarchical Text-Conditional Image Generation with CLIP Latents, arXiv:2204.06125v1 [cs.CV] 13 Apr 2022, [https://arxiv.org/pdf/2204.06125.pdf](https://arxiv.org/pdf/2204.06125.pdf)<br>
-[4] [https://docs.novelai.net/image.html](https://docs.novelai.net/image.html)
+[4] [https://docs.novelai.net/image.html](https://docs.novelai.net/image.html)<br>
 [5] 김도원, 김성훈, 이재광, 박정훈, 김병재, 정태인, 최은아 ,[KISA Insight 2023 Vol.03] ChatGPT(챗GPT) 보안 위협과 시사점,한국인터넷진흥원
-[https://www.kisa.or.kr/20301/form?postSeq=18&page=1](https://www.kisa.or.kr/20301/form?postSeq=18&page=1)
-[6]William Stallings 저, 김종현 역, “컴퓨터시스템구조론”10판, 성진미디어, 2018
-[7][ https://www.nvidia.com/content/cudazone/download/opencl/nvidia_opencl_programmingguide.pdf]( https://www.nvidia.com/content/cudazone/download/opencl/nvidia_opencl_programmingguide.pdf)
-[8] 코드 출처는 다음과 같다. [https://elice.io/newsroom/gpu_definition_and_exampless](https://elice.io/newsroom/gpu_definition_and_exampless)
-[9] [https://datamadness.github.io/TensorFlow2-CPU-vs-GPU](https://datamadness.github.io/TensorFlow2-CPU-vs-GPU)
+[https://www.kisa.or.kr/20301/form?postSeq=18&page=1](https://www.kisa.or.kr/20301/form?postSeq=18&page=1)<br>
+[6]William Stallings 저, 김종현 역, “컴퓨터시스템구조론”10판, 성진미디어, 2018<br>
+[7][ https://www.nvidia.com/content/cudazone/download/opencl/nvidia_opencl_programmingguide.pdf]( https://www.nvidia.com/content/cudazone/download/opencl/nvidia_opencl_programmingguide.pdf)<br>
+[8] 코드 출처는 다음과 같다. [https://elice.io/newsroom/gpu_definition_and_exampless](https://elice.io/newsroom/gpu_definition_and_exampless)<br>
+[9] [https://datamadness.github.io/TensorFlow2-CPU-vs-GPU](https://datamadness.github.io/TensorFlow2-CPU-vs-GPU)<br>
 [10] 김경림 기자,” [데이터로 본 엔베디아- ②] 파이 크기의 딜레마… GPU 시장 독점해야”, 연합인포맥스,
-[https://news.einfomax.co.kr/news/articleView.html?idxno=4269373](https://news.einfomax.co.kr/news/articleView.html?idxno=4269373)
-[11] [https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html](https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html)
-[12] [https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/](https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/)
-[13] 박상수, 이원혁, 정기석, “GPU에 내장된 행렬 연산에 특화된 코어를 사용한 인공 신경망의 가속”, [ http://esoc.hanyang.ac.kr/publications/2020/domestic-20-4.pdf](http://esoc.hanyang.ac.kr/publications/2020/domestic-20-4.pdf)
-[14] [https://en.wikipedia.org/wiki/GeForce_40_series](https://en.wikipedia.org/wiki/GeForce_40_series)
-[15] [https://en.wikipedia.org/wiki/GeForce_30_series](https://en.wikipedia.org/wiki/GeForce_30_series)
+[https://news.einfomax.co.kr/news/articleView.html?idxno=4269373](https://news.einfomax.co.kr/news/articleView.html?idxno=4269373)<br>
+[11] [https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html](https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html)<br>
+[12] [https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/](https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/)<br>
+[13] 박상수, 이원혁, 정기석, “GPU에 내장된 행렬 연산에 특화된 코어를 사용한 인공 신경망의 가속”, [ http://esoc.hanyang.ac.kr/publications/2020/domestic-20-4.pdf](http://esoc.hanyang.ac.kr/publications/2020/domestic-20-4.pdf)<br>
+[14] [https://en.wikipedia.org/wiki/GeForce_40_series](https://en.wikipedia.org/wiki/GeForce_40_series)<br>
+[15] [https://en.wikipedia.org/wiki/GeForce_30_series](https://en.wikipedia.org/wiki/GeForce_30_series)<br>
 [16] Robin Rombach,  Andreas Blattmann , Dominik Lorenz, Patrick Esser ,Bjorn Ommer , “High-Resolution Image Synthesis with Latent Diffusion Models”, arXiv:2112.10752v2 [cs.CV] 13 Apr 2022, [https://arxiv.org/pdf/2112.10752.pdf
-](https://arxiv.org/pdf/2112.10752.pdf
-)
+](https://arxiv.org/pdf/2112.10752.pdf)<br>
 [17] Training cost for Stable Diffusion was just $600,000 and that is a good sign for AI progress, the decoder,
-[https://the-decoder.com/training-cost-for-stable-diffusion-was-just-600000-and-that-is-a-good-sign-for-ai-progress/](https://the-decoder.com/training-cost-for-stable-diffusion-was-just-600000-and-that-is-a-good-sign-for-ai-progress/)
-[18] [https://stability.ai/blog/stable-diffusion-public-release](https://stability.ai/blog/stable-diffusion-public-release)
-[19] Alec Radford , Jong Wook Kim , Chris Hallacy , Aditya Ramesh , Gabriel Goh , Sandhini Agarwal , Girish Sastry , Amanda Askell , Pamela Mishkin , Jack Clark , Gretchen Krueger , Ilya Sutskever , “Learning Transferable Visual Models From Natural Language Supervision”, arXiv:2103.00020v1 [cs.CV] 26 Feb 2021, [https://arxiv.org/pdf/2103.00020.pdf](https://arxiv.org/pdf/2103.00020.pdf)
-[20] [https://en.wikipedia.org/wiki/Stable_Diffusion](https://en.wikipedia.org/wiki/Stable_Diffusion)
-[21] Hugo Touvron , Thibaut Lavril , Gautier Izacard , Xavier Martinet Marie-Anne Lachaux, Timothee Lacroix, Baptiste Rozière, Naman Goyal Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin Edouard Grave , Guillaume Lample,” LLaMA: Open and Efficient Foundation Language Models”, arXiv:2302.13971v1 [cs.CL] 27 Feb 2023 ,[https://arxiv.org/pdf/2302.13971.pdf](https://arxiv.org/pdf/2302.13971.pdf)
+[https://the-decoder.com/training-cost-for-stable-diffusion-was-just-600000-and-that-is-a-good-sign-for-ai-progress/](https://the-decoder.com/training-cost-for-stable-diffusion-was-just-600000-and-that-is-a-good-sign-for-ai-progress/)<br>
+[18] [https://stability.ai/blog/stable-diffusion-public-release](https://stability.ai/blog/stable-diffusion-public-release)<br>
+[19] Alec Radford , Jong Wook Kim , Chris Hallacy , Aditya Ramesh , Gabriel Goh , Sandhini Agarwal , Girish Sastry , Amanda Askell , Pamela Mishkin , Jack Clark , Gretchen Krueger , Ilya Sutskever , “Learning Transferable Visual Models From Natural Language Supervision”, arXiv:2103.00020v1 [cs.CV] 26 Feb 2021, [https://arxiv.org/pdf/2103.00020.pdf](https://arxiv.org/pdf/2103.00020.pdf)<br>
+[20] [https://en.wikipedia.org/wiki/Stable_Diffusion](https://en.wikipedia.org/wiki/Stable_Diffusion)<br>
+[21] Hugo Touvron , Thibaut Lavril , Gautier Izacard , Xavier Martinet Marie-Anne Lachaux, Timothee Lacroix, Baptiste Rozière, Naman Goyal Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin Edouard Grave , Guillaume Lample,” LLaMA: Open and Efficient Foundation Language Models”, arXiv:2302.13971v1 [cs.CL] 27 Feb 2023 ,[https://arxiv.org/pdf/2302.13971.pdf](https://arxiv.org/pdf/2302.13971.pdf)<br>
 
-[22] Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi ,Yasmine Babaei ,Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale ,Dan Bikel, Lukas Blecher, Cristian Canton, Ferrer Moya, Chen Guillem, Cucurull David, Esiobu Jude, Fernandes Jeremy ,Fu Wenyin, Fu Brian, Fuller Cynthia, Gao Vedanuj, Goswami Naman, Goyal Anthony ,Hartshorn Saghar, Hosseini Rui, Hou Hakan, Inan Marcin ,Kardas Viktor, Kerkez Madian ,Khabsa Isabel, Kloumann Artem ,Korenev Punit ,Singh Koura ,Marie-Anne Lachaux ,Thibaut Lavril, Jenya Lee ,Diana Liskovich, Yinghai Lu ,Yuning Mao, Xavier Martinet ,Todor Mihaylov, Pushkar Mishra, Igor Molybog ,Yixin Nie, Andrew Poulton, Jeremy Reizenstein ,Rashi Rungta, Kalyan Saladi, Alan Schelten ,Ruan Silva ,Eric Michael, Smith Ranjan ,Subramanian Xiaoqing, Ellen Tan, Binh Tang, Ross Taylor ,Adina Williams ,Jian Xiang ,Kuan Puxin ,Xu Zheng, Yan Iliyan ,Zarov Yuchen, Zhang Angela, Fan Melanie, Kambadur Sharan, Narang Aurelien, Rodriguez Robert, Stojnic Sergey, Edunov Thomas Scialom,” Llama 2: Open Foundation and Fine-Tuned Chat Models”, arXiv:2307.09288v2 [cs.CL] 19 Jul 2023, [https://arxiv.org/pdf/2307.09288.pdf](https://arxiv.org/pdf/2307.09288.pdf)
-[23] [https://pytorch.org/blog/introduction-to-quantization-on-pytorch/](https://pytorch.org/blog/introduction-to-quantization-on-pytorch/)
-[24] [https://www.tomshardware.com/news/stable-diffusion-gpu-benchmarks](https://www.tomshardware.com/news/stable-diffusion-gpu-benchmarks)
-[25] [https://github.com/facebookresearch/xformers](https://github.com/facebookresearch/xformers)
-[26] [https://www.tomshardware.com/news/running-your-own-chatbot-on-a-single-gpu](https://www.tomshardware.com/news/running-your-own-chatbot-on-a-single-gpu)
+[22] Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi ,Yasmine Babaei ,Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale ,Dan Bikel, Lukas Blecher, Cristian Canton, Ferrer Moya, Chen Guillem, Cucurull David, Esiobu Jude, Fernandes Jeremy ,Fu Wenyin, Fu Brian, Fuller Cynthia, Gao Vedanuj, Goswami Naman, Goyal Anthony ,Hartshorn Saghar, Hosseini Rui, Hou Hakan, Inan Marcin ,Kardas Viktor, Kerkez Madian ,Khabsa Isabel, Kloumann Artem ,Korenev Punit ,Singh Koura ,Marie-Anne Lachaux ,Thibaut Lavril, Jenya Lee ,Diana Liskovich, Yinghai Lu ,Yuning Mao, Xavier Martinet ,Todor Mihaylov, Pushkar Mishra, Igor Molybog ,Yixin Nie, Andrew Poulton, Jeremy Reizenstein ,Rashi Rungta, Kalyan Saladi, Alan Schelten ,Ruan Silva ,Eric Michael, Smith Ranjan ,Subramanian Xiaoqing, Ellen Tan, Binh Tang, Ross Taylor ,Adina Williams ,Jian Xiang ,Kuan Puxin ,Xu Zheng, Yan Iliyan ,Zarov Yuchen, Zhang Angela, Fan Melanie, Kambadur Sharan, Narang Aurelien, Rodriguez Robert, Stojnic Sergey, Edunov Thomas Scialom,” Llama 2: Open Foundation and Fine-Tuned Chat Models”, arXiv:2307.09288v2 [cs.CL] 19 Jul 2023, [https://arxiv.org/pdf/2307.09288.pdf](https://arxiv.org/pdf/2307.09288.pdf)<br>
+[23] [https://pytorch.org/blog/introduction-to-quantization-on-pytorch/](https://pytorch.org/blog/introduction-to-quantization-on-pytorch/)<br>
+[24] [https://www.tomshardware.com/news/stable-diffusion-gpu-benchmarks](https://www.tomshardware.com/news/stable-diffusion-gpu-benchmarks)<br>
+[25] [https://github.com/facebookresearch/xformers](https://github.com/facebookresearch/xformers)<br>
+[26] [https://www.tomshardware.com/news/running-your-own-chatbot-on-a-single-gpu](https://www.tomshardware.com/news/running-your-own-chatbot-on-a-single-gpu)<br>
