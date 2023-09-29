@@ -103,7 +103,8 @@ Abstract - The era of artificial intelligence has opened with AI Image Generator
 &nbsp;Stable Diffusion의 훈련 데이터는 약 50억개의 이미지 텍스트 쌍으로, 공개적으로 사용 가능한 데이터 세트 LAION-5B에서 가져온 것으로 알려져 있으며, Pinterest, WordPress, Blogspot, DeviantArt, Wikimedia Commons 등에 있는 이미지로 구성되어 있다[20].<br>
 
 &nbsp;Stable Diffusion의 기능은 텍스트를 이미지로 생성하는 기능과 이미지 수정 기능이 있다. 
-텍스트를 이미지로 생성하는 기능은 텍스트를 입력하면 이미지를 출력하는 기능이고 이미지 수정 기능은, 이미지의 해상도를 올리거나, 그림의 화풍을 바꿀 수 있다. 이런 기능을 사용할 때 이미지 생성에 영향을 주는 시드 값과 추론 단계 수(step)을 조정할 수 있다. 시드 값은 random noise에 사용되며, 따라서 같은 seed는 같은 random noise를 발생시키고, 이는 같은 프롬프트에 대해 같은 이미지를 생성한다.  추론 단계수는 noise를 제거하는 단계 수이며, 높이면 더 많은 시간이 들고 너무 낮으면 원하는 이미지가 나오지 않을 수 있다. 또한 Stable diffusion을 로컬 브라우저에서 실행할 수 있는 Stable Diffusion WebUI의 경우Negative prompt를 이용해 빼고 싶은 특성을 입력할 수도 있고, Batch size를 통해 한번에 생성할 이미지 개수를 조정할 수 있다.
+텍스트를 이미지로 생성하는 기능은 텍스트를 입력하면 이미지를 출력하는 기능이고 이미지 수정 기능은, 이미지의 해상도를 올리거나, 그림의 화풍을 바꿀 수 있다. 이런 기능을 사용할 때 이미지 생성에 영향을 주는 시드 값과 추론 단계 수(step)을 조정할 수 있다. 시드 값은 random noise에 사용되며, 따라서 같은 seed는 같은 random noise를 발생시키고, 이는 같은 프롬프트에 대해 같은 이미지를 생성한다.  <br>
+&nbsp;추론 단계수는 noise를 제거하는 단계 수이며, 높이면 더 많은 시간이 들고 너무 낮으면 원하는 이미지가 나오지 않을 수 있다. 또한 Stable diffusion을 로컬 브라우저에서 실행할 수 있는 Stable Diffusion WebUI의 경우Negative prompt를 이용해 빼고 싶은 특성을 입력할 수도 있고, Batch size를 통해 한번에 생성할 이미지 개수를 조정할 수 있다.
 
 ### 오픈 소스 기반의 거대 언어 모델, LLaMA
 &nbsp;오픈 소스 기반의 거대 언어 모델은 LLaMA가 있다. LLaMA는 Meta의 오픈소스 언어모델로서 기사, 시, 이야기, 여러 질문에 대한 답변, 소스코드 등을 생성할 수 있다. 현재 LLaMA-1[21]과 LLaMA-2[22] 가 공개되어 있다. LLaMA-1은 파라미터가 7B, 13B, 33B, 66B개 등을 가진 모델이 있고, LLaMA-2는 7B, 13B, 70B개의 파라미터를 가진 모델이 있다. 또한 각각 4bit양자화 모드와 8bit 양자화 모드가 있는데, 이는 모델의 파라미터를 32bit 부동소수점에서 4bit/8bit 정수로 양자화하여 계산과 메모리 access 속도를 높이는 기법이다.이 역시 로컬에서 돌릴 수 있다[23].<br>
