@@ -13,13 +13,13 @@ author_profile: true
 
 
 ---
-저자 : 전기컴퓨터공학부 정보컴퓨터공학전공 김태훈
+저자 : 부산대학교 전기컴퓨터공학부 정보컴퓨터공학전공 김태훈
 
 <span style="font-size:150%">A Survey on comparison of consumer NVIDIA GPUs for Open Source based AI Image Generator and Large Language Models(LLM)</span> <br>
 
 요약 – 그림 인공지능과 거대 언어모델로 인공지능 시대가 열렸다. 이러한 모델을 실행하는데 있어서 ChatGPT 같은 것이 있어 웹에서 편리하게 실행할 수 있지만, 회사 등에서는 정보유출 등의 이유로 로컬에서 실행할 필요가 있다. 최근 Stable Diffusion과 LLaMA 등의 오픈소스 모델공개로, 인터넷 연결없이 그림 인공지능과 거대 언어모델을 사용할 수 있게 되었다. 그러나 로컬에서 실행하기 위해서는 행렬 연산과 부동 소수점 연산에 특화된 GPU가 필요하다. 본 서베이에서는 Stable Diffusion과 LLaMA-13b 4bit를 실행하는데 어떤 GPU가 좋고 GPU간 성능 차이와 가격 대비 성능과 가격 상승분과 성능 상승분이 비슷할지 알아보고자 한다.
 
-Abstract - The era of artificial intelligence has opened with AI Image Generator and Large Language Models. In executing these models, there is something like ChatGPT that can be conveniently executed on the web, but companies and others need to run them locally for reasons such as information leakage. With the recent disclosure of open-source models such as Stable Diffusion and LLAMA, AI Image Generator and Large Language Models can be used without internet connection. However, to run locally, a GPU, specialized in matrix operations and floating point operations, is required. In this survey, we identified which GPU is good for running Stable Diffusion and LLaMA-13b 4bit and whether the difference in performance between GPUs and the increase in performance versus price and the increase in performance are similar.
+Abstract - The era of artificial intelligence has opened with AI Image Generator and Large Language Models. In running these models, there is something like ChatGPT that can be conveniently executed on the web, but companies and others need to run them locally for reasons such as information leakage. With the recent disclosure of open-source models such as Stable Diffusion and LLAMA, AI Image Generator and Large Language Models can be used without internet connection. However, to run locally, a GPU, specialized in matrix operations and floating point operations, is required. In this survey, we identified which GPU is good for running Stable Diffusion and LLaMA-13b 4bit and whether the difference in performance between GPUs, the increase in performance versus price, the increase in performance are similar.
 
 # 서론
 &nbsp;그림 인공지능(AI Image Generator)과 거대 언어 모델(Large Language Model)은 인공지능 시대를 연 인공지능의 대표분야들이다. 그림 인공지능은 생성적 적대 신경망(Generative Adversarial Network)를 이용하여 이미지를 생성하는 인공지능 기술이다. 그리고 거대 언어 모델은 수많은 파라미터를 보유한 인공 신경망으로 구성되는 언어 모델[1] (입력된 자연어를 기반으로 가장 적절한 글자를 출력하는 모델)이다.
@@ -104,7 +104,7 @@ Abstract - The era of artificial intelligence has opened with AI Image Generator
 
 &nbsp;Stable Diffusion의 기능은 텍스트를 이미지로 생성하는 기능과 이미지 수정 기능이 있다. 
 텍스트를 이미지로 생성하는 기능은 텍스트를 입력하면 이미지를 출력하는 기능이고 이미지 수정 기능은, 이미지의 해상도를 올리거나, 그림의 화풍을 바꿀 수 있다. 이런 기능을 사용할 때 이미지 생성에 영향을 주는 시드 값과 추론 단계 수(step)을 조정할 수 있다. 시드 값은 random noise에 사용되며, 따라서 같은 seed는 같은 random noise를 발생시키고, 이는 같은 프롬프트에 대해 같은 이미지를 생성한다.  <br>
-&nbsp;추론 단계수는 noise를 제거하는 단계 수이며, 높이면 더 많은 시간이 들고 너무 낮으면 원하는 이미지가 나오지 않을 수 있다. 또한 Stable diffusion을 로컬 브라우저에서 실행할 수 있는 Stable Diffusion WebUI의 경우Negative prompt를 이용해 빼고 싶은 특성을 입력할 수도 있고, Batch size를 통해 한번에 생성할 이미지 개수를 조정할 수 있다.
+&nbsp;추론 단계수는 noise를 제거하는 단계 수이며, 높이면 더 많은 시간이 들고 너무 낮으면 원하는 이미지가 나오지 않을 수 있다. 또한 Stable diffusion을 오프라인에서 브라우저에서 실행할 수 있는 Stable Diffusion WebUI의 경우Negative prompt를 이용해 빼고 싶은 특성을 입력할 수도 있고, Batch size를 통해 한번에 생성할 이미지 개수를 조정할 수 있다.
 
 ### 오픈 소스 기반의 거대 언어 모델, LLaMA
 &nbsp;오픈 소스 기반의 거대 언어 모델은 LLaMA가 있다. LLaMA는 Meta의 오픈소스 언어모델로서 기사, 시, 이야기, 여러 질문에 대한 답변, 소스코드 등을 생성할 수 있다. 현재 LLaMA-1[21]과 LLaMA-2[22] 가 공개되어 있다. LLaMA-1은 파라미터가 7B, 13B, 33B, 66B개 등을 가진 모델이 있고, LLaMA-2는 7B, 13B, 70B개의 파라미터를 가진 모델이 있다. 또한 각각 4bit양자화 모드와 8bit 양자화 모드가 있는데, 이는 모델의 파라미터를 32bit 부동소수점에서 4bit/8bit 정수로 양자화하여 계산과 메모리 access 속도를 높이는 기법이다.이 역시 로컬에서 돌릴 수 있다[23].<br>
@@ -161,7 +161,7 @@ Table4에서 알 수 있듯, image resolution에서 RTX 4090이 3.641로 가장 
 
 ### GPU 별 LLaMA 성능
 
-아래 Table5[26][14][15]는 LLaMA-13b 4-bit mode를 Text Generation Web UI라는 LLaMA를 쉽게 로컬 웹 브라우저에서 실행할 수 있는 환경에서 실행하여 400개 이상의 토큰을 생성했을 때 초당 token생성 개수이다. 아래 벤치마크를 실행한 환경은 Intel Core i9-12900K(CPU), MSI Pro Z690-A WiFi DDR4(Motherboard), Corsair 2x16GB DDR4-3600 CL16(Main Memory), Crucial P5 Plus 2TB(SSD), Windows 11 Pro 64bit(OS) 등이다.
+아래 Table5[26][14][15]는 LLaMA-13b 4-bit mode를 Text Generation Web UI라는 LLaMA를 쉽게 오프라인에서 웹 브라우저에서 실행할 수 있는 환경에서 실행하여 400개 이상의 토큰을 생성했을 때 초당 token생성 개수이다. 아래 벤치마크를 실행한 환경은 Intel Core i9-12900K(CPU), MSI Pro Z690-A WiFi DDR4(Motherboard), Corsair 2x16GB DDR4-3600 CL16(Main Memory), Crucial P5 Plus 2TB(SSD), Windows 11 Pro 64bit(OS) 등이다.
 
 | GPU           | Tokens/sec | 가격(US Dollar) | 가격당 성능(Tokens/sec/USDollar)(소수점 5째자리에서 반올림) | RTX 3060 대비 Tokens/sec(단위: 배, 3째자리에서 반올림) |
 | ------------- | ---------- | ------------- | ------------------------------------------- | ---------------------------------------- |
