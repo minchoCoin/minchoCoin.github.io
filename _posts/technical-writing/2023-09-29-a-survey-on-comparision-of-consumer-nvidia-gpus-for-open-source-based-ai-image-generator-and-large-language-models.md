@@ -175,6 +175,8 @@ Table4에서 알 수 있듯, image resolution에서 RTX 4090이 3.641로 가장 
 | RTX 3080      | 19.8       | 699           | 0.0283                                      | 1.02                                     |
 | RTX 3060      | 19.48      | 329           | 0.0592                                      | 1                                        |
 
+(Table 5.GPU 별 Generated Tokens per sec by LLaMA-13B.)
+
 Table5에서 알 수 있듯, LLaMA를 실행하여 Tokens/sec을 측정하였을 때RTX 4090이 25.82로 가장 높고, RTX 3060이 19.48로 가장 낮다. 가격당 성능은 RTX 3060이 0.0592로 가장 높고, RTX 3090Ti가 0.0107로 가장 낮다. RTX 4090은 RTX 3060대비 1.33배 더 높은 초당 토큰 수를 보여주었다.
 
 # 결론
