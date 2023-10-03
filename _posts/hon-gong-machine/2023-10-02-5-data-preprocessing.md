@@ -140,3 +140,7 @@ plt.show()
 ![scatter of kneighbors,bream and smelt data](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/a118cc98-0b80-4b45-91ee-35ae267214dd)
 
 이제 삼각형(새로운 데이터)에 가장 가까운 샘플을 도미라고 계산한다.
+
+# Reference
+ - 박해선 저,<혼자 공부하는 머신러닝 + 딥러닝>, 한빛미디어, 2020
+ - [https://github.com/rickiepark/hg-mldl](https://github.com/rickiepark/hg-mldl)

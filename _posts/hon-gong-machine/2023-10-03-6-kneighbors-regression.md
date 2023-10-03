@@ -150,3 +150,8 @@ for n in [1, 5, 10]:
 ```
 위 코드를 실행하면 k-최근접 이웃 회귀 모델의 k 값을 1,5,10으로 바꿔가며 농어의 길이가 5~45일때 모델이 예측하는 무게를 알 수 있다.
 ![k-최근접 이웃 회귀 모델의 예측 그래프](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/aea48c09-9a12-47f0-90b6-8d3d886b06d1)
+(k=5일때 예측 그래프)
+
+# Reference
+ - 박해선 저,<혼자 공부하는 머신러닝 + 딥러닝>, 한빛미디어, 2020
+ - [https://github.com/rickiepark/hg-mldl](https://github.com/rickiepark/hg-mldl)
