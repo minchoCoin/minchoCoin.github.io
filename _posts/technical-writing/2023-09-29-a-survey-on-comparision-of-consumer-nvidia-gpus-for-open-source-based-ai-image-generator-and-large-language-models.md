@@ -110,6 +110,15 @@ Abstract - The era of artificial intelligence has opened with AI Image Generator
 &nbsp;오픈 소스 기반의 거대 언어 모델은 LLaMA가 있다. LLaMA는 Meta의 오픈소스 언어모델로서 기사, 시, 이야기, 여러 질문에 대한 답변, 소스코드 등을 생성할 수 있다. 현재 LLaMA-1[21]과 LLaMA-2[22] 가 공개되어 있다. LLaMA-1은 파라미터가 7B, 13B, 33B, 66B개 등을 가진 모델이 있고, LLaMA-2는 7B, 13B, 70B개의 파라미터를 가진 모델이 있다. 또한 각각 4bit양자화 모드와 8bit 양자화 모드가 있는데, 이는 모델의 파라미터를 32bit 부동소수점에서 4bit/8bit 정수로 양자화하여 계산과 메모리 access 속도를 높이는 기법이다.이 역시 로컬에서 돌릴 수 있다[23].<br>
 
 &nbsp;LLaMA 훈련에 사용된 데이터셋은 CommonCrawl로 스크랩한 웹페이지, GitHub에 저장되어 있는 소스코드, 20개 언어의 Wikipedia, Project Gutenberg에 업로드된 책, Stack Exchange에 올라와 있는 질문과 답변, ArXiv에 있는 논문의 LaTeX 코드 등이다.
+# 조사범위
+ 현재 출시되고 있는 Nvidia GPU, 즉 RTX 40 series와 RTX 30 series 중 Stable diffusion 벤치마크는 RTX 4090, RTX 4080, RTX 4070Ti, RTX 3090Ti, RTX 3090, RTX 3080Ti, RTX 3080 12GB, RTX 3080, RTX 3070Ti, RTX 3070, RTX 3060Ti, RTX 3060, RTX 3050 이며 LLaMA 벤치마크는 RTX 4090, RTX 4080, RTX 4070Ti, RTX 3090Ti, RTX 3090, RTX 3080Ti, RTX 3080 12GB, RTX 3080, RTX 3060이다.
+# 조사방법 및 도구
+Stable diffusion 벤치마크 데이터는 아래를 참고하였다.
+https://www.tomshardware.com/news/stable-diffusion-gpu-benchmarks
+
+LLaMA 벤치마크 데이터는 아래를 참고하였다.
+https://www.tomshardware.com/news/running-your-own-chatbot-on-a-single-gpu
+
 
 ## GPU 성능비교
 
@@ -180,6 +189,18 @@ Table4에서 알 수 있듯, image resolution에서 RTX 4090이 3.641로 가장 
 Table5에서 알 수 있듯, LLaMA를 실행하여 Tokens/sec을 측정하였을 때RTX 4090이 25.82로 가장 높고, RTX 3060이 19.48로 가장 낮다. 가격당 성능은 RTX 3060이 0.0592로 가장 높고, RTX 3090Ti가 0.0107로 가장 낮다. RTX 4090은 RTX 3060대비 1.33배 더 높은 초당 토큰 수를 보여주었다.
 
 # 결론
+|     GPU              |     LLaMA에서     RTX 3060 대비 Tokens/sec     (단위: 배, 3째자리에서      반올림)    |     Stable Diffusion image resolution에서     RTX 3060 대비 Iteration/sec     (단위: 배, 3째자리에서      반올림)    |     Stable diffusion image generation에서     RTX 3060 대비Iteration/sec     (단위:배, 3째자리에서 반올림)    |     가격(US Dollar)    |
+|----------------------|---------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|------------------------|
+|     RTX 4090         |     1.33                                                                              |     7.13                                                                                                             |     4                                                                                                         |     1599               |
+|     RTX 4080         |     1.31                                                                              |     4.72                                                                                                             |     3.25                                                                                                      |     1199               |
+|     RTX 4070Ti       |     1.3                                                                               |     3.67                                                                                                             |     2.86                                                                                                      |     799                |
+|     RTX 3090Ti       |     1.1                                                                               |     3.05                                                                                                             |     2.66                                                                                                      |     1999               |
+|     RTX 3090         |     1.07                                                                              |     2.78                                                                                                             |     2.46                                                                                                      |     1499               |
+|     RTX 3080Ti       |     1.06                                                                              |     2.66                                                                                                             |     2.41                                                                                                      |     1199               |
+|     RTX 3080 12GB    |     1.05                                                                              |     2.54                                                                                                             |     2                                                                                                         |     799                |
+|     RTX 3080         |     1.02                                                                              |     2.29                                                                                                             |     1.95                                                                                                      |     699                |
+|     RTX 3060         |     1                                                                                 |     1                                                                                                                |     1                                                                                                         |     329                |
+
 &nbsp;본 서베이에서 그림 인공지능과 거대언어모델 실행 용도의 일반 소비자용 Nvidia GPU를 비교하였다. GPU는 부동소수점 연산과 행렬연산에 특화된 반도체로, CPU에 비해 더 빠른 부동소수점연산과 행렬연산을 보여주고 이는 모델을 학습하고 실행하는데도 더 빠르다.
 
 &nbsp;최근 많은 웹서버 기반의 그림 인공지능과 거대언어모델이 나와 GPU없이도 쉽게 사용할 수 있다. 그러나 이는 개인정보유출 등의 위험이 있고, 회사 등에서는 로컬에서 돌릴 필요가 있다. 최근 오픈소스 기반의 그림 인공지능인 Stable Diffusion과 거대언어모델인 LLaMA가 등장하였으며 GPU만 있으면 로컬에서 돌릴 수 있다. 
