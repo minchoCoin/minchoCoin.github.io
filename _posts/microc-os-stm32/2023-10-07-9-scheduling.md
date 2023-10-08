@@ -107,7 +107,106 @@ OSTaskResume()을 호출하는 task보다 다시 시작된 task의 우선순위�
 OS???Post() 함수를 호출하고 OS_OPT_POST_NO_SCHED를 지정하여 스케쥴러를 매번 실행시키지 않고 여러 post를 한꺼번에 수행할 수 있다(물론 위의 상황에서 마지막 post가 OS_OPT_POST_NO_SCHED 옵션이 없는 post일 수 있다).
 
 # Round-Robin Scheduling
+둘 이상의 작업의 우선순위가 같을 때, μC/OS-III는 하나의 task를 미리 정한 시간(Time Quanta)동안 실행한다(그리도 다음 task를 또 time quanta 동안 실행한다). 이 과정을 Round-Robin Scheduling 또는 Time Slicing이라 한다. 만약 task가 주어진 time quanta를 다 사용할 필요가 없다면 자발적으로 CPU를 방출(give up)하여 다음 작업을 실행할 수 있도록 한다. 이를 양보(Yielding)이라 한다. μC/OS-III은 사용자가 런타임에 라운드 로빈 스케줄링을 활성화 또는 비활성화할 수 있도록 한다.
 
+Fig 7-3은 동일한 우선순위로 실행되는 task들을 갖는 타이밍 다이어그램을 보여준다. 우선순위 'X'에서 ready-to-run 상태의 task는 3개가 있다. 예시를 위해 time quanta는 4 clock tick이라 하자. 이는 어두운 tick mark로 표시된다.
+
+![Round Robin Scheduling](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/69699f82-7ffa-461b-adba-cbdffbd30858)
+
+## F7-3(1)
+Task 3이 실행 중이다. 이 시간 동안, tick interrupt가 발생하지만 time quanta가 아직 만료되지는 않았다.
+
+## F7-3(2)
+4번째 tick interrupt에서, time quanta가 만료된다.
+
+## F7-3(3)
+task 1이 ready-to-run 상태의 우선순위 'X'의 task list의 다음 task이기 때문에 μC/OS-III는 task 1을 재개한다.
+
+## F7-3(4)
+task 1이 time quanta가 만료(즉, 4틱 후)될 때 까지 실행된다.
+
+## F7-3(5)(6)(7)
+task 3이 실행되지만 OSSchedRoundRobinYield()를 호출하여 time quanta를 포기한다. 이로 인해, 우선순위 'X'의 ready-to-run 상태의 task list에서 다음 task를 실행된다. μC/OS-III가 Task #1을 실행하려고 할때, time quanta를 3틱으로 리셋하여, 다음 time quanta가 이 시점부터 3틱 후에 만료되도록 한다.
+
+## F7-3(8)
+task 1이 time quanta 동안 실행된다.
+
+# Round-Robin Scheduling(2)
+μC/OS-III는 OSSchedRoundRobinCfg() 함수를 통해 런타임에 기본 time quanta를 변경할 수 있다(443페이지 부록 A, "μC/OS-III API Reference" 참조). 또한 round robin scheduling 을 활성화/비활성화하고 기본 time qunata를 변경할 수 있다.
+
+μC/OS-III는 또한 사용자가 task마다 time quanta를 지정하는 것을 가능하게 한다. 어떤 task는 1 틱, 다른 task는 12, 또 다른 task는 3, 그리고 또 다른 task는 7 등의 time quanta를 가질 수 있다. task의 time quanta는 task가 생성될 때 지정된다. task의 time quanta는 또한 함수 OSTaskTimeQuantaSet()을 통해 런타임에 변경될 수 있다.
+
+# Scheduling internals
+스케줄링은 OSSched()와 OSIIntExit()의 두 가지 함수에 의해 수행된다. OSSched()는 task 코드에 의해 호출되고 OSIIntExit()은 ISR에 의해 호출된다. 두 함수 모두 os_core.c에 있다.
+
+Fig 7-1은 스케줄러가 사용하는 두 가지 자료구조를 보여준다. priority ready bitmap과 ready list(Chapter 6, "The Ready List"에 설명됨)이다.
+
+![Priority ready bitmap and Ready list](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/a526bfca-e2df-4242-81a6-7af3ac7f62bc)
+
+## 7-4-1 OSSched()
+
+task level에서 호출되는 스케쥴러인 OSSched(os_core.c 참조)의 의사코드가 L7-1에 있다.
+```c
+void OSSched (void)
+{
+    Disable interrupts;
+    if (OSIntNestingCtr > 0) { (1)
+        return;
+    }
+    if (OSSchedLockNestingCtr > 0) { (2)
+        return;
+    }
+    Get highest priority ready; (3)
+    Get pointer to OS_TCB of next highest priority task; (4)
+    if (OSTCBNHighRdyPtr != OSTCBCurPtr) { (5)
+        Perform task level context switch;
+    }
+    Enable interrupts;
+}
+//L7-1 OSSched() pseudocode
+```
+### L7-1(1)
+OSSched()는 task level 스케줄러이므로, ISR에서 호출되지 않는지 확인하는 것으로 시작한다. ISR은 OSSched() 대신에 OSIntExit()을 호출해야한다. 만약 OSSched()가 ISR에서 호출되면 OSSched()는 단순히 return 한다.
+
+### L7-1(2)
+다음 단계는 스케줄러가 잠겨 있지 않은지 확인하는 것입니다. 코드가 OSSchedLock()를 호출하면 스케줄러를 잠그고, OSSched()는 단순히 return 한다.
+
+### L7-1(3)
+OSSched()는 141페이지의 6장 'The Ready List'에서 설명된 바와 같이 bitmap OSPrioTbl을 스캔함으로서, ready 상태의 가장 높은 우선순위의 task를 확인한다.
+
+### L7-1(4)
+어떤 우선순위의 task가 준비되었는지 알게 되면, 우선순위를 OSRdyList[]의 인덱스로 사용하고, OSRdyList[우선순위].HeadPtr에 있는, 즉 list의 맨 앞에 있는 OS_TCB를 추출한다. 이 시점에서 어느 OS_TCB로 전환할지, 그리고 어떤 task를 'OSSched()를 호출한 task로' 저장할지 알게된다. 구체적으로, OSTCBCurPtr은 현재 task의 OS_TCB를 가리키고, OSTCBHighRdyPtr은 전환할 새로운 OS_TCB를 가리킨다.
+
+### L7-1(5)
+현재 실행중인 task와 전환될 task가 같지 않으면, OSSched()는 context-switch를 수행할 코드를 호출한다. (165페이지의 8장 'Context-Switching'참조) 그러나 코드가 나타내듯이 task level 스케줄러는 문맥교환(context-switch)를 수행하기 위해 task-level의 함수를 호출한다.
+
+스케줄러와 문맥교환은 인터럽트를 비활성화한 상태에서 실행된다. 이 프로세스는 원자적이어야 하기 때문이다.
+
+## 7-4-2 OSIntExit()
+ISR level 스케줄러인 OSIntExit(os_core.c 참조)에 대한 의사 코드는 L7-2에 있다. 인터럽트는 OSIntExit()이 호출될 때 비활성화된 것으로 가정한다.
+
+```c
+void OSIntExit (void)
+{
+    if (OSIntNestingCtr == 0) { (1)
+        return;
+    }
+    OSIntNestingCtr--;
+    if (OSIntNestingCtr > 0) { (2)
+        return;
+    }
+    if (OSSchedLockNestingCtr > 0) { (3)
+        return;
+    }
+    Get highest priority ready; (4)
+    Get pointer to OS_TCB of next highest priority task; (5)
+    if (OSTCBHighRdyPtr != OSTCBCurPtr) { (6)
+    Perform ISR level context switch;
+    }
+}
+```
+### L7-2(1)
+OSIntExit()은 OSIntExit() 호출로 인해 OSIntNestingCtr이
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
