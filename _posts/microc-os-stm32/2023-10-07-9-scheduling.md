@@ -206,7 +206,79 @@ void OSIntExit (void)
 }
 ```
 ### L7-2(1)
-OSIntExit()은 OSIntExit() 호출로 인해 OSIntNestingCtr이
+OSIntExit() 호출로 인해 OSIntNestingCtr이 wrap around되지 않는 것을 확인한다. 잘 일어나지는 않지만, 확인하는 것이 좋다(wrap around란, unsigned 변수에서, 0에서 1을 뺐을 때 최대값이 되는 것을 의미한다. OSIntNestingCtr이 0이라는 의미는, ISR이 하나도 실행 중이지 않다는 의미로, OSIntExit()이 ISR 레벨에서 실행한 것이 아닐때 발생한다).
+
+### L7-2(2)
+OSIntExit()은 ISR 마지막에 호출되므로, 중첩(nesting) 카운터를 감소시킨다. 만약 모든 중첩 ISR이 끝나지 않았으면, 코드는 단순히 return한다. 끝내야할 인터럽트가 여전히 남아있으므로, 스케줄러를 실행할 필요가 없다.
+
+### L7-2(3)
+OSIntExit()은 스케줄러가 잠겨있지 않은지 확인한다. 만약 잠겨있다면 스케줄러를 실행하지 않고 단순히 스케줄러를 잠근, 중단된 task로 돌아간다.
+
+### L7-2(4)
+여기까지왔으면 이것이 마지막 ISR이며, 스케줄러가 잠겨있지 않다. 따라서 실행해야할 가장 높은 우선 순위의 task를 찾아야한다.
+
+### L7-2(5)
+OSRdyList[]에서 가장 우선순위가 높은 OS_TCB를 추출한다.
+
+### L7-2(6)
+현재 task와 (실행 준비된)가장 높은 우선순위의 task가 다를 경우, μC/OS-III는 ISR 레벨 문맥교환(context-switch)을 수행한다. ISR레벨 context switch는 인터럽트된 task의 context가 초기에 저장되었다고 가정하고, 새로운 task의 context만 복원하면 된다는 점에서 다르다. 이는 165페이지의 8장 'context-switch'에서 설명한다.
+
+## 7-4-3 OS_SchedRoundRobin()
+한 task의 time quanta가 만료되고, 이 task와 동일한 우선순위의 task가 여러개 있을 때,  μC/OS-III는 현재 우선 순위에서 실행 준비가 된 다음 task를 선택하여 실행한다. OS_SchedRoundRobin()은 이 작업을 수행하는 데 사용되는 코드이다. OS_SchedRoundRobin()은 OStimeTick() 또는 OS_IntQTask() 중 하나에서 호출된다. OS_SchedRoundRobin()은 OS_core에 있다.
+
+OS_SchedroundRobin()은 Direct Method를 선택한 경우 OSTimeTick()에 의해 호출된다(175페이지의 9장 'Interrupt Management' 참조). 8장에서 설명될 Deferred Post Method를 선택한 경우 OS_IntQTask()에 의해 호출된다.
+
+round-robin 스케줄러의 의사코드가 L7-3에 있다.
+
+```c
+void OS_SchedRoundRobin (void)
+{
+    if (OSSchedRoundRobinEn != TRUE) { (1)
+        return;
+    }
+    if (Time quanta counter > 0) { (2)
+        Decrement time quanta counter;
+    }
+    if (Time quanta counter > 0) {
+        return;
+    }
+    if (Number of OS_TCB at current priority level < 2) { (3)
+        return;
+    }
+    if (OSSchedLockNestingCtr > 0) { (4)
+        return;
+    }
+    Move OS_TCB from head of list to tail of list; (5)
+    Reload time quanta for current task; (6)
+}
+//L7-3 OS_SchedRoundRobin() pseudocode
+```
+### L7-3(1)
+먼저 round robin scheduling이 활성화되어있는지 확인하는 것으로 시작한다. round robin scheduling을 활성화하려면, OSSchedRoundRobinCfg()를 호출해야한다.
+
+### L7-3(2)
+실행 중인 task의 OS_TCB 내부에 있는 time quanta counter가 감소한다. 만약 감소되었는데도 0이 아니면 OS_SchedRoundRobin()는 단순히 return한다(즉 아직 time quanta가 남았다).
+
+### L7-3(3)
+time quanta counter가 0이 되면, OS_SchedRoundRobin()은 현재 우선순위에 다른 ready-to-run 상태의 작업이 있는지 확인한다. 만약 다른 task가 없으면, 단순히 return한다. round robin 스케줄링은 동일한 우선순위에 여러 task가 있고, task가 time quanta 내에 작업을 완료하지 못할 때만 적용된다.
+
+### L7-3(4)
+스케줄러가 잠겼으면 OS_SchedRoundRobin()은 단순히 return한다.
+
+### L7-3(5)
+OS_SchedRoundRobin()은 현재 task의 OS_TCB를 ready list의 처음 부분에서 끝 부분으로 옮긴다.
+
+### L7-3(6)
+list 맨 앞에 있는 task에 대한 time quanta를 로드한다. 각 task는 task가 생성될 때 또는 OSTaskTimeQuantaSet()을 통해 time quanta를 지정할 수 있다. time quanta를 0으로 설정하면, μC/OS-III는 기본 time quanta로 설정되었다고 가정한다. 기본 time quanta는 OSSchedRoundRobinDfltTimeQuanta에 있는 값이다.
+
+# 7-5 Summary
+μC/OS-III는 선점(preemptive) 스케줄러이므로 실행 가능한 가장 높은 우선순위의 작업을 항상 실행한다.
+
+μC/OS-III는 동일한 우선순위에 여러 task를 허용한다. ready-to-run 상태의 task가 여러 개 있는 경우 μC/OS-III은 이 task들 사이에 round robin을 할 것이다.
+
+스케줄링은 응용 프로그램이 특정 함수를 호출할 때 발생한다.
+
+μC/OS-III는 두 개의 스케쥴러를 가지고 있는데, OSSched()는 task-level 코드로 호출되며, OSIntExit()은 각 ISR의 끝에 호출된다.
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
