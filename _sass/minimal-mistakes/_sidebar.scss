@@ -6,7 +6,11 @@
    Default
    ========================================================================== */
 
+.sidebar::-webkit-scrollbar{display: none;}//sidebar remove
 .sidebar {
+
+  -ms-overflow-style: none; //sidebar remove
+
   @include clearfix();
   // @include breakpoint(max-width $large) {
   //   /* fix z-index order of follow links */
