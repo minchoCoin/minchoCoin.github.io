@@ -17,7 +17,7 @@ dispatcher 라고 불리는 scheduler는 μC/OS-III의 한 부분으로, 어떤 
 선점적(preemptive)이라는 말의 의미는 event가 발생했을 때, 그리고 그 event가 더 중요한 task를 ready-to-run 상태로 만든다면 μC/OS-III는 즉시 그 task에 CPU를 부여할 것이라는 것을 의미한다. 따라서 task가 더 높은 우선 순위의 task에 신호를 보내면 현재 task는 중단되고 더 높은 우선순위의 task는 CPU를 제어할 수 있게 된다. 마찬가지로, Interrupt Service Roution(ISR)이 더 높은 우선순위의 task에 신호를 보내거나 매시지가 전송되었을 때, 중단된 task는 중단된 상태로 유지되고 새로운 더 높은 우선순위의 task가 실행된다.
 
 # 7-1 Preemptive scheduling
-μC/OS-III는 인터럽트로부터의 이벤트 포스팅을 Direct와 Deferred 포스트의 두가지 다른 방법을 사용하여 처리한다. 이들에 대해서는 175페이지의 9장 '인터럽트 관리'에서 보다 상세하게 논의될 것이다. 스케쥴링 관점에서 보면 ,두 방법의 최종 결과는 동일하다. ready 상태의 task 중 가장 높은 우선순위는 rmfla 7-1과 7-2처럼 CPU를 할당받을 것이다.
+μC/OS-III는 인터럽트로부터의 이벤트 포스팅을 Direct와 Deferred 포스트의 두가지 다른 방법을 사용하여 처리한다. 이들에 대해서는 175페이지의 9장 '인터럽트 관리'에서 보다 상세하게 논의될 것이다. 스케쥴링 관점에서 보면 ,두 방법의 최종 결과는 동일하다. ready 상태의 task 중 가장 높은 우선순위는 Figure 7-1과 7-2처럼 CPU를 할당받을 것이다.
 
 ![Preemptive scheduling - direct method](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/3cf3b459-fd33-416a-a2c9-ade22470d0b9)
 
