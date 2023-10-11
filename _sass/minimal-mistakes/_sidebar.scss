@@ -6,10 +6,10 @@
    Default
    ========================================================================== */
 
-.sidebar::-webkit-scrollbar{display: none;}//sidebar remove
+.sidebar::-webkit-scrollbar{display: none;}//sidebar scroll remove
 .sidebar {
 
-  -ms-overflow-style: none; //sidebar remove
+  -ms-overflow-style: none; //sidebar scroll remove
 
   @include clearfix();
   // @include breakpoint(max-width $large) {
