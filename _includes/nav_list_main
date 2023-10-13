@@ -62,6 +62,12 @@
                         <li><a href="/categories/computer-architecture" class="">컴퓨터구조 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
+
+                {% for category in site.categories %}
+                    {% if category[0] == "software-engineering" %}
+                        <li><a href="/categories/software-engineering" class="">소프트웨어공학 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
             <span class="nav__sub-title">임베디드시스템</span>
             <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
