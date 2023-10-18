@@ -2,7 +2,7 @@
 title: "μC/OS-III ch.9 Interrupt Management"
 last_modified_at: 2023-10-12T00:53:12+09:00
 categories:
-    - microc-os-stm32
+    - microc-os-3-stm32
 tags:
     - microc-os
     - embedded-system
@@ -49,7 +49,7 @@ CPU는 아래 2가지 방법중 하나를 이용하여 인터럽트를 처리한
 
 이 두 가지 방법을 논의하기 전에, μC/OS-III가 CPU 인터럽트를 어떻게 처리하는지 이해하는 것이 중요하다.
 
-# Typical μC/OS-III INTERRUPT SERVICE ROUTINE (ISR)
+# Typical μC/OS-III Interrupt Service Routine (ISR)
 μC/OS-III에서는 인터럽트 서비스 루틴이 어셈블리어로 작성되어야 한다. 그러나 C 컴파일러가 인라인 어셈블리어를 지원한다면 ISR 코드는 C 소스 파일에 직접 넣을 수 있다. μC/OS-III를 사용할 때의 전형적인 ISR에 대한 의사 코드는 Listing 9-1과 같다.
 
 ```c
@@ -66,7 +66,7 @@ MyISR: (1)
     OSIntExit(); (9)
     Restore the CPU registers; (10)
     Return from interrupt; (11)
-// Listing 9-1
+// Listing 9-1 ISRs under μC/OS-III (assembly language)
 ```
 ## L9-1(1)
 이전에 서술한 바와 같이, ISR은 보통 어셈블리 언어로 작성된다. My ISR은 인터럽트를 발생시킨 디바이스를 처리할 핸들러의 이름에 대응한다.
@@ -79,7 +79,69 @@ MyISR: (1)
 
 특정 CPU들은 단지 인터럽트들(즉, 인터럽트 스택)을 처리하기 위해 특별한 스택으로 자동 전환하기도 한다. 이는 귀중한 task 스택 공간 사용을 피하기 때문에 일반적으로 유용하다. 그러나 μC/OS-III의 경우, 인터럽트된 task의 문맥은 해당 task의 스택에 저장될 필요가 있다.
 
-프로세서에 ISR을 처리할 전용 스택 포인터가 없다면 소프트웨어적으로 구현하는 것이 가능하다. 구체적으로, ISR을 입력할 때 단순히 현재 task 스택을 저장하고 전용 ISR 스택으로 전환한 후 다시 task 스택으로 전환하면 된다. 물론 이것은 쓸 코드가 추가로 있다는 것을 의미하지만 중첩 인터럽트를 포함한 최악의 경우 인터럽트 스택 사용을 수용하기 위해 task 스택에 여분의 공간을 할당할 필요는 없기 때문에 이점은 엄청나다.
+프로세서에 ISR을 처리할 전용 스택 포인터가 없다면 소프트웨어적으로 구현하는 것이 가능하다. 구체적으로, ISR에 진입할 때 단순히 현재 task 스택을 저장하고 전용 ISR 스택으로 전환한 후 다시 task 스택으로 전환하면 된다. 물론 이것은 쓸 코드가 추가로 있다는 것을 의미하지만 중첩 인터럽트를 포함한 최악의 경우 인터럽트 스택 사용을 수용하기 위해 task 스택에 여분의 공간을 할당할 필요는 없기 때문에 이점은 엄청나다.
+
+## L9-1(4)
+다음으로 OSIntEnter()를 호출하거나, 단순히 어셈블리어로 변수 OSIntNestingCtr를 증가시킨다. 이는 일반적으로 상당히 쉽고 OSIntEnter()를 호출하는 것보다 더 효율적이다. 이름에서 알 수 있듯이 OSIntNestingCtr는 인터럽트 네스팅 레벨을 저장한다.
+
+## L9-1(5)
+이것이 첫 번째 중첩 인터럽트라면, 인터럽트된 task의 스택 포인터의 현재 값을 그것의 OS_TCB에 저장할 필요가 있다. 글로벌 포인터 OSTCBCurPtr은 인터럽트된 작업의 OS_TCB를 가리킨다. OS_TCB의 바로 첫 번째 필드가 스택 포인터를 저장할 필요가 있는 곳이다. 즉, OS_TCB에서 OSTCBCurPtr->StkPtr은 오프셋 0에 있게 된다(이는 어셈블리어를 크게 단순화한다).
+
+## L9-1(6)
+이때, 당신은 인터럽트 장치가 동일한 다른 인터럽트를 발생시키지 않도록 인터럽트 장치를 클리어할 필요가 있다. 그러나, 대부분의 사람들은 소스의 클리어를 연기하고, "C"에서 ISR 핸들러 내에서 해당 동작을 수행하는 것을 선호한다.
+
+## L9-1(7)
+이때 중첩 인터럽트를 허용하고 싶다면, 인터럽트를 다시 활성화해도 괜찮다. 이 단계는 선택 사항이다.
+
+## L9-1(8)
+이 시점에서, 추가 처리는 어셈블리 언어로부터 호출된 C 함수로 지연될 수 있다. 이는 ISR 핸들러에서 해야 할 처리의 양이 많은 경우에 특히 유용하다. 그러나, 일반적으로, ISR들은 가능한 한 짧게 유지한다. 사실, 단순히 task에 신호를 보내거나 메시지를 보내고 task이 인터럽트 장치를 서비스하는 세부사항들을 처리하도록 하는 것이 최선이다.
+
+ISR은 OSSemPost(), OSTaskSemPost(), OSFlagPost(), OSQPost() 또는 OSTaskQPost() 중 하나의 함수를 호출해야 한다. 이것은 ISR이 인터럽트 장치를 서비스할 작업에게 알려야하기 때문에 필요하다. 이것들은 ISR에서 호출할 수 있는 유일한 함수들이며 task에 신호를 보내거나 메시지를 보낼 때 사용된다. 그러나 만약 ISR이 이러한 함수들 중 하나를 호출할 필요가 없다면, 다음 절에서 설명하는 것처럼 ISR을 "Non Kernel-Aware Interrupt Service Routine"으로 쓰는 것을 고려해 보자.
+
+## L9-1(9)
+ISR이 완료되면 OSIntExit()을 호출하여 μC/OS-III에게 ISR이 완료되었음을 알려주어야 한다. OSIntExit()은 OSIntNestingCtr를 단순히 감소시키고 OSIntNestingCtr이 0에 도달하면 ISR이 (이전에 중단된 ISR이 아닌) task level 코드로 돌아가려고 함을 나타낸다. μC/OS-III은 중첩된 ISR 중 하나 때문에 실행할 필요가 있는 더 높은 우선순위의 task가 있는지 판단해야 할 것이다.  즉, ISR은 이 신호나 메시지를 기다리는 더 높은 우선순위의 task에 신호를 보내거나 메시지를 보냈을 수 있다. 이 경우 μC/OS-III은 중단된 작업으로 돌아가는 대신에 문맥이 더 높은 우선순위의 작업으로 전환할 것이다. 이 후자의 경우 OSIntExit()은 실제로 복귀하지 않고 다른 경로를 취한다.
+
+## L9-1(10)
+ISR이 인터럽트된 작업보다 우선순위가 낮은 작업에 신호를 보내거나 메시지를 보낸 경우 OSIntExit()이 리턴하고 종료된다. 이는 인터럽트된 task가 여전히 실행해야 할 우선순위가 가장 높은 task이며 이전에 저장된 레지스터를 복원하는 것이 중요하다는 것을 의미한다.
+
+## L9-1(11)
+ISR은 인터럽트로부터 돌아오고, 인터럽트된 task를 재개한다.
+
+참고: (1)부터 (6)까지는 ISR 프롤로그, (9)부터 (11)까지는 ISR 에필로그로 지칭됩니다.
+
+# Non kernel-Aware Interrupt Service Routine(ISR)
+위의 순서는 ISR이 작업에 신호를 보내거나 메시지를 보낸다고 가정한다. 그러나 많은 경우에 ISR은 작업을 통지할 필요가 없을 수도 있고, ISR 내에서 모든 작업을 간단히 수행할 수 있다(빠른 시간에 수행할 수 있다고 가정). 이 경우 ISR은 L9-2와 같이 나타날 것이다.
+
+```c
+MyShortISR: (1)
+    Save enough registers as needed by the ISR; (2)
+    Clear interrupting device; (3)
+    DO NOT re-enable interrupts; (4)
+    Call user ISR; (5)
+    Restore the saved CPU registers; (6)
+    Return from interrupt; (7)
+//L9-2 Non-Kernel Aware ISRs with μC/OS-III
+```
+## L9-2(1)
+ISR은 전형적으로 어셈블리 언어로 작성된다. MyShort ISR은 인터럽트 장치를 처리할 핸들러의 이름에 대응한다.
+
+## L9-2(2)
+ISR을 처리하는 데 필요한 만큼 충분한 레지스터를 저장한다.
+
+## L9-2(3)
+ISR이 반환되면 동일한 인터럽트가 발생하지 않도록 인터럽트 장치를 클리어할 필요가 있을 것이다.
+
+## L9-2(4)
+다른 인터럽트가 μC/OS-III 호출을 하여 컨텍스트를 더 높은 우선순위의 task로 강제 전환할 수 있으므로 이 시점에서 인터럽트를 다시 활성화하지 마십시오. 이는 위 ISR이 완료되지만 훨씬 나중에 완료됨을 의미합니다.
+
+## L9-2(5)
+이제 인터럽트 장치를 어셈블리어로 처리하거나 필요한 경우 C 기능을 호출할 수 있습니다.
+
+## L9-2(6)
+완료되면 저장된 CPU 레지스터를 복원하기만 하면 된다.
+
+## L9-2(7)
+인터럽트로 부터 돌아오고, 인터럽트된 task를 재개한다.
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 

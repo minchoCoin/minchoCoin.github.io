@@ -2,7 +2,7 @@
 title: "μC/OS-III ch.7 Scheduling"
 last_modified_at: 2023-10-07T19:53:12+09:00
 categories:
-    - microc-os-stm32
+    - microc-os-3-stm32
 tags:
     - microc-os
     - embedded-system
