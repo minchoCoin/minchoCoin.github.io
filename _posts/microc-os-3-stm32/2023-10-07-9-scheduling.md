@@ -58,7 +58,7 @@ ISR이 작업을 다 끝내면, μC/OS-III를 호출한다.
 ISR이 ISR Handler Task를 ready-to-run 상태로 만들었기 때문에 μC/OS-III는 ISR Handler Task를 실행한다.
 
 ## F7-2(5)(6)
-그런 다음 ISR Handler Task는 message queue에서 post call을 제거하고 post 관련 함수를 호출한다. 이번에는 ISR 레벨 대신 task 레벨에서 이를 수행한다. 이러한 추가 단계를 거치는 이유는 인터럽트 비활성화 시간을 가능한 적게 유지하기 위함이다. 해당 주제에 대한 자세한 내용은 175페이지의 9장 "Interrupt Management"를 참고하라. queue가 비면 μC/OS-III는 ready list에서 ISR Handler Task를 제거하고 중단되었던 task로 전환한다(즉, 그림에서 (6)부분은 잘못되었는데, ISR handler에서 μC/OS-III로 갔다가 High Priority Task로 넘어가야한다).
+그런 다음 ISR Handler Task는 message queue에서 post call을 제거하고 post 관련 함수를 호출한다. 이번에는 ISR 레벨 대신 task 레벨에서 이를 수행한다. 이러한 추가 단계를 거치는 이유는 인터럽트 비활성화 시간을 가능한 적게 유지하기 위함이다. 해당 주제에 대한 자세한 내용은 175페이지의 9장 "Interrupt Management"를 참고하라. queue가 비면 μC/OS-III는 ready list에서 ISR Handler Task를 제거하고 신호나 메시지를 받은 task를 실행시킨다(즉, 그림에서 (6)부분은 잘못되었는데, ISR handler에서 μC/OS-III로 갔다가 High Priority Task로 넘어가야한다).
 
 # 7-2 Scheduling points
 scheduling은 스케줄링 포인트들에서 발생하며, scheduling은 아래의 조건들에 따라 자동적으로 발생하기 때문에 애플리케이션 코드에서 특별한 것을 수행할 필요가 없다.
