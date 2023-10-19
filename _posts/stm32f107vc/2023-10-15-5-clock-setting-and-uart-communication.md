@@ -296,7 +296,10 @@ MCO(PA8)와 USART TX(PA9)은 MODE 11, CNF 10으로 설정하고, USART TX(PA10)�
 
 미리 주어진 코드에 의해 word length 설정 비트 및 parity enable 설정 비트가 0으로 초기화되어있다. 구체적으로, 
 
-USART->CR1 &= ~(uint32_t)(USART_CR1_M|USART_CR1_PCE, USART_CR1_PS|USART-CR1_TE|USART_CR1_RE)에 의해 word length설정, 패리티 활성화 설정, even/odd 패리티 설정, TX 활성화 설정, RX 활성화 설정이 모두 0으로 초기화 되어있다.
+```c
+USART->CR1 &= ~(uint32_t)(USART_CR1_M|USART_CR1_PCE, USART_CR1_PS|USART-CR1_TE|USART_CR1_RE)
+```
+에 의해 word length설정, 패리티 활성화 설정, even/odd 패리티 설정, TX 활성화 설정, RX 활성화 설정이 모두 0으로 초기화 되어있다.
 
 ![Word length configuration in Control register(USART_CR1)](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/87becd26-46f7-4f2e-9efe-c95a40c791be)
 
@@ -326,7 +329,10 @@ USART_CR1_TE, USART_CR1_RE 매크로 상수를 이용해 TX와 RX를 활성화�
 (그림 18 STOP bit configuration bits in register(USART_CR2))
 
 stop bit 설정 비트가 0으로 초기화되어있다. 구체적으로,
-USART1->CR2 &=~(uint32_t)(USART_CR2_STOP)에 의해 0으로 초기화 되어있다. Stop bit를 1bit로 설정하기 위해서는 00을 넣으면 되는데 이밎 초기화되어있으므로, 따로 설정하지 않는다
+```c
+USART1->CR2 &=~(uint32_t)(USART_CR2_STOP)
+```
+에 의해 0으로 초기화 되어있다. Stop bit를 1bit로 설정하기 위해서는 00을 넣으면 되는데 이밎 초기화되어있으므로, 따로 설정하지 않는다
 
 ![CTS enable/disable bit in register(USART_CR3)](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/0edc8144-6eaf-43c7-9680-664388eaf5d5)
 
