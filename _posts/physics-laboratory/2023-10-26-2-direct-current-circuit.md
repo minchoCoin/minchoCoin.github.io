@@ -89,7 +89,7 @@ $$ R = \rho \frac{l}{A} = 도전율 \times \frac{길이}{단면적}$$
 
 (표1 : 저항의 색표시, 승수는 10^x에서 x만 표시)
 
-저항의 색표시는 ||| |(ABD E) 로 표시되어있거나 |||| |(ABCD E)로 표시되어 있는데, 전자는 $(AB \times D\Omega)\pm E\% $, 후자는 $(ABC \times D\Omega)\pm E\%$ 으로 해석한다.
+저항의 색표시는 $||| |(ABD E)$ 로 표시되어있거나 $|||| |(ABCD E)$로 표시되어 있는데, 전자는 $(AB \times D\Omega)\pm E\% $, 후자는 $(ABC \times D\Omega)\pm E\%$ 으로 해석한다.
 
 # 실험 기구 및 재료
 직류 전원 공급기, 멀티미터, 색저항3개
