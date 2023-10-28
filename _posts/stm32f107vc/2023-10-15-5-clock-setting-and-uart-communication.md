@@ -108,7 +108,15 @@ RCC_CFGR2에서는 PLL3MUL, PLL2MUL, PREDIV2, PREDIV1을 설정할 수 있다.
 
 RCC_CR에서는 PLL 활성화, HSE 활성화, HSI 활성화 등을 설정할 수 있다.
 
-예를 들어, MCO source를 시스템 클럭으로 사용하고 싶으면 라이브러리를 이용해 ‘RCC->CFGR &= ~(uint32_t)RCC_CFGR_MCO’를 통해 CFGR의 MCO 설정 부분을 초기화한 후, ‘RCC->CFGR |=(uint32_t)RCC_CFGR_MCO_SYSCLK’으로 설정하여 MCO source를 시스템 클럭으로 사용할 수 있다.
+예를 들어, MCO source를 시스템 클럭으로 사용하고 싶으면 라이브러리를 이용해 
+```c
+RCC->CFGR &= ~(uint32_t)RCC_CFGR_MCO
+```
+를 통해 CFGR의 MCO 설정 부분을 초기화한 후, 
+```c
+RCC->CFGR |=(uint32_t)RCC_CFGR_MCO_SYSCLK
+```
+으로 설정하여 MCO source를 시스템 클럭으로 사용할 수 있다.
 
 ## 시리얼 통신(Serial Communication)
 병렬 통신(Parallel Communication)은 여러 개의 데이터 선을 이용해, 각각의 선에 비트를 하나씩 보내는 방법이다. 그러나 직렬 통신(Serial Communication)은 하나의 데이터 선을 이용해 비트를 차례로 보내는 방법으로, 속도는 상대적으로 느리지만, 데이터선을 연장하기 위한 비용이 적다.
