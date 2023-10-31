@@ -29,7 +29,7 @@ author_profile: true
 ## 신경망의 파라미터 개수가 많아졌을 때 문제점
 예를 들어 꽃 사진 분류에서 사진의 크기를 160x120, 그리고 컬러 이미지일 때 입력 벡터의 크기는 160x120x3 = 57600이며 은닉 계층을 3개, 폭을 각각 5000,500,50으로 설정하면 약 3억개의 파라미터 수가 필요하게 된다.
 
-이렇게 파라미터 수가 많아지게 되면 지나치게 많은 데이터가 필요하다는 단점이 있다. 파라미터를 학습시킬 데이터가 부족하면, 제대로 학습이 되지 않을 수 있는데 이는 손실함수의 평균 $L = \frac{\sum 손실함수(y,output)}{AB}$ (여기서 A는 이전 계층에서 출력한 출력 벡터의 개수, B는 현재 계층에서의 출력 벡터의 개수이다)에서 A와 B가 지나치게 커지면, 역전파 처리 과정을 처리할 때, $\frac{\partial L}{\partial output_{ij}} = \frac{\partial L}{\partial 손실함수_{ij}}\frac{\partial 손실함수_{ij}}{\partial output_{ij}}$ 에서 $frac{\partial L}{\partial 손실함수_{ij}} = \frac{1}{AB}$ 이므로, 한 데이터를 넣었을 때 파라미터 값이 조정되는 양이 매우 작아지기 때문이다.
+이렇게 파라미터 수가 많아지게 되면 지나치게 많은 데이터가 필요하다는 단점이 있다. 파라미터를 학습시킬 데이터가 부족하면, 제대로 학습이 되지 않을 수 있는데 이는 손실함수의 평균 $L = \frac{\sum 손실함수(y,output)}{AB}$ (여기서 A는 이전 계층에서 출력한 출력 벡터의 개수, B는 현재 계층에서의 출력 벡터의 개수이다)에서 A와 B가 지나치게 커지면, 역전파 처리 과정을 처리할 때, $\frac{\partial L}{\partial output_{ij}} = \frac{\partial L}{\partial 손실함수_{ij}}\frac{\partial 손실함수_{ij}}{\partial output_{ij}}$ 에서 $\frac{\partial L}{\partial 손실함수_{ij}} = \frac{1}{AB}$ 이므로, 한 데이터를 넣었을 때 파라미터 값이 조정되는 양이 매우 작아지기 때문이다.
 일반적으로 모델의 파라미터 개수의 10배 되는 데이터가 있어야 정확도(f-score)가 0.85이상 나온다고 알려져 있다([https://malay-haldar.medium.com/how-much-training-data-do-you-need-da8ec091e956](https://malay-haldar.medium.com/how-much-training-data-do-you-need-da8ec091e956)).
 
 ## 다층 퍼셉트론이 이미지 처리에 부적합한 이유
