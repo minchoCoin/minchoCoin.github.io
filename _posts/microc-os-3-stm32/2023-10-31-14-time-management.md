@@ -99,3 +99,157 @@ HPT의 실행시간이 있을 때, 시간 지연은 요청한 것처럼 정확�
 
 # OSTimeDly() (3)
 OSTimeDly()는 L11-2와 같이, OS_OPT_TIME_PERIODIC 옵션으로 호출될 수도 있다. 이 옵션은 틱 카운터가 어떤 주기적 매치 값에 도달할 때까지 task를 지연시킬 수 있으며, 따라서 시간 내의 간격이 CPU 부하 변동의 영향을 받지 않으므로 항상 동일함을 보장한다.
+
+μC/OS-III는 OSTickCtr의 "match value"를 계산하여, 원하는 주기를 기반으로 task가 언제 깨어나야하는지를 확인한다. 이는 Figure 11-2에 나타나있다. μC/OS-III는 match를 계산하어 match가 그때 이미 지나간 값을 나타내는 경우 지연이 0이 되도록 한다.
+
+![Figure 11-2 OSTimeDly() - Periodic](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/d1641b02-0108-4a5f-9cc0-3cd9ffe421da)
+
+```c
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    :
+    :
+    while (DEF_ON) {
+        OSTimeDly(4, (1)
+                    OS_OPT_TIME_PERIODIC, (2)
+                    &err);
+        /* Check “err” */ (3)
+        :
+        :
+    }
+}
+//L11-2 OSTimeDly() - Periodic
+```
+## L11-2(1)
+첫번째 argument는 task가 실행될 주기를 지정하며, 여기서는 4틱을 지정한다. 물론, task의 우선순위가 낮은 경우, μC/OS-III는 우선순위에 기반하여 task를 스케줄링하고 실행할 뿐이다.
+
+## L11-2(2)
+OS_OPT_TIME_PERIODIC으로 지정하면, 틱 카운터가 이전 호출에서부터 시작하여 원하는 주기에 도달할 때 task가 ready-to-run 상태가 된다.
+
+## L11-2(3)
+μC/OS-III에서 반환된 오류 코드를 항상 확인해야 한다.
+
+# OSTimeDly() (4)
+상대적(relative) 모드와 주기적(periodic)모드가 똑같아보일 수 있지만, 다르다. 상대적 모드에서, 시스템이 바빠서 틱을 놓칠 수 있다. 주기적 모드에서, task는 여전히 일정시간 대기하지만, 항상 원하는 틱 수에 동기화될 것이다. 사실, 주기적 모드는 time-of-day 클록을 구현하는데 사용된다.
+
+마지막으로 절대적(absolute) 모드를 사용하여 전원을 켠 후 일정 시간 후에 특정 동작을 수행할 수 있다. 예를 들어, 제품 전원을 켠 후, 10초 후에 불을 끌 수 있다. 이 경우 실제로 도달하고자하는 OSTickCtr 값은 dly 값이다.
+
+요약하면, task는 OSTickCtr이 아래와 같은 값에 도달했을 때 깨어난다.
+
+```c
+Value of “opt”          Task wakes up when
+
+OS_OPT_TIME_DLY         OSTickCtr + dly
+
+OS_OPT_TIME_PERIODIC    OSTCBCurPtr->TickCtrPrev + dly
+
+OS_OPT_TIME_MATCH       dly
+```
+
+# OSTimeDlyHMSM()
+task는 보다 사용자 친화적인 방식으로 시간의 길이를 지정함으로써, 일정 시간동안 실행을 중지하도록 이 함수를 호출할 수 있다. 구체적으로 지연될 시간(Hours), 분(Minutes), 초(Seconds), 밀리초(Milliseconds)를 지정할 수 있다(따라서 HMSM). 이 함수는 상대적(relative)모드에서만 작동한다.
+
+L11-3은 OSTimeDlyHMSM()을 어떻게 쓰는지 보여준다.
+
+```c
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    :
+    :
+    while (DEF_ON) {
+        :
+        :
+        OSTimeDlyHMSM(0, (1)
+                        0,
+                        1,
+                        0,
+                        OS_OPT_TIME_HMSM_STRICT, (2)
+                        &err); (3)
+        /* Check “err” */
+        :
+        :
+    }
+}
+//L11-3
+```
+## L11-3(1)
+처음 네 개의 argument는 함수를 호출한 시점부터 시간 지연의 양(시간, 분, 초, 밀리초 단위)을 지정한다. 위의 예에서, task는 1초 동안 지연되어야한다. resolution은 tick rate에 의존한다. 예를 들어 tick rate(os_cfg_app.h에 OS_CFG_TICK_RATE_HZ)가 1000Hz로 설정되면, 기술적으로 1밀리초의 resolution을 가진다. tick rate가 100Hz라면 현재 task의 지연은 10밀리초 단위이다. 즉, 실제 지연은 정확하지 않을 수 있다.
+
+## L11-3(2)
+OS_OPT_TIME_HMSM_STRICT를 지정하면 사용자가 시간, 분, 초 및 밀리초의 유효한 값을 엄격하게 전달하는지 확인한다. 유효 시간은 0~99, 유효 분은 0~59, 유효 초는 0~59, 및 유효 밀리초는 0~999이다.
+
+OS_OPT_TIME_HMSM_NON_STRICT를 지정하면, 함수는 시(0~999), 분(0~9999), 초(최대 65,535) 및 밀리초(최대 4,294,967,295)의 값은 거의 모든 값이 허용된다. OSTimeDlyHMSM(203, 101, 69, 10000)은 허용될 수 있다. 이것이 말이 되는지 아닌지는 다른 이야기이다.
+
+시간이 999로 제한되는 이유는 시간 지연이 일반적으로 32비트 값을 사용하여 틱을 추적하기 때문이다. 틱 속도가 1000 Hz로 설정되면 1,193시간에 해당하는 4,294,967초만 추적할 수 있으므로 999는 합리적인 한계이다.
+
+## L11-3(3)
+대부분의 μC/OS-III 서비스와 마찬가지로 사용자는 오류 반환 값을 받게 될 것이다. 예제는 L11-3의 인수들이 모두 유효하므로 OS_ERR_NONE을 반환해야 한다. 가능한 오류 코드들의 목록에 대해서는 443페이지의 Appendix A "μC/OS-III API Reference"를 참조한다.
+
+# OSTimeDlyHMSM() (2)
+μC/OS-III가 task에 매우 긴 지연을 허용하더라도 실제로 task를 장시간 지연시키는 것은 권장되지 않는다. 그 이유는  남아있는 지연 시간의 양을 모니터링할 수 없다면 task가 실제로 "살아있다"고 인식할 수 없기 때문이다. task가 대략 1분 마다 깨어나고, 여전히 괜찮다고 말하도록 하는 것이 더 좋다.
+
+OSTimeDly()는 주기적인 task(주기적으로 실행되는 task)을 생성하는 데 종종 사용된다. 예를 들어, 50밀리초마다 키보드를 스캔하는 task와 10밀리초마다 아날로그 입력을 읽는 다른 task 등을 가질 수 있다.
+
+# OSTimeDlyResume()
+task는 OSTimeDlyResume()을 호출하여, OSTimeDly() 또는 OSTimeDlyHMSM()을 호출한 다른 task를 재개할 수 있다. L11-4는 OSTimeDlyResume()의 사용 방법을 보여준다. 일정 시간을 기다리고 있었던 task는 OSTimeDlyResume()에 의해 재개되었다고 알 수 없고, 지연 시간이 끝났다고 생각할 것이다. 이 때문에 이 함수를 신중하게 사용해야한다.
+
+```c
+OS_TCB MyTaskTCB;
+void MyTask (void *p_arg)
+    {
+    OS_ERR err;
+    :
+    :
+    while (DEF_ON) {
+        :
+        :
+        OSTimeDly(10,
+                    OS_OPT_TIME_DLY,
+                    &err);
+        /* Check “err” */
+        :
+        :
+    }
+    }
+
+void MyOtherTask (void *p_arg)
+{
+    OS_ERR err;
+    :
+    :
+    while (DEF_ON) {
+        :
+        :
+        OSTimeDlyResume(&MyTaskTCB,
+                        &err);
+        /* Check “err” */
+        :
+        :
+    }
+}
+//L11-4 OSTimeDlyResume()
+```
+
+# OSTimeSet() And OSTimeGet()
+μC/OS-III는 틱 인터럽트가 발생할 때마다 틱 카운터를 증가시킨다. 이 카운터는 애플리케이션이 대략적인 시간 측정을 하고, 시간 개념을 갖게 해준다.
+
+OSTimeGet()은 사용자가 틱 카운터의 값을 확인할 수 있게 한다. 이 값을 사용하여 특정 개수의 틱 동안 task를 지연시키는 것을 반복할 수 있다(실제 tick list에 들어가지 않고).
+
+OSTimeSet()은 사용자가 틱 카운터의 현재 값을 변경할 수 있게 해준다. μC/OS-III가 이를 허용하지만, 이 기능은 매우 주의하여 사용하는 것이 좋다.
+
+# OSTimeTick()
+틱 인터럽트 서비스 루틴(ISR)은 틱 인터럽트가 발생할 때마다 이 함수를 호출해야 한다. μC/OS-III은 이 함수를 사용하여 다른 시스템콜에서 사용되는 time delay와 타임아웃을 업데이트한다. OSTimeTick()은 μC/OS-III의 내부 함수로 간주된다.
+
+# Summary
+μC/OS-III는 task가 사용자가 정의한 시간 만큼 실행을 중단할 수 있도록 애플리케이션들에 서비스들을 제공한다. 지연들은 클록 틱들의 수 또는 시간, 분, 초, 및 밀리초 단위로 지정한다.
+
+애플리케이션 코드는 OSTimeDlyResume()을 호출하여 일정 시간 대기 중인 task를 재개할 수 있다. 그러나 재개된 작업은 시간 지연이 만료된 것이 아니라 재개되었음을 알 수 없기 때문에 사용을 권장하지 않는다.
+
+μC/OS-III는 켜지고 난 이후 또는 마지막으로 OSTimeSet()에 의해 틱 카운터가 변경된 이후 발생한 틱 수를 추적한다. 카운터는 OSTimeGet()을 이용하여 어플리케이션 코드가 읽을 수 있다.
+
+# Reference
+ - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
+
+[책 링크](https://micrium.atlassian.net/wiki/spaces/osiiidoc/overview)
