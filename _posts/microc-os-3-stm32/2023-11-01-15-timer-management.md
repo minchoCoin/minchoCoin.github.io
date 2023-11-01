@@ -309,8 +309,16 @@ Index into OSCfg_TickWheel[] = 4
 
 ![Figure 12-10 Inserting a second timer in the tick list](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/998e8005-b207-45df-b624-5e9c47073bb5)
 
-timer task가 실행되면(os_tmr.c의 OS_TmrTask() 참조), OSTmrTickCtr을 증가시킴으로써 시작하여 업데이트가 필요한 테이블 항목(즉, spoke)를 결정한다. 그런 다음 그 항목 목록에 타이머가 있으면(즉, .FirstPtr이 NULL이 아니면), 각 OS_TMR을 검사하여 .Match 값이 "OSTmrTickCtr"과 일치하는지 여부를 결정하고, 만약 그렇다면, 해당 OS_TMR은 목록에서 제ㅔ거되고, 타이머가 생성될 때 콜백 함수가 정의되었다고 가정하면, OS_TmrTask()는 타이머 콜백 함수를 호출한다.
+timer task가 실행되면(os_tmr.c의 OS_TmrTask() 참조), OSTmrTickCtr을 증가시킴으로써 시작하여 업데이트가 필요한 테이블 항목(즉, spoke)를 결정한다. 그런 다음 그 항목 목록에 타이머가 있으면(즉, .FirstPtr이 NULL이 아니면), 각 OS_TMR을 검사하여 .Match 값이 "OSTmrTickCtr"과 일치하는지 여부를 결정하고, 만약 그렇다면, 해당 OS_TMR은 목록에서 제거되고, 타이머가 생성될 때 콜백 함수가 정의되었다고 가정하면, OS_TmrTask()는 타이머 콜백 함수를 호출한다. 리스트에서 검색은 OSTmrTickCtr이 타이머의 .Match 값과 일치하지 않는 순간 종료된다. 즉, 리스트는 이미 정렬되어 있으므로, 리스트에서 더 이상 탐색해도 의미가 없다.
 
+OS_TmrTask()는 대부분의 작업을 스케줄러가 잠긴 상태에서 수행한다. 그러나 리스트가 정렬되고 리스트 검색에서 더 이상 일치하지 않는 즉시 종료되기 때문에 임계 구역은 상당히 짧다.
+
+# Summary
+타이머는 카운터가 0에 도달했을 때 지정된 행동을 하는 다운 카운터이다. 행동은 사용자가 정의한 콜백 함수로 제공된다.
+
+μC/OS-III는 애플리케이션 코드가 임의의 수의 타이머를 생성할 수 있게 한다(RAM양에만 제한됨).
+
+콜백 함수는 스케줄러가 잠긴 상태에서 timer task의 문맥에서 실행된다. 콜백 함수는 가능한 짧고 빠르게 실행되어야하고, blocking call을 하면 안된다.
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
