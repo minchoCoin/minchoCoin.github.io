@@ -491,7 +491,7 @@ void USART1_Init(void)
 ```
 먼저 USART_Cmd로 어느 USART를 활성화할 것인지 설정한다. 첫번째 인자는 USART1, USART2... 등 USART 번호이고, 2번째인자는 활성화 여부(ENABLE, DISABLE이다).
 
-그리고 USART1을 초기화하기 위해 USART_InitTypeDef 구조체를 활용한다. USART_BaudRate에는 사용할 BaudRate를 대입하고 USART_WordLength를 통해 WordLength를 8bit로 설정(USART_WordLength_8b)한다. USART_Stopbits를 통해 StopBits를 1비트로 설정(USART_StopBits_1)하고 USART_Parity를 통해 Parity bit를 비활성화한다(USART_Parity_No). 그리고 USART_Mode를 통해 RX,TX 둘다 사용할 것이라고 설정한다(USART_Mode_RX|USART_Mode_Tx). 마지막으로, nCTS핀이 활성화되어있을 때만 데이터를 전송하는 HardwareFlowControl을 비활성화하기 위해 USART_HardwareFlowControl을 USART_HardwareFlowControl_None으로 설정한다.
+그리고 USART1을 초기화하기 위해 USART_InitTypeDef 구조체를 활용한다. USART_BaudRate에는 사용할 BaudRate를 대입하고 USART_WordLength를 통해 WordLength를 8bit로 설정(USART_WordLength_8b)한다. USART_Stopbits를 통해 StopBits를 1비트로 설정(USART_StopBits_1)하고 USART_Parity를 통해 Parity bit를 비활성화한다(USART_Parity_No). 그리고 USART_Mode를 통해 RX,TX 둘다 사용할 것이라고 설정한다(USART_Mode_RX or USART_Mode_Tx). 마지막으로, nCTS핀이 활성화되어있을 때만 데이터를 전송하는 HardwareFlowControl을 비활성화하기 위해 USART_HardwareFlowControl을 USART_HardwareFlowControl_None으로 설정한다.
 
 그리고 USART_Init을 호출하여 USART1_InitStructure 구조체에 설정한대로 USART1 관련 레지스터를 설정한다. 마지막으로, USART_ITConfig()를 통해 데이터를 받았을 때 인터럽트가 발생하도록 설정한다. USART_ITConfig()의 첫번째 인자는 USART번호(USART1,USART2,USART3,UART4,UART5)이고 2번째 인자는 언제 인터럽트를 발생시킬지를 설정하는 것으로서, 보낼 데이터가 없을 때(USART_IT_TXE), 데이터를 다 보냈을 때(USART_IT_TC), 패리티 에러가 났을때(USART_IT_PE), 데이터를 받았을 때(USART_IT_RXNE) 등일때 인터럽트를 발생시킬 수 있으며, 여기서는 USART_IT_RXNE로 설정한다.
 
