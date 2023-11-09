@@ -10,7 +10,7 @@ tags:
 toc: true
 toc_label: "My Table of Contents"
 author_profile: true
-
+classes: wide
 ---
 # 목표
 - Interrupt 방식을 활용한 GPIO 제어 및 UART 통신
