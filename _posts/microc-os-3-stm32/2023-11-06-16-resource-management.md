@@ -142,7 +142,7 @@ OSSchedLock()과 OSSchedUnlock()은 최대 250단계 깊이까지 중첩될 수 
 
 μC/OS-III는 스케줄러가 잠겨 있을 때 사용자가 blocking call을 하지 못하게 한다. 만일 애플리케이션이 blocking call을 할 수 있었다면, 애플리케이션은 거의 실패했을 것이다.
 
-이 방법은 잘 작동하지만, 선점적 커널을 갖는 목적과 맞지 않기 때문에 스케줄러를 비활성화하는 것을 하지 않을 수도 있다. 스케줄러를 잠그면 현재 task가 가장 우선순위가 높은 task가 된다.
+이 방법은 잘 작동하지만, 선점형 커널을 갖는 목적과 맞지 않기 때문에 스케줄러를 비활성화하는 것을 하지 않을 수도 있다. 스케줄러를 잠그면 현재 task가 가장 우선순위가 높은 task가 된다.
 
 # Semaphores
 세마포어는 원래 원래 기계적 신호 전달 메커니즘(mechanical signaling mechanism)이었다. 철도 산업은 이 창치를 사용하여 둘 이상의 열차가 공유하는 철도 선로에 대해 상호 배제를 제공하였다. 세마포어는 현재 사용 중인 선로로부터 열차를 차단하기 위해 차단기를 내려 열차에 신호를 전달하였다. 선로가 사용가능해지면, 차단기를 올려 대기하고 있던 열차가 그 선로를 이용할 수 있게 된다.
@@ -482,5 +482,221 @@ OSSemPend()가 err를 OS_ERR_NONE으로 설정 후 리턴하는 경우, 코드�
 err에 다른 내용이 포함된 경우, 즉 OSSemPend()가 타임아웃되었거나(타임아웃 argument가 0이 아닌 경우), 대기가 다른 task에 의해 중단되었거나, 세마포어가 다른 task에 의해 삭제된 경우가 있다. 따라서 반환된 오류 코드를 검사하고 모든 것이 잘 되었다고 생각하지 않는 것이 항상 중요하다.
 
 ### L13-11(3)
+task가 자원 접근을 마치면, OSSemPost()를 호출하고, 호출할 때 동일한 세마포어를 지정해야한다. OSSemPost()는 이 함수에 전달된 argument를 확인하여 유효한 값인지 확인한다(os_cfg.h에서 OS_CFG_ARG_CHK_EN이 1로 설정되어있다고 가정하자).
+
+그리고 OSSemPost()는 OS_TS_GET()을 호출하여 현재 타임스탬프를 가져오고 해당 정보가 나중에 OSSemPend()에서 사용될 세마포어에 들어간다. 이 기능은 세마포어가 자원을 공유하는데 사용될 때보다 시그널링 메커니즘으로 사용될 때 유용하다.
+
+OSSemPost()는 세마포어를 기다리는 task가 있는지 확인한다. 만약 없다면, OSSemPost()는 단순히 p_sem->Ctr을 증가시키고 타임스탬프를 세마포어에 저장한 후 반환한다.
+
+세마포어가 방출되기를 기다리는 작업이 있으면 OSSemPost()는 해당 세마포어를 기다리는 가장 높은 우선순위의 task를 추출한다. 추출은 pend list가 우선순위에 따라 정렬되기 때문에 빠르게 수행된다.
+
+OSSemPost()를 호출할 때 스케줄러를 호출하지 않는 것을 옵션으로 지정할 수 있다. 이는 post가 수행되지만, 더 높은 우선순위의 task가 세마포어가 방출될 때까지 기다려도 스케줄러가 호출되지 않는다는 것을 의미한다. 이를 통해 OSSemPost()를 호출한 task는 다른 post를 수행하고 각 post 사이의 문맥교환 가능성 없이 모든 post가 동시에 효력을 발휘할 수 있다.
 
 ## Prioirty Inversions
+우선순위 역전은 실시간 시스템에서 문제가 되며, 우선순위 기반 선점형 커널을 사용할 경우에만 발생한다. Fig 13-4는 우선순위 역전 시나리오의 예시를 나타내고 있다. Task H(높은 우선순위)가 Task M(중간 우선순위)보다 높은 우선순위를 가지며, 이는 다시 Task L(낮은 우선순위)보다 높은 우선순위를 가진다.
+
+![Fig 13-4 Unbounded priority Inversion](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/c89dd7f3-f152-4ba4-aa78-ea316640639d)
+
+### F13-4(1)
+Task H와 Task M은 둘다 이벤트가 발생하기를 기다리고 있고, Task L이 실행되고 있다.
+
+### F13-4(2)
+어떤 시점에서, Task L은 공유 자원에 접근하기 전에 필요한 세마포어를 획득한다.
+
+### F13-4(3)
+Task L은 얻은 자원으로 여러 명령을 수행한다.
+
+### F13-4(4)
+Task H가 기다리고 있던 이벤트가 발생하고, 커널은 Task H의 우선순위가 더 높기 때문에 Task L을 중단하고 Task H를 실행한다.
+
+### F13-4(5)
+Task H는 방금 수신한 이벤트를 기반으로 명령을 수행한다.
+
+### F13-4(6)
+이제 Task H는 Task L이 현재 소유하고 있는 자원에 접근하기를 원한다(즉, Task L이 소유하고 있는 세마포어를 획득하려고 시도한다). Task L이 해당 자원을 소유하고 있기 때문에, Task H은 해당 세마포어를 기다리는 task의 목록에 배치된다.
+
+### F13-4(7)
+Task L이 다시 시작되고, 공유 자원에 계속 접근한다.
+
+### F13-4(8)
+Task L은 Task M이 대기 중이던 이벤트가 발생한 이후, Task M에 의해 선점된다.
+
+### F13-4(9)
+Task M이 이벤트를 처리한다.
+
+### F13-4(10)
+Task M이 끝나면, 커널은 CPU를 Task L로 다시 념겨준다.
+
+### F13-4(11)
+Task L이 계속 해당 자원에 접근한다.
+
+### F13-4(12)
+Task L은 마침내 해당 자원에 대한 작업을 끝내고 세마포어를 방출한다. 이시점에서 커널은 우선순위가 높은 task가 해당 세마포어를 기다리고 있음을 알고, Task L을 재개하기 위해 문맥교환이 발생한다.
+
+### F13-4(13)
+Task H가 세마포어를 획득하고, 공유 자원에 접근한다.
+
+## Prioirty Inversions (2)
+
+따라서 여기서 일어난 일은 Task L이 소유한 자원을 기다렸기 때문에 Task H의 우선순위가 Task L의 우선순위로 낮아졌다는 것이다. 문제는 Task M이 Task L을 선점하여 Task H의 실해을 더 지연시키면서 시작된다. 이를 *unbounded priority inversion* 이라고 한다. 어떤 중간 우선순위도 task H가 해당 자원을 기다려야 하는 시간을 연장할 수 있기 때문에 경계가 없다. 기술적으로 모든 중간 우선순위의 task가 최악의 경우의 periodic behavior과 bounded execution time을 알고 있다면, 우선순위 반전 시간은 계산 가능하다. 그러나 이 과정은 지루할 수 있으며, 중간 우선순위의 task가 변경될 때마다 수정되어야 할 것이다.
+
+이러한 상황은 Task L의 우선순위를 상향 조정함으로써 수정될 수 있는데, 자원에 접근하는 시간 동안만 이를 수정하고, 자원 접근이 끝나면 원래의 우선순위로 복원할 수 있다. Task L의 우선순위는 Task H의 우선순위까지 상향 조정되어야 한다. 실제로 μC/OS-III은 바로 그렇게 하는 특수한 형태의 세마포어를 포함하고 있으며, 이를 상호배제 세마포어라고 한다.
+
+# Mutual Exclusion Semaphores (MUTEX)
+μC/OS-III는 unbounded priority inversion을 제거하는 상호배제 세마포어(mutex라고도 함)라는 특별한 형태의 이진 세마포어를 지원한다. Fig 13-5는 우선순위 역전이 어떻게 mutex를 사용하여 경계지어지는지 보여준다.
+
+![Fig 13-5 Using a mutex to share a resource](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/000d9057-1a29-46a5-b5ae-8386ec30ecc6)
+
+## F13-5(1)
+Task H와 Task M은 둘다 이벤트가 발생하기를 기다리고 있고, Task L이 실행되고 있다.
+
+## F13-5(2)
+어느 시점에서 Task L은 공유 자원에 접근하기 전에 필요한 mutex를 획득한다.
+
+## F13-5(3)
+Task L은 획득한 자원으로 명령을 수행한다.
+
+## F13-5(4)
+Task H가 기다린 이벤트가 발생하고 Task H의 우선순위가 더 높기 때문에 커널은 Task L을 중단하고 Task H를 실행한다.
+
+## F13-5(5)
+Task H는 방금 수신한 이벤트를 기반으로 명령을 수행한다.
+
+## F13-5(6)
+이제 Task H는 Task L이 현재 소유하고 있는 자원에 접근하기를 원한다(즉 Task L로부터 mutex를 획득하려고 시도한다). Task L이 자원을 소유하고 있기 때문에, μC/OS-III는 Task L이 중간 우선순위 task에 의해 선점되는 것을 방지하고, Task L이 공유 자원 사용을 (빨리) 끝내게 하기 위해 Task L의 우선순위를 Task H와 동일한 우선순위로 상승시킨다.
+
+## F13-5(7)
+Task L은 자원에 계속 접근하지만, Task H와 동일한 우선순위로 실행된다(자원에 접근하는 동안만). Task H는 Task L이 mutex를 방출하기를 기다리고 있기 때문에 실제로 실행되고 있지 않음을 유의해야한다. 즉 Task H는 mutex 대기 목록에 있다.
+
+## F13-5(8)
+Task L은 자원 접근을 완료하고 mutex를 방출한다. μC/OS-III는 Task L의 우선순위가 상승되었음을 알게되고, Task L을 원래 우선순위로 낮춘다. 그렇게 한 후, μC/OS-III는 mutex가 방출되기를 기다리고 있던 Task H에게 mutex를 준다.
+
+## F13-5(9)
+Task H가 mutex를 획득하고, 공유자원에 접근한다.
+
+## F13-5(10)
+Task H가 공유자원에 대한 접근을 끝내고, mutex를 방출한다.
+
+## F13-5(11)
+실행할 더 높은 우선순위의 task가 없으므로, Task H가 계속 실행된다.
+
+## F13-5(12)
+Task H가 작업을 끝내고 이벤트가 발생할 때까지 대기한다. 이때 μC/OS-III는 Task H 또는 Task L이 실행되는 동안 ready-to-run 상태가 된 Task M을 재개한다. Task M이 대기중이던 인터럽트(Fig 13-5에 표시되지 않음)가 발생하였기 때문에 Task M이 ready-to-run이 되었다.
+
+## F13-5(13)
+Task M이 실행된다.
+
+# Mutual Exclusion Semaphores (MUTEX) (2)
+
+우선순위 역전이 없고 자원 공유만 한다는 점에 유의한다. 물론 Task L이 공유 자원에 빨리 접근하여 mutex를 빨리 방출할수록 좋다.
+
+mutex는 OS_MUTEX 데이터 타입으로 정의되는 커널 객체로서 os_mutex 구조체(os_h참조)를 이용하여 정의되어있다. 어플리케이션은 무제한의 mutex(RAM 양에만 제한됨)을 가질 수 있다.
+
+task만 상호 제외 세마포어를 사용할 수 있다(ISR은 허용되지 않음).
+
+μC/OS-III는 사용자가 mutex 소유권을 중첩할 수 있게 한다. task가 mutex를 소유하는 경우, 동일한 mutex를 250번까지 소유할 수 있다. mutex를 소유한 task는 동등한 횟수만큼 풀어주어야한다. 몇몇 경우에서, 특히 L13-12와 같은 함수를 호출하여 mutex를 다시 획득한 경우, 애플리케이션은 자신이 OSMutexPend()를 여러 번 호출한 것을 즉시 인지하지 못할 수 있다.
+
+```c
+OS_MUTEX MyMutex;
+SOME_STRUCT MySharedResource;
+
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+    :
+    while (DEF_ON) {
+        OSMutexPend((OS_MUTEX *)&MyMutex, (1)
+                    (OS_TICK )0,
+                    (OS_OPT )OS_OPT_PEND_BLOCKING,
+                    (CPU_TS *)&ts,
+                    (OS_ERR *)&err);
+        /* Check ’err” */ (2)
+        /* Acquire shared resource if no error */
+        MyLibFunction(); (3)
+        OSMutexPost((OS_MUTEX *)&MyMutex, (7)
+                    (OS_OPT )OS_OPT_POST_NONE,
+                    (OS_ERR *)&err);
+        /* Check “err” */
+    }
+}
+
+void MyLibFunction (void)
+{
+    OS_ERR err;
+    CPU_TS ts;
+
+    OSMutexPend((OS_MUTEX *)&MyMutex, (4)
+                (OS_TICK )0,
+                (OS_OPT )OS_OPT_PEND_BLOCKING,
+                (CPU_TS *)&ts,
+                (OS_ERR *)&err);
+    /* Check “err” */
+    /* Access shared resource if no error */ (5)
+    OSMutexPost((OS_MUTEX *)&MyMutex, (6)
+                (OS_OPT )OS_OPT_POST_NONE,
+                (OS_ERR *)&err);
+    /* Check “err” */
+}
+```
+
+## L13-12(1)
+작업은 공유 자원에 접근하기 위해 mutex에 대기하는 것으로 시작된다. OSMutexPend()는 nesting counter를 1로 설정한다.
+
+## L13-12(2)
+반환되는 에러 값을 확인해야한다. 만약 에러가 없을 경우, MyTask()는 MySharedResource를 소유한다.
+
+## L13-12(3)
+함수가 호출되고 추가 작업을 수행한다.
+
+## L13-12(4)
+MyLibFunction()의 설계자는 MySharedResource에 접근하기 위해 mutex를 획득해야 한다는 것을 알고 있다. MyLibFunction()을 호출한 task가 이미 mutex를 소유하고 있으므로, 이 작업은 필요하지 않다. 그러나 MyLibFunction()은 MySharedResource에 대한 접근이 필요하지 않은 또 다른 함수에 의해 호출되었을 수도 있다. μC/OS-III는 중첩된 mutex 대기를 허용하므로 이것은 문제가 되지 않는다. 따라서 mutex nesting counter는 2로 증가된다.
+
+## L13-12(5)
+MyLibFunction()은 해당 공유 자원에 접근할 수 있다.
+
+## L13-12(6)
+mutex가 방출되고 nesting counter는 다시 1로 감소한다. 이것은 mutex를 여전히 같은 task가 소유하고 있음을 나타내므로 더 이상 수행될 필요가 없으며, OSMutexPost()는 단순히 반환된다. MyLibFunction()은 호출자에게 반환된다.
+
+## L13-12(7)
+mutex가 다시 방출되고, 이번에는 nesting counter가 다시 0으로 감소하여 다른 task가 mutex를 획득할 수 있음을 나타낸다.
+
+# Mutual Exclusion Semaphores (MUTEX) (3)
+항상 OSMutexPend()(및 커널 호출)의 반환 값을 확인하여 mutex를 정상적으로 획득하여 OSMutexPend()가 리턴되었는지 확인해야한다(또한 mutex가 삭제되어서, 다른 task가 OSMutexPendAbort()를 호출하여 함수가 OSMutexPend()함수가 리턴되었는지 확인해야한다). 
+
+일반적으로, 임계 구역에서는 함수 호출을 하지 않는다. 모든 상호 배제 세마포어 호출은 소스코드의 leaf node(예를 들어, 실제 하드웨어에 접근하는 하위 레벨 드라이버 또는 다른 재진입 함수 라이브러리)에 있어야 한다.
+
+mutex에서 수행할 수 있는 명령은 표13-3에 정리된 바와 같이 여러 가지가 있다. 단, 여기서는 가장 많이 사용되는 세 가지 기능, 즉 OSMutexCreate(), OSMutexPend(), OSMutexPost()에 대해서만 논의하고자 한다. 그 외의 기능들은 443페이지의 Appendix A, “μC/OS-III API Reference”에 설명되어 있다.
+
+| Function Name | Operation |
+|---------------|-----------|
+|OSMutexCreate()               |mutex를 만든다.           |
+|OSMutexDel()               |mutex를 삭제한다.         |
+|OSMutexPend()               |mutex를 대기한다.           |
+|OSMutexPendAbort()               |mutex 대기를 중단한다.           |
+|OSMutexPost()               |mutex를 방출한다.           |
+
+(표 13-3 Mutex API summary)
+
+## Mutual Exclusion Semaphores Internals
+mutex는 OS_MUTEX 데이터 타입으로 정의되는 커널 객체로서 os_mutex 구조체(os_h참조)를 이용하여 정의되어있다.
+
+```c
+typedef struct os_mutex OS_MUTEX; (1)
+
+struct os_mutex {
+    OS_OBJ_TYPE Type; (2)
+    CPU_CHAR *NamePtr; (3)
+    OS_PEND_LIST PendList; (4)
+    OS_TCB *OwnerTCBPtr; (5)
+    OS_PRIO OwnerOriginalPrio; (6)
+    OS_NESTING_CTR OwnerNestingCtr; (7)
+    CPU_TS TS; (8)
+};
+//L13-13 OS_MUTEX data type
+```
+
+### L13-13(1)
+μC/OS-III에서 모든 구조체에 자료형이 주어진다. 모든 자료형은 "OS_"로 시작하며 대문자이다. mutex를 선언할 때 단순히 OS_MUTEX를, mutex를 선언하는데 사용되는 변수의 자료형으로 사용된다.
+
+### L13-13(2)
