@@ -1,5 +1,5 @@
 ---
-title: "clock setting and UART communication"
+title: "clock setting and UART communication on stm32f107vc"
 last_modified_at: 2023-10-15T23:53:12+09:00
 categories:
     - stm32f107vc

@@ -1,5 +1,5 @@
 ---
-title: "Bluetooth Communication and Soldering"
+title: "Bluetooth Communication and Soldering for stm32f107vc and FB755AC"
 last_modified_at: 2023-11-05T00:28:12+09:00
 categories:
     - stm32f107vc
