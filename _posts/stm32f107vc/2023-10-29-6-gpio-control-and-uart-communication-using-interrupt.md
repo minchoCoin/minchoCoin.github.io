@@ -1,5 +1,5 @@
 ---
-title: "GPIO control and UART communication using interrupt"
+title: "GPIO control and UART communication using interrupt on stm32f107vc"
 last_modified_at: 2023-10-29T00:53:12+09:00
 categories:
     - stm32f107vc
