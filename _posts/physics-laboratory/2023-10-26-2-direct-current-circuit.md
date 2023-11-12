@@ -2,9 +2,9 @@
 title: "일반물리학실험 보고서 - 직류 회로"
 last_modified_at: 2023-10-26T12:53:12+09:00
 categories:
-    - physics laboratory
+    - physics-laboratory
 tags:
-    - physics laboratory
+    - physics-laboratory
 
 toc: true
 toc_label: "My Table of Contents"
