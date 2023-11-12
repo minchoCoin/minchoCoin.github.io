@@ -525,7 +525,7 @@ Task L은 Task M이 대기 중이던 이벤트가 발생한 이후, Task M에 �
 Task M이 이벤트를 처리한다.
 
 ### F13-4(10)
-Task M이 끝나면, 커널은 CPU를 Task L로 다시 념겨준다.
+Task M이 끝나면, 커널은 CPU를 Task L에게 다시 념겨준다.
 
 ### F13-4(11)
 Task L이 계속 해당 자원에 접근한다.
@@ -538,7 +538,7 @@ Task H가 세마포어를 획득하고, 공유 자원에 접근한다.
 
 ## Prioirty Inversions (2)
 
-따라서 여기서 일어난 일은 Task L이 소유한 자원을 기다렸기 때문에 Task H의 우선순위가 Task L의 우선순위로 낮아졌다는 것이다. 문제는 Task M이 Task L을 선점하여 Task H의 실해을 더 지연시키면서 시작된다. 이를 *unbounded priority inversion* 이라고 한다. 어떤 중간 우선순위도 task H가 해당 자원을 기다려야 하는 시간을 연장할 수 있기 때문에 경계가 없다. 기술적으로 모든 중간 우선순위의 task가 최악의 경우의 periodic behavior과 bounded execution time을 알고 있다면, 우선순위 반전 시간은 계산 가능하다. 그러나 이 과정은 지루할 수 있으며, 중간 우선순위의 task가 변경될 때마다 수정되어야 할 것이다.
+따라서 여기서 일어난 일은 Task L이 소유한 자원을 기다렸기 때문에 Task H의 우선순위가 Task L의 우선순위로 낮아졌다는 것이다. 문제는 Task M이 Task L을 선점하여 Task H의 실행을 더 지연시키면서 시작된다. 이를 *unbounded priority inversion* 이라고 한다. 어떤 중간 우선순위도 task H가 해당 자원을 기다려야 하는 시간을 연장할 수 있기 때문에 경계가 없다. 기술적으로 모든 중간 우선순위의 task가 최악의 경우의 periodic behavior과 bounded execution time을 알고 있다면, 우선순위 반전 시간은 계산 가능하다. 그러나 이 과정은 지루할 수 있으며, 중간 우선순위의 task가 변경될 때마다 수정되어야 할 것이다.
 
 이러한 상황은 Task L의 우선순위를 상향 조정함으로써 수정될 수 있는데, 자원에 접근하는 시간 동안만 이를 수정하고, 자원 접근이 끝나면 원래의 우선순위로 복원할 수 있다. Task L의 우선순위는 Task H의 우선순위까지 상향 조정되어야 한다. 실제로 μC/OS-III은 바로 그렇게 하는 특수한 형태의 세마포어를 포함하고 있으며, 이를 상호배제 세마포어라고 한다.
 
@@ -662,7 +662,7 @@ mutex가 방출되고 nesting counter는 다시 1로 감소한다. 이것은 mut
 mutex가 다시 방출되고, 이번에는 nesting counter가 다시 0으로 감소하여 다른 task가 mutex를 획득할 수 있음을 나타낸다.
 
 # Mutual Exclusion Semaphores (MUTEX) (3)
-항상 OSMutexPend()(및 커널 호출)의 반환 값을 확인하여 mutex를 정상적으로 획득하여 OSMutexPend()가 리턴되었는지 확인해야한다(또한 mutex가 삭제되어서, 다른 task가 OSMutexPendAbort()를 호출하여 함수가 OSMutexPend()함수가 리턴되었는지 확인해야한다). 
+항상 OSMutexPend()(및 커널 호출)의 반환 값을 확인하여 mutex를 정상적으로 획득하여 OSMutexPend()가 리턴되었는지 확인해야한다(또한 mutex가 삭제되어서, 다른 task가 OSMutexPendAbort()를 호출하여 OSMutexPend()함수가 리턴되었는지 확인해야한다). 
 
 일반적으로, 임계 구역에서는 함수 호출을 하지 않는다. 모든 상호 배제 세마포어 호출은 소스코드의 leaf node(예를 들어, 실제 하드웨어에 접근하는 하위 레벨 드라이버 또는 다른 재진입 함수 라이브러리)에 있어야 한다.
 
@@ -700,3 +700,281 @@ struct os_mutex {
 μC/OS-III에서 모든 구조체에 자료형이 주어진다. 모든 자료형은 "OS_"로 시작하며 대문자이다. mutex를 선언할 때 단순히 OS_MUTEX를, mutex를 선언하는데 사용되는 변수의 자료형으로 사용된다.
 
 ### L13-13(2)
+구조체는 "Type" 필드로 시작하는데, 이 필드를 통해 μC/OS-III는 이 구조체를 mutex로 인식할 수 있다. 다른 커널 객체들도 구조체의 첫 번째 멤버로서 ".Type"을 가질 것이다. 함수가 커널 객체를 전달받으면 μC/OS-III은 적절한 자료형을 전달받고 있음을 확인할 수 있을 것이다(os_cfg.h에서 OS_CFG_OBJ_TYPE_CHK_EN이 1로 설정되었다고 가정할 때). mutex 서비스(예를 들어 OSMutexPend())로 메시지 큐(OS_Q)를 전달하면, μC/OS-III은 애플리케이션이 잘못된 객체를 전달했음을 인식하고 그에 따라 오류 코드를 반환할 것이다.
+
+### L13-13(3)
+각 커널 객체는 디버거나 μC/Probe가 인식하기 쉽도록 이름이 부여될 수 있다. 이 멤버는 단순히 NUL문자로 끝나는 ASCII 문자열에 대한 포인터이다.
+
+### L13-13(4)
+여러 task가 mutex에서 대기할 수 있기 때문에 mutex 객체는 197페이지의 10장 "Pend Lists(or Wat Lists)" 에서 설명된 바와 같이 대기 목록을 포함한다.
+
+### L13-13(5)
+어떤 task가 mutex를 소유하고 있는 경우 해당 task의 OS_TCB를 가리킨다.
+
+### L13-13(6)
+task가 mutex를 소유하고 있는 경우 이 필드는 mutex를 소유하는 task의 원래 우선순위이다. 이 필드는 task의 unbounded priority inversion을 방지하기 위해 더 높은 우선순위로 상승되어야 하는 경우에 요구된다.
+
+### L13-13(7)
+μC/OS-III는 task가 동일한 mutex를 여러 번 획득할 수 있게 한다. mutex가 방출되기 위해서는 mutex를 소유한 task는 mutex를 획득한 만큼 mutex를 방출해야한다. 최대 250번(250-level deep) 중복(nesting)으로 소유할 수 있다.
+
+### L13-13(8)
+mutex는 timestamp를 포함하는데, 이는 마지막으로 방출된 시간을 나타내기 위해 사용된다. μC/OS-III는 애플리케이션이 시간 측정을 할 수 있게 해주는 free-running 카운터가 있다고 가정한다. mutex가 방출되면 free-running 카운터 값이 읽혀져 이 필드에 있게 되는데, 이는 OSMutexPend()가 리턴될 때 읽혀져 반환된다.
+
+## Mutual Exclusion Semaphores Internals (2)
+애플리케이션 코드는 이 자료구조의 어떤 필드에도 직접 접근해서는 절대 안된다. 대신  μC/OS-III와 함께 제공되는 API를 항상 사용해야 한다.
+
+mutual exclusion semaphore(mutex)는 애플리케이션이 사용하기 전에 생성되어야 한다. L13-14는 mutex를 생성하는 방법을 보여준다.
+
+```c
+OS_MUTEX MyMutex; (1)
+
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    :
+    :
+    OSMutexCreate(&MyMutex, (2)
+                    “My Mutex”, (3)
+                    &err); (4)
+    /* Check “err” */
+    :
+    :
+}
+//L13-14 Creating a mutex
+```
+
+### L13-14(1)
+애플리케이션은 OS_MUTEX 타입의 변수를 선언해야한다. 이 변수는 mutex 서비스에서 참조될 것이다.
+
+### L13-14(2)
+OSMutexCreate()를 호출하고, [L13-14(1)](#l13-141) 에서 생성된 mutex 구조체의 주소를 전달하여 mutex를 생성한다.
+
+### L13-14(3)
+mutex에 ASCII 이름을 할당할 수 있는데, 이는 디버거나 μC/Probe가 이 mutex를 쉽게 식별할 수 있도록 하는데 사용할 수 있다. μC/OS-III는 문자열을 구성하는 실제 문자가 아닌 ASCII 문자열에 대한 포인터를 저장하기 때문에 이름의 길이에는 실질적인 제한은 없다.
+
+### L13-14(4)
+OSMutexCreate()는 결과에 따라 오류 코드를 반환한다. argument가 모두 유효하다면, err는 OS_ERR_NONE이다.
+
+## Mutual Exclusion Semaphores Internals (3)
+
+mutex는 항상 이진 세마포어이므로, mutex counter를 초기화할 필요가 없다.
+
+task는 L13-15와 같이 OSMutexPend()를 호출하여 공유 자원에 접근하기 전에 mutual exclusion semaphore에서 대기한다(argument에 대한 자세한 내용은 443페이지의 Appendix A, “μC/OS-III API Reference” 를 참조한다).
+
+```c
+OS_MUTEX MyMutex;
+
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+    :
+    while (DEF_ON) {
+        :
+        OSMutexPend(&MyMutex, /* (1) Pointer to mutex */
+                    10, /* Wait up until this time for the mutex */
+                    OS_OPT_PEND_BLOCKING, /* Option(s) */
+                    &ts, /* Timestamp of when mutex was released */
+                    &err); /* Pointer to Error returned */
+        :
+        /* Check “err” (2) */
+        :
+        OSMutexPost(&MyMutex, /* (3) Pointer to mutex */
+                    OS_OPT_POST_NONE,
+                    &err); /* Pointer to Error returned */
+        /* Check “err” */
+        :
+        :
+    }
+}
+```
+
+### L13-15(1)
+OSMutexPend()가 호출되면, 전달받은 argument가 유효한 값을 가지는지 확인하는 것으로 시작한다. 이는 os_cfg.h 에서 OS_CFG_ARG_CHK_EN이 1로 설정되었다고 가정한다.
+
+mutex를 사용할 수 있는 경우, OSMutexPend()는 OSMutexPend()를 호출한 task가 이제 mutex의 소유자라고 가정하고, task의 OS_TCB에 대한 포인터를 p_mutex->OwnerTCPPtr에 저장하고, p_mutex->OwnerOriginalPrio에 해당 task의 우선순위를 저장한 다음 mutex nesting counter를 1로 설정한다. 그리고 OSMutexPend()는 OS_ERR_NONE 오류 코드와 함께 리턴된다.
+
+OSMutexPend()를 호출하는 task가 이미 mutex를 소유하고 있다면, OSMutexPend()는 단순히 nesting counter를 증가시킨다. 애플리케이션은 최대 250번 OSMutexPend() 중복 호출할 수 있으며 반환되는 에러는 OS_ERR_MUTEX_OWNER이다.
+
+mutex를 이미 다른 task가 소유하고 있고 OS_OPT_PEND_NON_BLOCKING이 지정된 경우, task가 mutex가 방출될 때 까지 기다리지 않기 때문에 OSMutexPend()는 바로 리턴된다.
+
+mutex를 낮은 우선수위의 task가 소유하게 되면, μC/OS-III는 mutex를 소유한 task의 우선순위를 현재 task의 우선순위와 일치하도록 올린다.
+
+옵션으로 OS_OPT_PEND_BLOCKING을 지정하면, OSMutexPend()를 호출한 task는 해당 mutex를 대기하는 task 목록에 들어간다. task는 우선순위 순으로 목록에 들어가므로, mutex에 대기하는 가장 높은 우선순위의 task는 목록 시작부분에 있다.
+
+타임아웃을 0이 아니게 지정하면 task는 tick list에 들어간다. 타임아웃을 0으로 지정하면 mutex가 방출될 때까지 영원히 기다린다는 것을 의미한다.
+
+mutex가 방출되기를 기다리고 있으면 현재 task는 더 이상 실행될 수 없기 때문에 스케줄러가 호출된다. 그러면 스케줄러는 그 다음으로 가장 우선순위가 높은 task(그리고 ready-to-run 상태인) task를 실행할 것이다.
+
+mutex가 방출되고 OSMutexPend()를 호출한 task가 다시 가장 높은 우선순위의 task가 되면 OSMutexPend() 리턴되는 이유를 확인한다. 가능한 경우는 다음과 같다:
+
+1) 해당 task가 mutex를 받았다. 이것이 보통 원하는 결과이다.
+2) 다른 task에 의해 대기가 중단되었다.
+3) 특정 timeout 내로 mutex를 받지 못했다.
+4) mutex가 삭제되었다.
+
+OSMutexPend()가 리턴되면, OSMutexPend()를 호출한 task는 적절한 오류 코드를 통해 결과를 알 수 있다.
+
+### L13-15(2)
+OSMutexPend()가 err을 OS_ERR_NONE으로 설정한 상태로 리턴되면, OSMutexPend()를 호출한 task가 이제 해당 자원을 소유하고, 해당 자원에 접근할 수 있다고 생각한다. err에 다른 내용이 있으면 OSMutexPend()가 타임아웃되었거나(타임아웃 argument가 0이 아닌 경우), 다른 task에 의해 대기가 중단되었거나, mutex가 삭제되었다는 의미이다. 반환된 오류 코드를 검사하고 모든 것이 잘 진행되었다고 생각하지 않는 것이 항상 중요하다.
+
+err가 OS_ERR_MUTEX_NESTING이라면, OSMutexPend()를 호출한 task는 동일한 mutex에 대기를 시도한 것이다.
+
+### L13-15(3)
+자원에 접근이 끝나면, OSMutexPost()를 호출하고 동일한 mutex를 지정해야한다. OSMutexPost()는 이 함수에 전달된 argument가 유요한 값인지 확인하는 것으로 시작한다(os_cfg.h에서 OS_CFG_ARG_CHK_EN이 1로 설정되었다고 가정).
+
+OSMutexPost()는 OS_TS_GET()을 호출하여 현재 타임스탬프를 얻고 해당 정보를 mutex에 넣고, 이 정보는 OSMutexPend()에 사용된다.
+
+OSMutexPost()는 nesting counter를 감소시키고, 여전히 0이 아닌 경우, OSMutexPost()는 리턴된다. 즉, 현재 mutex 소유 task는 mutex를 완전히 방출하지 않은 상태이다. 에러 코드는 OS_ERR_MUTEX_NESTING이 될 것이다.
+
+mutex를 대기하는 task가 없으면, OSMutexPost()는 p_mutex->OwnerTCPPtr을 NULL로 설정하고 mutex nesting counter를 초기화한다.
+
+만약 μC/OS-III가 mutex 소유 task의 우선순위를 올려야 했다면, 이때 원래의 우선순위로 돌아간다.
+
+mutex 상에서 대기 중인 가장 높은 우선순위의 task는 pend list로부터 추출되고, mutex를 받는다. 이것은 pend list가 우선순위에 따라 정렬되기 때문에 빠른 작업이다.
+
+OSMutexPost()에 대한 옵션이 OS_OPT_POST_NO_SCHED가 아닌 경우, 스케줄러를 호출하여 새로운 mutex 소유 task가 현재 task보다 높은 우선순위를 가지고 있는지 확인한다. 만약 그렇다면, μC/OS-III는 새롭게 mutex를 소유한 task로 문맥 교환할 것이다.
+
+한 번에 하나의 뮤텍스만 획득해야 한다는 점에 유의해야 한다. 실제로 뮤텍스를 획득할 때 다른 커널 객체는 획득하지 않는 것이 매우 권장된다.
+
+# Should You Use A Semaphore Instead Of A Mutex?
+공유 자원을 놓고 경쟁하는 task 중 어느 task도 deadline이 없는 경우 mutex 대신 세마포어를 사용할 수 있다.
+
+그러나 deadline이 있다면 공유 자원에 접근하기 위해 mutex를 사용해야한다. 세마포어는 unbounded priority inversion이 있지만 mutex는 그렇지 않다.
+
+# Deadlocks (Or Deadly Embrace)
+deadly embrace 라고도 불리는 *deadlock(교착상태)* 는, 두 가지 task가 서로가 가지고 있는 자원을 기다리는 상황이다.
+
+L13-16의 의사 코드에 나타난 바와 같이, task T1이 자원 R1에 독점적으로 접근할 수 있고, task T2가 자원 R2에 독점적으로 접근할 수 있다고 가정한다.
+
+```c
+void T1 (void *p_arg)
+{
+    while (DEF_ON) {
+        Wait for event to occur; (1)
+        Acquire M1; (2)
+        Access R1; (3)
+        :
+        :
+        \-------- Interrupt! (4)
+        :
+        : (8)
+        Acquire M2; (9)
+        Access R2;
+    }
+}
+
+void T2 (void *p_arg)
+{
+    while (DEF_ON) {
+        Wait for event to occur; (5)
+        Acquire M2; (6)
+        Access R2;
+        :
+        :
+        Acquire M1; (7)
+        Access R1;
+    }
+}
+```
+## L13-16(1)
+task T1이 대기 중인 이벤트가 발생하고, 이제 T1이 실행해야 할 가장 높은 우선순위의 task라고 가정하자.
+
+## L13-16(2)
+Task T1이 실행되고, mutex M1을 획득한다.
+
+## L13-16(3)
+자원 R1에 접근한다.
+
+## L13-16(4)
+인터럽트가 발생하고, T2는 T1보다 우선순위가 높기 때문에 CPU가 T2로 task로 전환한다.
+
+## L13-16(5)
+ISR이 task T2가 대기하는 이벤트이기 때문에 T2가 재개된다.
+
+## L13-16(6)
+Task T2가 mutex M2를 획득하고, R2 자원에 접근할 수 있게 된다.
+
+## L13-16(7)
+Task T2는 mutex M1를 획득하려고 하지만, μC/OS-III는 mutex M1를 다른 task가 소유하고 있음을 알게 된다.
+
+## L13-16(8)
+Task T2가 더 이상 계속 실행될 수 없기 때문에, μC/OS-III는 task T1으로 다시 전환한다. 자원 R1에 접근하기 위해서는 mutex M1이 필요하다.
+
+## L13-16(9)
+이제 task T1은 mutex M2에 접근하려고 하지만 불행하게도 mutex M2는 task T2가 소유하고 있다. 이 시점에서, 두 task는 교착 상태에 있으며, 어느 한 task가 다른 task가 원하는 자원을 소유하고 있기 때문에 둘 다 계속 실행될 수 없다.
+
+# Deadlocks (Or Deadly Embrace) (2)
+task가 교착상태를 피하기 위해 다음과 같은 방법이 사용된다:
+- 진행하기 전에 모든 자원 확보
+- 항상 동일한 순서로 자원 획득
+- pend 함수 호출 시 timeout 사용
+
+μC/OS-III는 pend 함수를 호출하는 task가 타임아우슬 지정할 수 있게 한다. 이것은 교착 상태를 깨게 하지만, 같은 교착 상태가 나중에 여러 번 재발할 수 있다. mutex가 일정 기간 내에 사용가능하지 않으면, 자원을 요청하는 task는 실행을 재개한다.  μC/OS-III은 타임아웃이 발생했음을 나타내는 오류 코드를 반환한다. 이 반환 코드는 task가 자원을 획득했다고 생각하지 못하게 한다.
+
+L13-17에 있는 의사코드와 같이 먼저 모든 자원을 획득함으로써 교착 상태를 방지한다.
+
+```c
+void T1 (void *p_arg)
+{
+    while (DEF_ON) {
+        Wait for event to occur;
+        Acquire M1;
+        Acquire M2;
+        Access R1;
+        Access R2;
+    }
+}
+
+void T2 (void *p_arg)
+{
+    while (DEF_ON) {
+        Wait for event to occur;
+        Acquire M1;
+        Acquire M2;
+        Access R1;
+        Access R2;
+    }
+}
+//L13-17 Deadlock avoidance – acquire all first and in the same order
+```
+모든 mutex들을 동일한 순서로 획득하기 위한 의사코드는 L13-18에 있다. 이는 단지 두 task에 대해 mutex들이 동일한 순서로 획득되는 것을 확인하기 위해, 모든 mutex들을 먼저 획득할 필요는 없다는 점을 제외하고 앞의 예와 유사하다.
+
+```c
+void T1 (void *p_arg){
+    while (DEF_ON) {
+        Wait for event to occur;
+        Acquire M1;
+        Access R1;
+        Acquire M2;
+        Access R2;
+    }
+}
+
+void T2 (void *p_arg)
+{
+    while (DEF_ON) {
+        Wait for event to occur;
+        Acquire M1;
+        Access R1;
+        Acquire M2;
+        Access R2;
+    }
+}
+//L13-18 Deadlock avoidance – acquire in the same order
+```
+
+# Summary
+사용되는 상호 배제 방법은 표 13-14와 같이 코드가 공유 자원에 얼마나 빨리 접근하느냐에 따라 달라진다.
+
+| Resource Sharing Method | When should you use? |
+|-------------------------|----------------------|
+|Disable/Enable Interrupts  |공유 자원 접근에 매우 빠르고(몇 개의 변수를 읽거나 쓰기), 실제로 엑세스가 μC/OS-III의 인터럽트 비활성 시간보다 빠를 때. interrupt latency에 영향을 미치므로, 이 방법을 사용하지 않는 것이 좋다.|
+|Locking/Unlocking the Scheduler|공유 자원에 접근 시간이 μC/OS-III의 인터럽트 비활성화 시간보다 길지만 μC/OS-III의 스케줄러 잠금 시간보다 짧은 경우. 스케줄러를 잠그는 것은 스케줄러를 잠근 task를 최우선 task로 삼는 것과 같은 효과가 있다. 이 방법은 μC/OS-III의 사용 목적을 무시하는 것이므로 사용하지 않는 것이 좋다. 그러나 interrupt latency에 영향을 주지 않으므로 인터럽트를 비활성화하는 것보다 좋은 방법이다.|
+|Semaphores|공유 자원에 접근해야하는 모든 작업에 deadline이 없는 경우. 세마포어는 unbounded priority inversion을 발생시킬 수 있기 때문이다. 그러나 세마포어 서비스는 mutex 서비스보다 실행시간 측면에서 약간 더 빠르다.|
+|Mutual Exclusion Semaphores|이 방법은 특히 공유자원에 접근해야하는 task가 deadline을 갖는 경우 선호되는 방법이다. mutex는 unbounded priority inversion을 방지하는 우선순위 상속 메커니즘을 가지고 있음을 생각하자. 그러나 mutex 소유 task의 우선순위가 변경될 필요가 있을 수 있기 때문에, mutex는 세마포어보다 실행 시간 측면에서 약간 더 느리다.|
+
+# Reference
+ - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
+
+[책 링크](https://micrium.atlassian.net/wiki/spaces/osiiidoc/overview)
