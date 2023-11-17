@@ -222,6 +222,111 @@ OSSemCreate()를 호출하고, [L14-3(1)](#l14-31)에서 선언한 세마포어�
 ### L14-3(5)
 OSsemCreate()는 호출의 결과에 따라 오류 코드를 반환한다. 모든 인수가 유효하면 err는 OS_ERR_NONE 이다.
 
+## Semaphore Internals (For Synchronization) (3)
+OSSemCreate()는 이 함수에 전달되는 argument를 검사하고(os_cfg.h에서 OS_CFG_ARG_CHK_EN이 1로 설정되어있다고 가정) 시그널링에 사용되는 OS_SEM 타입의 변수만 초기화한다.
+
+task는 L14-4에 나타낸 바와 같이 OSSemPend()를 호출하여 ISR또는 다른 task로부터의 신호를 기다린다(argument에 대한 자세한 내용은 443페이지 Appendix A “μC/OS-III API Reference” )를 참조한다.
+
+```c
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+    :
+    while (DEF_ON) {
+        OSSemPend(&MySem, (1)
+                    0,
+                    OS_OPT_PEND_BLOCKING,
+                    &ts,
+                    &err);
+        /* Check “err” */ (2)
+        :
+    }
+}
+```
+### L14-4(1)
+OSSemPend()가 호출되면, 이 함수에 전달된 argument가 유요한 값을 갖는지 확인하는 것으로 시작한다(os_cfg.h에서 OS_CFG_OBJ-TYPE_CHK_EN이 1로 설정되어있다고 가정).
+
+세마포어 카운터(OS_SEM의 .Ctr)가 0보다 크면 카운터가 감소하고 OSSemPend()가 리턴되는데, 이는 신호가 발생했음을 의미한다. 이는 기대하는 결과이다.
+
+세마포어 카운터가 0이면 신호가 발생하지 않았음을 의미하며, OSSemPend()를 호출한 task는 세마포어가 방출될 때까지 기다려야할 수 있다. OS_OPT_PEND_NON_BLOCKING 옵션을 지정하면 OSSemPend()는 즉시 리턴되며, 반환된 오류 코드는 신호가 발생하지 않았음을 표시한다.
+
+옵션으로 OS_OPT_PEND_BLOCKING을 지정하면 세마포어가 시그널링되기를 기다리는 task의 목록에 OSSemPend()를 호출한 task가 삽입된다. task는 Fig14-6과 같이 우선순위 순서에 따라 list에 삽입된다(가장 높은 우선순위의 task가 list의 시작부분에 있음).
+
+0이 아닌 타임아웃을 지정하면, task는 tick list에도 삽입된다. 0 타임아웃 값은 OSSemPend()를 호출한 task가 세마포어가 시그널링될 때까지 영원히 기다릴 의향이 있음을 나타낸다.
+
+현재 task가 실행될 수 없으므로, 스케줄러가 호출된다. 스케줄러는 실행 준비가 된, 다음으로 우선순위가 높은 task를 실행할 것이다.
+
+세마포어가 시그널링되고 OSSemPend()를 호출한 task가 가장 높은 우선순위의 task가 되면, task상태를 검사하여 OSSemPend()가 리턴되는 이유를 확인한다. 가능성은 다음과 같다.
+1. 세마포어가 시그널링되었다. 이것이 원하는 결과이다.
+2. 다른 task에 의해 대기가 중단되었다.
+3. 세마포어가 특정 타임아웃 내로 시그널링되지 않았다.
+4. 세마포어가 삭제되었다.
+
+OSSemPend()가 리턴되었을 때, OSSemPend()를 호출한 task는 오류 코드로 위 결과를 전달받을 것이다.
+
+### L14-4(2)
+OSSemPend()가 err이 OS_ERR_NONE으로 지정되어 리턴되면, 세마포어가 시그널링되었다고 가정하고 ISR또는 세마포어를 시그널링한 task를 처리할 수 있다. err에 다른 것이 포함되어 있는 경우, 즉 타임아웃 되었거나(타임아웃 argument가 0이 아닌 경우), 다른 task에 의해 대기가 중단되었거나, 세마포어가 삭제된 경우가 있을 수 있다. 따라서 반환된 오류 코드를 검사하고 모든 것이 예상대로 진행되었다고 가정하지 않는 것이 항상 중요하다.
+
+## Semaphore Internals (For Synchronization) (4)
+ISR이나 task가 다른 task를 시그널링하기 위해서는 L14-5에 나와있는 것처럼 OSSemPost()를 호출하면 된다.
+
+```c
+OS_SEM MySem;
+
+void MyISR (void)
+{
+    OS_ERR err;
+    :
+    OSSemPost(&MySem, (1)
+                OS_OPT_POST_1, (2)
+                &err); (3)
+    /* Check “err” */
+    :
+    :
+}
+```
+### L14-5(1)
+task가 OSSemPost()를 호출하여 세마포어를 시그널링한다. 세마포어의 주소를 전달하여, post할 세마포어를 지정한다. 세마포어는 미리 생성되어있어야한다.
+
+### L14-5(2)
+다음 argument는 task가 post하고자하는 방법을 명시한다. 선택할 수 있는 옵션은 여러 가지가 있다.
+
+OS_OPT_POST_1을 지정하면 (세마포어에 대기 중인 task가 여러 개인 경우) 하나의 task만 post하고자 함을 나타내고 있다. 실행 준비가 될 task는 대기 중인 task 중 가장 높은 우선순위의 task이다. 만일 동일한 우선순위에 있는 task가 여러 개인 경우, 그 중 하나만 실행준비상태가 될 것이다. Fig14-6에서 보는 바와 같이 대기 중인 task의 목록은 우선순위 순으로 배치된다(HPT는 높은 우선순위의 task, LPT는 낮은 우선순위의 task). 따라서 list에서 HPT를 추출하는 것은 빠른 연산이다.
+
+만약 OS_OPT_POST_ALL을 지정하면, 세마포어에서 대기하는 모든 task가 post되고 실행준비상태가 될 것이다.
+
+OS_OPT_POST_NO_SCHED 옵션을 이전의 두 옵션 중 하나에 추가하여 스케줄러가 OSSemPost() 마지막에 호출되지 않도록 할 수 있는데, 이는 추가적인 post가 수행될 것이어서, 스케줄링을 모든 post가 완료된 후 수행해야할 때 필요하다. 이는 시그널링이 되지만, 더 높은 우선순위의 task가 해당 세마포어를 대기하고 있었더라도 스케줄러가 호출되지 않음을 의미한다. 이를 통해 OSSemPost()를 호출한 task는 추가로 post할 수 있으며, 모든 post를 동시에 유효하게 할 수 있다. OS_OPT_POST_NO_SCHED는 이전 옵션 중 하나와 함께 사용할 수 있음을 주목하라. 따라서 다음과 같이 옵션을 지정할 수 있다:
+```c
+OS_OPT_POST_1
+OS_OPT_POST_ALL
+OS_OPT_POST_1 + OS_OPT_POST_NO_SCHED
+OS_OPT_POST_ALL + OS_OPT_POST_NO_SCHED
+```
+![Figure 14-6 Tasks waiting for semaphore](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/f3c16088-fdfd-4ab5-ae92-49b5604e6c90)
+
+### L14-5(3)
+OSSemPost()는 호출 결과에 따라 에러 코드를 반환한다. 호출이 성공했다면, err는 OS_ERR_NONE이다. 그렇지 않다면 에러코드는 에러의 이유를 나타낼 것이다(OSSemPost()에 대한 가능한 에러 코드는 443페이지의 Appendix A "μC/OS-III API Reference" 참조)
+
+# Task Semaphore
+세마포어를 사용하여 task를 시그널링하는 것은 보편적인 동기화 방법으로, μC/OS-III에서는 각 task들은 고유하게 내장된 세마포어를 가진다. 이 기능은 코드를 단순화할 뿐만 아니라 별도의 세마포어 객체를 사용하는 것보다 더 효율적이다. 각 task에 내장된 세마포어는 Fig 14-7과 같다.
+
+μC/OS-III의 task 세마포어 서비스는 OSTaskSem??() 접두사로 시작하며, 애플리케이션 프로그래머가 사용할 수 있는 서비스는 443페이지의 Appendix A "μC/OS-III API Reference"에 설명되어있다. task 세마포어는 μC/OS-III에 내장되어 있으며, 컴파일 시 다른 서비스처럼 비활성화할 수 없다. task 세마포어에 대한 코드는 os_task.c에 있다.
+
+에빈트가 발생했을 때 어떤 task를 시그널링해야하는지를 코드가 알고 있다면 이 기능을 사용할 수 있다. 예를 들어 이더넷 컨트롤러로부터 인터럽트를 받으면 수신된 패킷의 처리를 담당하는 task에 신호를 보낼 수 있는데 이 처리는 ISR 대신 task를 사용하여 수행하는 것이 바람직하기 때문이다.
+
+![Figure 14-7 Semaphore built-into a Task](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/4bcd373a-bc23-4135-b5d4-9b665f127484)
+
+표 14-2에 요약된, task 세마포어에 대해 수행할 다양한 함수가 있다.
+
+| Function Name | Operation |
+|---------------|-----------|
+|OSTaskSemPend()|task 세마포어를 대기한다.           |
+|OSTaskSemPendAbort()|task 세마포어 대기를 중단한다.           |
+|OSTaskSemPost()|task를 시그널링한다.           |
+|OSTaskSemSet()|세마포어 카운트를 원하는 값으로 설정한다.           |
+
+(표 14-2 Task Semaphore API summary)
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
