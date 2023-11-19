@@ -187,7 +187,7 @@ void main (void)
     OSInit(&err);
     :
     OSSemCreate(&MySem, (2)
-                “My Semaphore”, (3)
+                "My Semaphore", (3)
                 1, (4)
                 &err); (5)
     /* Check “err” */
@@ -734,7 +734,7 @@ void MyTask (void *p_arg)
     :
     :
     OSMutexCreate(&MyMutex, (2)
-                    “My Mutex”, (3)
+                    "My Mutex", (3)
                     &err); (4)
     /* Check “err” */
     :
