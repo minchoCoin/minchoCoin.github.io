@@ -313,7 +313,7 @@ OSSemPost()는 호출 결과에 따라 에러 코드를 반환한다. 호출이 
 
 μC/OS-III의 task 세마포어 서비스는 OSTaskSem??() 접두사로 시작하며, 애플리케이션 프로그래머가 사용할 수 있는 서비스는 443페이지의 Appendix A "μC/OS-III API Reference"에 설명되어있다. task 세마포어는 μC/OS-III에 내장되어 있으며, 컴파일 시 다른 서비스처럼 비활성화할 수 없다. task 세마포어에 대한 코드는 os_task.c에 있다.
 
-에빈트가 발생했을 때 어떤 task를 시그널링해야하는지를 코드가 알고 있다면 이 기능을 사용할 수 있다. 예를 들어 이더넷 컨트롤러로부터 인터럽트를 받으면 수신된 패킷의 처리를 담당하는 task에 신호를 보낼 수 있는데 이 처리는 ISR 대신 task를 사용하여 수행하는 것이 바람직하기 때문이다.
+이벤트가 발생했을 때 어떤 task를 시그널링해야하는지를 코드가 알고 있다면 이 기능을 사용할 수 있다. 예를 들어 이더넷 컨트롤러로부터 인터럽트를 받으면 수신된 패킷의 처리를 담당하는 task에 신호를 보낼 수 있는데 이 처리는 ISR 대신 task를 사용하여 수행하는 것이 바람직하기 때문이다.
 
 ![Figure 14-7 Semaphore built-into a Task](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/4bcd373a-bc23-4135-b5d4-9b665f127484)
 
@@ -327,6 +327,40 @@ OSSemPost()는 호출 결과에 따라 에러 코드를 반환한다. 호출이 
 |OSTaskSemSet()|세마포어 카운트를 원하는 값으로 설정한다.           |
 
 (표 14-2 Task Semaphore API summary)
+
+## Pending(i.e., Waiting) On A Task Semaphore
+task가 생성되면 초기값이 0인 내부 세마포어가 자동으로 생성된다. L14-6과 같이 task 세마포어를 대기하는 것은 상당히 간단하다.
+
+```c
+void MyTask (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+    :
+    while (DEF_ON) {
+        OSTaskSemPend(10, (1)
+                        OS_OPT_PEND_BLOCKING, (2)
+                        &ts, (3)
+                        &err); (4)
+        /* Check “err” */
+    :
+    :
+    }
+}
+```
+
+### L14-6(1)
+task는 OSTaskSemPend()를 호출함으로써 task 세마포어를 대기한다. 현재 task가 대기하는 것으로 가정하기 때문에, 어떤 task를 특정할 필요가 없다. 첫 번째 argument는 clock tick 단위로 지정된 타임아웃이다. 타임아웃은 tick rate에 의존한다. tick rate(os_cfg_app.h 참조)가 1000으로 설정되면, 10틱의 타임아웃은 10 밀리초를 나타낸다. 타임아웃을 0으로 지정하는 것은 task가 task 세마포어를 영원히 대기하는 것을 의미한다.
+
+### L14-6(2)
+두 번째 인수는 대기 방법을 지정한다. OS_OPT_PEND_BLOCKING 과 OS_OPT_PEND_NON_BLOCKING 두 가지 옵션이 있다. blocking 옵션은 task 세마포어가 시그널링(또는 post)되지 않은 경우, 세마포어가 시그널링될 때까지 또는 다른 task에 의해 대기가 중단되거나, 타임아웃이 만료될 때까지 task가 대기한다는 것을 의미한다.
+
+### L14-6(3)
+세마포어가 시그널링되면, μC/OS-III는 타임스탬프를 읽어 (신호를 받는)task의 OS_TCB에 넣는다. OSTaskSemPend()가 리턴될 때 타임스탬프 값을 로컬 변수 ts에 넣는다. 이 기능은 시그널링이 실제로 발생한 시점을 알려준다. OS_TS_GET()을 호출하여 현재 타임스탬프를 읽고 차이를 계산할 수 있다. 그러면 task가 post를 한 task나 ISR로부터 시그널링되는데 걸린 시간을 확인할 수 있다.
+
+### L14-6(4)
+OSTaskSemPend()는 호출 결과에 따라 에러 코드를 반환한다. 호출이 성공적이었다면 err는 OS_ERR_NONE이다. 그렇지 않다면 에러 코드는 에러 원인을 나타낼 것이다(443페이지의 Appendix A "μC/OS-III API Reference" 참조).
+
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
