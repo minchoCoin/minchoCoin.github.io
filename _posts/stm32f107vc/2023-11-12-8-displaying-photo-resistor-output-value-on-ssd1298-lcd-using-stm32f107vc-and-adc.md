@@ -315,9 +315,8 @@ void ADC1_2_IRQHandler() {
   
 }
 
-ADC로부터 인터럽트가 발생하였다면 발생한 인터럽트가 변환이 끝나서 발생한 인터럽트인지 확인하고, 해당 인터럽트라면, 변환한 값을 받은 후 pendingbit를 초기화한다.
-
 ```
+ADC로부터 인터럽트가 발생하였다면 발생한 인터럽트가 변환이 끝나서 발생한 인터럽트인지 확인하고, 해당 인터럽트라면, 변환한 값을 받은 후 pendingbit를 초기화한다.
 
 ## main() 작성
 ```c
@@ -383,6 +382,7 @@ https://www.st.com/content/dam/kms/Contents/Reflibrary/ADC_Firmware_guide_Mode_a
 
 # 참고 - ADC 관련 라이브러리 구조체 및 함수
 
+## ADC_InitTypeDef
 ADC_InitTypeDef 구조체와 멤버는 아래와 같다.
 
 ```c
@@ -473,6 +473,7 @@ typedef struct
 //\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\stm32f10x_adc.h
 ```
 
+## ADC_Init()
 ADC_Init 함수에 대한 설명은 아래와 같다.
 
 ```c
@@ -488,6 +489,7 @@ void ADC_Init(ADC_TypeDef* ADCx, ADC_InitTypeDef* ADC_InitStruct)
 //\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\stm32f10x_adc.h
 ```
 
+## ADC_RegularChannelConfig()
 ADC_RegularChannelConfig()에 대한 설명은 아래와 같다.
 
 ```c
@@ -533,6 +535,7 @@ void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Ra
 //\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\stm32f10x_adc.c
 ```
 
+## ADC_ITConfig()
 ADC_ITConfig()에 대한 설명은 아래와 같다.
 ```c
 /**
@@ -551,7 +554,7 @@ void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)
 
 //\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\stm32f10x_adc.c
 ```
-
+## ADC_Cmd()
 ADC_Cmd()에 대한 설명은 아래와 같다.
 
 ```c
@@ -565,6 +568,7 @@ ADC_Cmd()에 대한 설명은 아래와 같다.
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 ```
 
+## ADC_ResetCalibration()
 ADC_ResetCalibration()에 대한 설명은 아래와 같다.
 ```c
 /**
@@ -575,6 +579,7 @@ ADC_ResetCalibration()에 대한 설명은 아래와 같다.
 void ADC_ResetCalibration(ADC_TypeDef* ADCx)
 ```
 
+## ADC_GetResetCalibrationStatus()
 ADC_GetResetCalibrationStatus()에 대한 설명은 아래와 같다.
 ```c
 /**
@@ -585,6 +590,7 @@ ADC_GetResetCalibrationStatus()에 대한 설명은 아래와 같다.
 FlagStatus ADC_GetResetCalibrationStatus(ADC_TypeDef* ADCx)
 ```
 
+## ADC_StartCalibration()
 ADC_StartCalibration()에 대한 설명은 아래와 같다.
 ```c
 /**
@@ -595,6 +601,7 @@ ADC_StartCalibration()에 대한 설명은 아래와 같다.
 void ADC_StartCalibration(ADC_TypeDef* ADCx)
 ```
 
+## ADC_GetCalibrationStatus()
 ADC_GetCalibrationStatus()에 대한 설명은 아래와 같다.
 ```c
 /**
@@ -605,6 +612,7 @@ ADC_GetCalibrationStatus()에 대한 설명은 아래와 같다.
 FlagStatus ADC_GetCalibrationStatus(ADC_TypeDef* ADCx)
 ```
 
+## ADC_SoftwareStartConvCmd()
 ADC_SoftwareStartConvCmd()에 대한 설명은 아래와 같다.
 ```c
 /**
