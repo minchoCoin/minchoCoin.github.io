@@ -198,7 +198,7 @@ void MyCode (void)
     OS_ERR err;
     :
     OSSemCreate(&MySem, (2)
-                “My Semaphore”, (3)
+                "My Semaphore", (3)
                 (OS_SEM_CTR)0, (4)
                 &err); (5)
     /* Check “err” */
@@ -353,13 +353,241 @@ void MyTask (void *p_arg)
 task는 OSTaskSemPend()를 호출함으로써 task 세마포어를 대기한다. 현재 task가 대기하는 것으로 가정하기 때문에, 어떤 task를 특정할 필요가 없다. 첫 번째 argument는 clock tick 단위로 지정된 타임아웃이다. 타임아웃은 tick rate에 의존한다. tick rate(os_cfg_app.h 참조)가 1000으로 설정되면, 10틱의 타임아웃은 10 밀리초를 나타낸다. 타임아웃을 0으로 지정하는 것은 task가 task 세마포어를 영원히 대기하는 것을 의미한다.
 
 ### L14-6(2)
-두 번째 인수는 대기 방법을 지정한다. OS_OPT_PEND_BLOCKING 과 OS_OPT_PEND_NON_BLOCKING 두 가지 옵션이 있다. blocking 옵션은 task 세마포어가 시그널링(또는 post)되지 않은 경우, 세마포어가 시그널링될 때까지 또는 다른 task에 의해 대기가 중단되거나, 타임아웃이 만료될 때까지 task가 대기한다는 것을 의미한다.
+두 번째 argument는 대기 방법을 지정한다. OS_OPT_PEND_BLOCKING 과 OS_OPT_PEND_NON_BLOCKING 두 가지 옵션이 있다. blocking 옵션은 task 세마포어가 시그널링(또는 post)되지 않은 경우, 세마포어가 시그널링될 때까지 또는 다른 task에 의해 대기가 중단되거나, 타임아웃이 만료될 때까지 task가 대기한다는 것을 의미한다.
 
 ### L14-6(3)
 세마포어가 시그널링되면, μC/OS-III는 타임스탬프를 읽어 (신호를 받는)task의 OS_TCB에 넣는다. OSTaskSemPend()가 리턴될 때 타임스탬프 값을 로컬 변수 ts에 넣는다. 이 기능은 시그널링이 실제로 발생한 시점을 알려준다. OS_TS_GET()을 호출하여 현재 타임스탬프를 읽고 차이를 계산할 수 있다. 그러면 task가 post를 한 task나 ISR로부터 시그널링되는데 걸린 시간을 확인할 수 있다.
 
 ### L14-6(4)
 OSTaskSemPend()는 호출 결과에 따라 에러 코드를 반환한다. 호출이 성공적이었다면 err는 OS_ERR_NONE이다. 그렇지 않다면 에러 코드는 에러 원인을 나타낼 것이다(443페이지의 Appendix A "μC/OS-III API Reference" 참조).
+
+## Posting(i.e., Signaling) A Task Semaphore
+ISR 또는 task는 L14-7과 같이 OSTaskSemPost()를 호출하여 task에 신호를 보낸다.
+```c
+OS_TCB MyTaskTCB;
+
+void MyISR (void *p_arg)
+{
+    OS_ERR err;
+    :
+    OSTaskSemPost(&MyTaskTCB, (1)
+                    OS_OPT_POST_NONE, (2)
+                    &err); (3)
+    /* Check “err” */
+    :
+    :
+}
+//L14-7 Posting (or signaling) a Semaphore
+```
+
+### L14-7(1)
+task는 OSTaskSemPost()를 호출하여 task를 post(또는 signal)한다. 원하는 task의 OS_TCB주소를 전달해야 하며, 물론 task가 존재해야한다.
+
+### L14-7(2)
+다음 argument는 post하고자하는 방법을 선택한다. 선택할 수 있는 방법은 2가지이다.
+
+OS_OPT_POST_NONE는 세마포어를 post한 후 스케줄러를 호출하는 기본 옵션이다.
+
+또는 OS_OPT_POST_NO_SCHED를 통해 스케줄러가 OSTaskSemPost()의 마지막에 호출되지 않도록 표시한다. 추가 post가 있을 수 있고, 모든 post 후 스케줄링이 일어나기 원하기 때문일 수 있다(마지막 post는 이 옵션을 지정하지 않을 것이다).
+
+OSTaskSemPost()는 호출의 결과에 따라 에러 코드를 반환한다. 성공적이였다면 에러는 OS_ERR_NONE이다. 그렇지 않다면 에러 코드는 에러 이유를 나타낼 것이다(OSTaskSemPost()에 대한 가능한 에러 코드 목록은 Appendix A, 443페이지의 "μC/OS-III API Reference"를 참조한다).
+
+## Bilateral Rendez-Vous
+두 개의 task는 Fig 14-8과 같이 두 개의 task 세마포어를 사용하여 동기화할 수 있으며, 이를 *bilateral rendez-vous* 라고 한다. bilateral rendez-vous는 진행하기 전에 두 개의 task가 서로 동기화되있어야 한다는 점을 제외하고 일반적인 rendez-vous와 유사하다. ISR은 세마포어를 대기할 수 없기 때문에 task와 ISR사이에서 bilateral rendez-vous를 수행할 수 없다.
+
+![Figure 14-8 Bilateral Rendezvous](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/750a5835-0d73-407d-b224-55d64e2b4963)
+
+L14-8은 bilateral rendez-vous를 수행하기 위한 코드이다. 물론 bilateral rendez-vous는 두 개의 서로 다른 세마포어를 사용할 수도 있지만, 내장된 task 세마포어를 사용하면 이러한 유형의 동기화를 설정할 수 있다.
+
+```c
+OS_TCB MyTask1_TCB;
+OS_TCB MyTask2_TCB;
+
+void Task1 (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+
+    while (DEF_ON) {
+    :
+    OSTaskSemPost(&MyTask2_TCB, (1)
+                    OS_OPT_POST_NONE,
+                    &err);
+    /* Check ’err” */
+    OSTaskSemPend(0, (2)
+                    OS_OPT_PEND_BLOCKING,
+                    &ts,
+                    &err);
+    /* Check ’err” */
+    :
+    }
+}
+void Task2 (void *p_arg)
+{
+    OS_ERR err;
+    CPU_TS ts;
+
+    while (DEF_ON) {
+    :
+    OSTaskSemPost(&MyTask1_TCB, (3)
+                    OS_OPT_POST_NONE,
+                    &err);
+    /* Check ’err” */
+    OSTaskSemPend(0, (4)
+                    OS_OPT_PEND_BLOCKING,
+                    &ts,
+                    &err);
+    /* Check ’err” */
+    :
+    }
+}
+//L14-8 Tasks synchronizing their activities
+```
+
+### L14-8(1)
+Task 1이 실행되고, Task 2 세마포어를 시그널링한다.
+
+### L14-8(2)
+Task 1은 Task 2와 동기화 하기 위해 자신의 내부 세마포어를 대기한다. Task #2가 아직 실행되지 않았기 때문에, Task 1은 시그널링될 자신의 세마포어를 대기하면서 실행이 중단된다. μC/OS-III는 Task 2로 문맥교환한다.
+
+### L14-8(3)
+Task 2가 실행되고, Task 1 세마포어를 시그널링한다.
+
+### L14-8(4)
+이미 시그널링되었기 때문에, Task 2는 Task 1과 동기화된다. Task 1이 Task2보다 우선순위가 높으면, μC/OS-III는 Task 1으로 다시 전환될 것이다. 그렇지 않으면, Task 2는 실행을 계속한다.
+
+# Event Flags
+이벤트 플래그는 task가 여러 이벤트 발생과 동기화해야 할 때 사용된다. task는 이벤트 중 어느 하나라도 발생했을 때 동기화될 수 있는데 이를 disjunctive synchronization(logical OR)라고 한다. task가 모든 이벤트가 발생했을 때 동기화될 수 있는데, 이를 conjunctive synchronization(logical AND)라고 한다. disjunctive와 conjuctive synchronization은 Fig 14-9와 같다.
+
+애플리케이션 프로그래머는 무제한의 이벤트 플래그 그룹(사용 가능한 RAM에만 제한됨)을 만들 수 있다. μC/OS-III에서 이벤트 플래그 서비스는 OSFlag??() 접두사로 시작한다. 애플리케이션 프로그래머가 사용할 수 있는 서비스는 443페이지 Appendix A, "μC/OS-III API Reference"에 설명되어 있다.
+
+이벤트 플래그 서비스에 대한 코드는 os_flag.c 파일에 있으며, os_cfg.h에 OS_CFG_FLAG_EN을 1로 설정하여 활성화할 수 있다.
+
+![Figure 14-9 Event Flags](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/dd8cc0f7-f9ab-450a-9980-4ac7253439a9)
+
+## F14-9(1)
+μC/OS-III "이벤트 플래그 그룹"은 OS_FLAG_GRP 타입의 커널 객체이며, 일련의 비트들(os_type.h에 정의된 자료형 OS_FLAGS에 따라 8,16,32비트)로 구성된다. 이벤트 플래그 그룹은 비트들 중 일부(또는 모든)가 set돠거나 clear되기를 기다리는 task들의 목록을 가지고 있다. 이벤트 플래그 그룹은 task과 ISR이 사용하기 전에 먼저 생성되어야 한다. 이벤트 플래그는 μC/OS-III를 시작하기 전에, 또는 애플리케이션 코드의 시작 task에 의해 생성되어야 한다.
+
+## F14-9(2)
+task 또는 ISR은 이벤트 플래그에 post할 수 있다. task만 이벤트 플래그 그룹을 생성하고, 삭제하고, 다른 task가 대기하는 것을 중단할 수 있다.
+
+## F14-9(3)
+task는 이벤트 플래그 그룹의 임의의 수의 비트들에 대해 대기할 수 있다. 모든 μC/OS-III pend와 마찬가지로, task는 원하는 비트들이 지정된 시간(틱)내에 post되지 않으면 task가 재개되도록 타임아웃 값을 지정할 수 있다.
+
+## F14-9(4)
+task는 비트들의 subset 중 어떤 bit라도 set(또는 clear)될 때까지 기다릴 것인지(OR), 또는 subset의 모든 bit가 set(또는 clear)될 때까지 기다릴 것인지(AND) 지정할 수 있다.
+
+# Event Flags(2)
+표 14-3에 요약된 바와 같이, 이벤트 플래그와 관련된 다양한 함수가 있다.
+
+| Function Name | Operation |
+|---------------|-----------|
+|OSFlagCreate()|이벤트 플래그 그룹을 만든다.|
+|OSFlagDel()|이벤트 플래그 그룹을 삭제한다.|
+|OSFlagPend()|이벤트 플래그 그룹을 기다린다.|
+|OSFlagPendAbort()|이벤트 플래그 그룹 대기를 중단한다.|
+|OSFlagPendGetFlagsRdy()|task를 ready상태로 만든 플래그를 얻는다.|
+|OSFlagPost()|이벤트 플래그 그룹에 플래그를 post한다.|
+
+(표 14-3 Event Flags API summary)
+
+## Using Event Flags
+task 또는 ISR이 이벤트 플래그 그룹에 post하면, 대기하고 있던 task는 모두 재개된다.
+
+이벤트 플래그 그룹의 각 비트가 의미하는 바를 결정하는 것은 애플리케이션에 달려 있으며, 필요한 만큼 많은 이벤트 플래그 그룹을 사용하는 것이 가능하다. 예를 들어 이벤트 플래그 그룹에서 0번째 비트는 온도 센서가 너무 낮음을 나타내고, 1번째 비트는 배터리 전압이 낮음을 나타내고, 2번째 비트는 스위치가 눌려졌음을 나타낸다고 정의할 수 있다. 이러한 조건을 감지하는 코드(task 또는 ISR)는 OSFlagPost()를 호출하여 적절한 이벤트 플래그를 설정하고, 이러한 조건에 응답하는 task(들)는 OSFlagPend()를 호출한다
+
+L14-9는 이벤트 플래그를 어떻게 사용하는지 보여준다.
+
+```c
+#define TEMP_LOW (OS_FLAGS)0x0001 (1)
+#define BATT_LOW (OS_FLAGS)0x0002
+#define SW_PRESSED (OS_FLAGS)0x0004
+
+OS_FLAG_GRP MyEventFlagGrp; (2)
+
+void main (void)
+{
+    OS_ERR err;
+
+    OSInit(&err);
+    :
+    OSFlagCreate(&MyEventFlagGrp, (3)
+                "My Event Flag Group",
+                (OS_FLAGS)0,
+                &err);
+    /* Check ’err” */
+    :
+    OSStart(&err);
+}
+void MyTask (void *p_arg) (4)
+{
+    OS_ERR err;
+    CPU_TS ts;
+
+    while (DEF_ON) {
+            OSFlagPend(&MyEventFlagGrp, (5)
+            TEMP_LOW + BATT_LOW,
+            (OS_TICK )0,
+            (OS_OPT)OS_OPT_PEND_FLAG_SET_ANY,
+            &ts,
+            &err);
+        /* Check ’err” */
+        :
+    }
+}
+
+void MyISR (void) (6)
+{
+    OS_ERR err;
+    :
+    OSFlagPost(&MyEventFlagGrp, (7)
+                BAT_LOW,
+                (OS_OPT)OS_OPT_POST_FLAG_SET,
+                &err);
+    /* Check ’err” */
+    :
+}
+```
+
+### L14-9(1)
+이벤트 플래그 그룹에 사용할 비트를 정의해야 한다.
+
+### L14-9(2)
+OS_FLAG_GRP 타입의 변수를 선언해야한다. 이 변수는 이 이벤트 플래그 그룹을 사용하는 모든 μC/OS-III함수에서 참조될 것이다. 논의를 위해, 이벤트 플래그들이 os_type.h에서 16bit로 선언된다고 가정한다(즉, COU_INT16U 타입).
+
+### L14-9(3)
+이벤트 플래그 그룹은 사용되기 전에 먼저 생성되어야한다. 이벤트 플래그 그룹을 생성하기 위한 최적의 함수는 시작 코드이다. 시작 코드에 이벤트 플래그 그룹을 생성하면 어떤 task나 ISR도 μC/OS-III가 시작될 때까지 이벤트 플래그 그룹을 사용할 수 없도록 보장한다. 다시 말해서, 최적의 장소는 이벤트 플래그 그룹을 main()에 생성하는 것이다. 예제에서, 이벤트 플래그는 이름이 주어졌고 모든 비트는 클리어된 상태(즉, 모두 0)에서 시작한다.
+
+### L14-9(4)
+여기서 애플리케이션이 이벤트 플래그 그룹을 대기할 예정인 MyTask()를 생성했다고 하자.
+
+### L14-9(5)
+이벤트 플래그 그룹을 대가하려면, OSFlagPend()를 호출하여 원하는 이벤트 플래그 그룹의 주소를 전달해야한다.
+
+두 번쨰 argument는 set될 때까지 대기할 bit를 지정한다(task가 clear될 bit가 아니라 set될 bit를 기다린다고 가정).
+
+또한 이러한 비트가 set될 때까지 대기할 시간을 설정해야한다. 타임아웃 값이 0이면 비트가 set될 때까지 영원히 대기할 것임을 나타낸다. 0이 아닌 값은 최대로 기다릴 틱 수를 나타낸다.
+
+OS_OPT_FLAG_SET_ANY를 지정하면, 지정된 두 비트 중 하나가 설정되면 task가 꺠어남을 나타낸다.
+
+이벤트 플래그 그룹이 post될 때 타임스탬프가 읽혀지고 저장된다. 이 타임스탬프는 이벤트에 대한 응답시간을 확인하는데 사용될 수 있다.
+
+OSFlagPend()는 전달된 argument에 대해 여러 검사를 수행하고(즉, NULL 포인터 전달, 잘못된 옵션 전달), 호출 결과에 따라 오류 코드를 반환한다(os_cfg.h에서 OS_CFG_ARG_CHK_EN이 1로 설정되어있다고 가정). 호출이 성공하면 err는 OS_ERR_NONE이다.
+
+### L14-9(6)
+ISR은 제품의 배터리 전압이 낮을 때(제품이 배터리로 작동된다고 가정할 때) 감지하도록 설정된다. ISR은 해당 task에 신호를 보내며 해당 task가 필요한 모든 조치를 수행하도록 한다.
+
+### L14-9(7)
+post 호출에도 post할 이벤트 플래그 그룹의 위치를 지정하고, 어떤 플래그를 설정할 것인지도 설정한다. 세 번째 옵션은 비트가 set됨으로서 플래그될 것임을 지정한다. 그리고 함수는 호출의 결과에 따라 err을 설정한다.
+
+## Using Event Flags(2)
+이벤트 플래그는 일반적으로 status와 transient event 두 가지 목적으로 사용된다. 일반적으로 L14-10과 같이 이들 각각을 처리하기 위해 다른 이벤트 플래그 그룹을 사용할 것이다.
+
+Task 또는 ISR은 특정 값을 초과한 온도, 엔진 또는 모터의 RPM이 0이거나 탱크의 연료가 있는 등의 상태 정보를 보고할 수 있다. 상태가 다른 task 또는 ISR에 의해 관리되기 때문에 이러한 상태 정보는 이러한 이벤트를 대기하는 task에 의해 처리될 수 없다. 상태 정보와 연관된 이벤트 플래그는 다른 task가 non-blocking wait call을 사용하여 모니터링 된다.
+
+task는 또한 스위치가 눌렸거나, 모션 센서가 물체를 감지했거나, 폭발이 발생한 것과 같은 일시적인 이벤트를 보고할 수도 있다. 이러한 이벤트들에 응답하는 task는 일반적으로 그러한 이벤트들 중 임의의 것이 발생하기를 block-waiting하고, 이벤트를 처리할 것이다.
+
+![Figure 14-10 Event Flags used for Status and Transient Events](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/f0329aac-80a8-427d-9272-f66691228828)
 
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
