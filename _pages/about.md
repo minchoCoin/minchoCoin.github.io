@@ -31,6 +31,9 @@ layout: single
 
 - 2023.09: [리그오브레전드의 각종 지표와 승률의 상관관계 분석](https://github.com/minchoCoin/LOL_data_analysis_prj)
     - 리그오브레전드의 킬수, 타워파괴횟수 등과 승률의 상관관계를 scikit-learn, pandas 등을 이용하여 분석하였습니다.
+
+- 2023.08: [아두이노로 만드는 마법의 소라고둥](https://github.com/minchoCoin/arduino_eduthon)
+    - 동아리 에듀톤으로, 아두이노와 음성인식모듈, mp3 모듈, 서보모터를 이용하여 질문에 랜덤으로 대답하는 간이 로봇 만들기 프로젝트를 하였습니다.
 - 2023.05 - 2023.07: [한식당 웹사이트 프로젝트](https://github.com/minchoCoin/internet-and-web-term-prj)
     - '인터넷과웹기초' 과목의 텀프로젝트로 html, css, javascript, jquery, nodejs를 이용하여 한식당 웹사이트를 만들었습니다.
 
