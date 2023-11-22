@@ -10,7 +10,7 @@ main:
   #   url: /collection-archive/
   # - title: "Sitemap"
   #   url: /sitemap/
-  - title: "resume"
+  - title: "Resume"
     url: /resume/
   - title: "Tag"
     url: /tags/
