@@ -4,6 +4,8 @@ title: "Resume"
 last_modified_at: 2023-11-21T11:59:26+09:00
 
 layout: single
+
+minimal_mistakes_skin: "default"
 ---
 # Taehun Kim
 ## Contact
