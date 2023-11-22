@@ -11,7 +11,7 @@ main:
   # - title: "Sitemap"
   #   url: /sitemap/
   - title: "Resume"
-    url: /resume/
+    url: https://minchocoin.github.io/resume/
   - title: "Tag"
     url: /tags/
   - title: "Category"
