@@ -266,7 +266,7 @@ ADC_DataAlign은 ADC_DataAlign_Right로 설정하여 변환된 값 왼쪽에 4�
 
 ADC_ExternalTrigConv는 ADC_ExternalTrigConv_None으로 설정하여, 외부 트리거를 받지 않는 것으로 설정한다.
 
-그리고 ADC Mode는 independent 모드로 설정하고, NbrOfChannel은 1로 설정하여 채널의 개수는 1로 설정하고, ScanCovMode는 채널 그룹 내의 모든 채널을 순서대로 스캔하여 변환하는 모드로, DISABLE로 설정한다. 그리고 ADC_Init()으로 설정한 구조체를 실제 레지스터에 반영한다.
+그리고 ADC Mode는 independent 모드로 설정하고, NbrOfChannel은 1로 설정하여 채널의 개수는 1로 설정하고, ScanCovMode는 채널 그룹 내의 모든 채널을 순서대로 스캔하여 변환하는 모드로, 지금은 한 개의 채널만 사용하면 되므로 DISABLE로 설정한다. 그리고 ADC_Init()으로 설정한 구조체를 실제 레지스터에 반영한다.
 
 ADC_RegularChannelConfig를 사용하여 ADC regular channel을 설정한다. ADC1을 설정한다고 명시하고, 채널은 ADC_Channel_12로 설정한다. 그리고 채널 rank는 1, 샘플링 타임은 239.5Cycle로 지정한다.
 
