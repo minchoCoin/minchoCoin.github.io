@@ -837,6 +837,51 @@ OSMutexPost()에 대한 옵션이 OS_OPT_POST_NO_SCHED가 아닌 경우, 스케�
 
 한 번에 하나의 뮤텍스만 획득해야 한다는 점에 유의해야 한다. 실제로 뮤텍스를 획득할 때 다른 커널 객체는 획득하지 않는 것이 매우 권장된다.
 
+## OSMutexPend Function
+```c
+void  OSMutexPend (OS_MUTEX  *p_mutex,
+                   OS_TICK    timeout,
+                   OS_OPT     opt,
+                   CPU_TS    *p_ts,
+                   OS_ERR    *p_err)
+{
+    ...
+    p_tcb = p_mutex->OwnerTCBPtr;                           /* Point to the TCB of the Mutex owner                    */
+    if (p_tcb->Prio > OSTCBCurPtr->Prio) {                  /* See if mutex owner has a lower priority than current   */
+        switch (p_tcb->TaskState) {
+            case OS_TASK_STATE_RDY:
+                 OS_RdyListRemove(p_tcb);                   /* Remove from ready list at current priority             */
+                 p_tcb->Prio = OSTCBCurPtr->Prio;           /* Raise owner's priority                                 */
+                 OS_PrioInsert(p_tcb->Prio);
+                 OS_RdyListInsertHead(p_tcb);               /* Insert in ready list at new priority                   */
+                 break;
+
+            case OS_TASK_STATE_DLY:
+            case OS_TASK_STATE_DLY_SUSPENDED:
+            case OS_TASK_STATE_SUSPENDED:
+                 p_tcb->Prio = OSTCBCurPtr->Prio;           /* Only need to raise the owner's priority                */
+                 break;
+
+            case OS_TASK_STATE_PEND:                        /* Change the position of the task in the wait list       */
+            case OS_TASK_STATE_PEND_TIMEOUT:
+            case OS_TASK_STATE_PEND_SUSPENDED:
+            case OS_TASK_STATE_PEND_TIMEOUT_SUSPENDED:
+                 OS_PendListChangePrio(p_tcb,
+                                       OSTCBCurPtr->Prio);
+                 break;
+
+            default:
+                 OS_CRITICAL_EXIT();
+                *p_err = OS_ERR_STATE_INVALID;
+                 return;
+        }
+    }
+}
+```
+mutex가 낮은 우선순위의 task에 의해 소유되는 경우, OSMutePend()는 mutex를 소유하는 task의 우선순위를 mutex를 대기하는 task와 동일한 우선순위로 올린다.
+
+mutex를 소유한 task가 mutex를 방출하면, 우선순위가 원래 우선순위로 돌아간다(OSMutexPost() 참조).
+
 # Should You Use A Semaphore Instead Of A Mutex?
 공유 자원을 놓고 경쟁하는 task 중 어느 task도 deadline이 없는 경우 mutex 대신 세마포어를 사용할 수 있다.
 
