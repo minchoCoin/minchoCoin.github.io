@@ -412,8 +412,32 @@ RPM task는 OSTaskQPend()를 호출하여 RPM ISR로부터의 메시지를 기�
 
 ![Figure 15-13 OS_MSG_Q structure](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/fc8238e4-7a52-426f-8c4f-6273be2ed07a)
 
+- .InPtr : 이 필드는 OS_MSG가 다음으로 삽입될 위치를 가리킨다. OS_MSG는 .InPtr이 가리키는 OS_MSG 바로 다음에 삽입된다(즉, .InPtr이 가리키는 OS_MSG 의 .NextPtr).
+- .OutPtr : 이 필드는 다음으로 꺼내질 OS_MSG의 위치를 가리킨다.
+- .NbrEntriesSize : 이 필드는 큐가 보유할 수 있는 최대 OS_MSG 개수이다. 애플리케이션이 메시지를 보내려고 하는데 .NbrEntries와 .NbrEntriesSize가 일치하면, 큐가 꽉 찬 것으로 간주되어 OS_MSG가 삽입되지 않는다.
+- .NbrEntries : 이 필드는 현재 큐에 있는 OS_MSG의 개수이다.
+- .NbrEntriesMax : 이 필드는 큐에 있었던 OS_MSG 개수의 최대값이다.
 
+μC/OS-III는 free list및 메시지를 관리하기 위해 수많은 내부 함수를 사용한다. 구체적으로, OS_MsgQPut()은 OS_MSG_Q에 OS_MSG를 삽입하고, OS_MsgQGet()은 OS_MSG_Q에서 OS_MSG를 꺼내며, OS_MsgQFreeAll()은 OS_MSG_Q에 있는 모든 OS_MSG를 free OS_MSG 풀로 반환한다. os_msg.c에 초기화 시 사용되는 OS_MsgQ??()로 시작하는 다양한 함수가 있다.
 
+Fig 15-14는 OS_MSG가 4개 삽입된 OS_MSG_Q를 보여준다.
+
+![Figure 15-14 OS_MSG_Q with four OS_MSGs](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/eda59ddf-f233-40fc-b289-8f6f83ff6fb2)
+
+OS_MSG_Q는 OS_Q와 OS_TCB 내부에 사용된다. 메시지 큐 객체를 만들 때 OS_Q가 선언된다는 것을 기억하라. OS_TCB는 task control block이며, 앞서 언급한 바와 같이 os_cfg.h에 있는 상수 OS_CFG_TASK_Q_EN을 1로 설정하면 OS_TCB는 고유의 메시지 큐를 가질 수 있다. Fig15-15는 OS_MSG_Q를 포함하는 OS_Q와 OS_TCB를 보여준다. OS_MSG_Q 자료구조는 구조 내의 구조를 강조하기 위해 분해도(exploded view)로 보여준다.
+
+![Figure 15-15 OS_Q and OS_TCB each contain an OS_MSG_Q](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/9296d77c-df0e-4953-979d-26cec60b9a25)
+
+# Summary
+메시지 큐는 task나 ISR이 다른 task에 데이터를 보내야 할 때 유용하다. 전송된 데이터는 값이 아닌 참조에 의한 전달이기 때문에 데이터는 유지되어야 한다. 즉, 전송된 데이터는 복사되지 않는다.
+
+메시지가 전송되기를 기다리는 task는 기다리는 동안 CPU 시간을 소모하지 않는다.
+
+어떤 task가 생산자가 보낸 메시지를 서비스하는지 알려져 있다면, task 메시지 큐(즉, OSTaskQ???()) 서비스가 간단하고 빠르기 때문에 이것을 사용해야 한다. task 메시지 큐 서비스는 os_cfg.h에서 OS_CFG_TASK_Q_EN을 1로 설정하면 활성화 된다.
+
+여러 task가 동일한 메시지 큐에서 오는 메시지를 기다려야 하는 경우, OS_Q를 만들고 해당 task가 큐로 메시지가 전송될 때까지 기다리도록 해야 한다. 또는 메시지 큐에서 기다리는 모든 task에게 메시지를 브로드캐스트할 수 있다. 메시지 큐 서비스는 os_cfg.h에서 OS_CFG_Q_EN이 1로 설정되어 있을 때 활성화 된다.
+
+메시지는 pool에서 μC/OS-III가 획득한 OS_MSG 자료구조를 사용하여 전송된다. 메시지 큐로 보낼 수 있는 최대 메시지 수 또는 pool에서 사용 가능한 메시지 수를 설정해야 한다.
 # Reference
  - uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009
 
