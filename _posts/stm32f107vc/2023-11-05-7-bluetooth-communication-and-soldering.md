@@ -98,6 +98,18 @@ CONFIG SELECT 핀에 3.3V 입력을 해제하고 보드 전원을 껐다 켜 AT 
 스마트폰을 Serial Bluetooth Terminal 앱을 통해 보드와 연결하여 통신한다.
 
 # 코드 작성
+
+## 여러 헤더 파일 include
+```c
+#include "stm32f10x.h"
+#include "stm32f10x_exti.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_usart.h"
+#include "stm32f10x_rcc.h"
+
+#include "misc.h"
+```
+
 ## RCC 설정
 
 ```c

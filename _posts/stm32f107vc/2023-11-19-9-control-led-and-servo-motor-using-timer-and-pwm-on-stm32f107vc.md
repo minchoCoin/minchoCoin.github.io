@@ -138,6 +138,23 @@ static void SetSysClock(void)
 
 # 코드 작성
 
+## 여러 헤더파일 include
+```c
+#include <stdbool.h>
+#include "stm32f10x.h"
+#include "stm32f10x_exti.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_usart.h"
+#include "stm32f10x_rcc.h"
+#include "core_cm3.h"
+#include "stm32f10x_adc.h"
+#include "lcd.h"
+#include "touch.h"
+#include "misc.h"
+
+#include "stm32f10x_tim.h"
+```
+
 ## 전역변수 정의
 ```c
 uint16_t value, x, y;

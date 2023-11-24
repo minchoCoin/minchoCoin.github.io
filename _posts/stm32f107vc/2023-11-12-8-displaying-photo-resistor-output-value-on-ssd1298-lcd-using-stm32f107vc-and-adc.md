@@ -199,6 +199,23 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
 # 코드 작성
 앞으로 나올 코드에서 value, x, y는 uint16_t 타입으로 선언된 전역 변수이다.
 
+## 여러 헤더 파일 include
+```c
+#include <stdbool.h>
+#include "stm32f10x.h"
+#include "core_cm3.h"
+#include "misc.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_usart.h"
+#include "stm32f10x_adc.h"
+#include "lcd.h"
+#include "touch.h"
+
+#include "stm32f10x_exti.h"
+#include "stm32f10x_rcc.h"
+
+```
+
 ## RCC 설정
 
 ```c

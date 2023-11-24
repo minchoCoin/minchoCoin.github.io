@@ -169,6 +169,11 @@ $$ USARTDIV = Mantissa + \frac{Fraction}{16}$$
 
 # 실험 과정
 
+## stm32f10x.h include
+```c
+#include "stm32f10x.h"
+```
+
 ## PCLK2를 시스템 클럭의 1/2로 설정(14MHz)하고, 시스템 클럭을 HSE 클럭(25MHz)과 Mux, PREDIVx, PLLxMUL을 이용하여 28MHz로 설정하기
 
 ```c

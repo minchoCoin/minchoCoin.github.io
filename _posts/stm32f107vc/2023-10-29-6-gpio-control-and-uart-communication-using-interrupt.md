@@ -130,6 +130,17 @@ typedef struct
 
 # 실험 과정
 
+## 여러 헤더 파일 include
+```c
+#include "stm32f10x.h"
+#include "stm32f10x_exti.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_usart.h"
+#include "stm32f10x_rcc.h"
+
+#include "misc.h"
+```
+
 ## RCC_APB2에 클럭 인가
 
 ```cpp
