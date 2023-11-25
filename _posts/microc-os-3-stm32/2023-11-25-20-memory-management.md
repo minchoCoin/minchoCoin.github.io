@@ -50,7 +50,7 @@ void main (void) (3)
     OSInit(&err);
     :
     OSMemCreate((OS_MEM *)&MyPartition, (4)
-                (CPU_CHAR *)”My Partition”, (5)
+                (CPU_CHAR *)"My Partition", (5)
                 (void *)&MyPartitionStorage[0][0], (6)
                 (OS_MEM_QTY ) 12, (7)
                 (OS_MEM_SIZE)100, (8)
