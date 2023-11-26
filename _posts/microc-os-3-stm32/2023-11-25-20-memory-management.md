@@ -110,7 +110,7 @@ void main (void)
         p_storage = malloc(12 * 100); (3)
         if (p_storage != (void *)0) {
             OSMemCreate((OS_MEM *)MyPartitionPtr, (4)
-                        (CPU_CHAR *)”My Partition”,
+                        (CPU_CHAR *)"My Partition",
                         (void *)p_storage, (5)
                         (OS_MEM_QTY ) 12, (6)
                         (OS_MEM_SIZE)100, (6)
