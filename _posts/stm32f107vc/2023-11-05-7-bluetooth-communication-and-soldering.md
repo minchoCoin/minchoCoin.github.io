@@ -82,7 +82,7 @@ VCC, GND핀을 보드의 3.3V와 GND에 연결하고, STATUS 핀과 DCD핀은 LE
 
 ## 코드 작성
 1. 실험에 필요한 GPIOA와 USART1, USART2 및 AFIO clock을 활성화한다.
-2.	USART1 TX(PA9), USART1 RX(PA10), USART2 TX(PA2), USART RX(PA3)의 핀모드와 속도를 설정한다.
+2.	USART1 TX(PA9), USART1 RX(PA10), USART2 TX(PD5), USART RX(PD6)의 핀모드와 속도를 설정한다.
 3.	USART1과 USART2의 BaudRate, WordLength, StopBIts, HardwareFlowControl, Parity bit, mode를 설정한다.
 4.	USART1 인터럽트와 USART2 인터럽트의 우선순위를 설정한다.
 5.	USART1 인터럽트 핸들러를 만든다. USART1, 즉 Putty에서 데이터를 받았을 때, 받은 데이터를 USART2로 보낸다.
@@ -150,19 +150,19 @@ void GPIO_Configure(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     /* USART2 pin setting */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
    //RX
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
 }
 
 ```
-GPIO_InitTypeDef 구조체를 활용하여 TX(USART1은 PA9, USART2는 PA2)은 Alternative function output push-pull, RX(USART1은 PA10, USART2는 PA3)는 Input with pull-up/pull-down으로 설정하고 속도는 모두 50MHz로 설정한다. 그리고 GPIO_Init을 이용하여 설정값이 들어있는 구조체를 실제로 레지스터에 반영한다.
+GPIO_InitTypeDef 구조체를 활용하여 TX(USART1은 PA9, USART2는 PD5)은 Alternative function output push-pull, RX(USART1은 PA10, USART2는 PD6)는 Input with pull-up/pull-down으로 설정하고 속도는 모두 50MHz로 설정한다. 그리고 GPIO_Init을 이용하여 설정값이 들어있는 구조체를 실제로 레지스터에 반영한다.
 
 ## USART1 설정
 ```c
