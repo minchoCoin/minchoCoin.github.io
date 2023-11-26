@@ -1,5 +1,5 @@
 ---
-title: "μC/OS-III ch.15 Synchronization"
+title: "μC/OS-III ch.15 Message Passing"
 last_modified_at: 2023-11-22T11:18:12+09:00
 categories:
     - microc-os-3-stm32
