@@ -1,5 +1,5 @@
 ---
-title: "복합 출력의 처리 방법 - 오피스31 다차원 분류 신경망"
+title: "간단한 합성곱 모델 - 꽃 이미지 분류 신경망"
 last_modified_at: 2023-11-20T19:18:12+09:00
 categories:
     - alzza-deeplearning
