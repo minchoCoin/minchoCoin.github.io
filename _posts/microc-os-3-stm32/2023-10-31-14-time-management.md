@@ -27,6 +27,8 @@ author_profile: true
 |OSTimeSet()               |tick counter를 새로운 값으로 설정한다           |
 |OSTimeTick()               |clock tick 발생을 알린다.           |
 
+(표11-1 Time Services API summary)
+
 애플리케이션 프로그래머는 이러한 서비스에 대한 상세한 설명을 보기 위해 Appendix A, "μC/OS-III API Reference"를 참조해야한다.
 
 # OSTimeDly()
@@ -95,7 +97,7 @@ HPT가 실행된다.
 이 틱에서 실행할 HPT가 없으므로 μC/OS-III는 LPT로 전환된다.
 
 ## F11-1(9)
-HPT의 실행시간이 있을 때, 시간 지연은 요청한 것처럼 정확히 2개의 틱이 아니다. 실 정확히 원하는만큼의 틱의 지연을 구하는 것은 사실상 불가능하다. 두 틱의 지연을 요청할 수도 있지만, 바로 다음 틱은 OSTimeDly()를 호출한 직후에 발생할 수 있다! 만약 모든 HPT가 실행하는 데 시간이 더 걸리고 (3)과 (4)를 오른쪽으로 더 밀어냈을 때 어떤 일이 일어날지 상상해 보아라. 이 경우 지연은 실제로 두 틱이 아니라 한 틱으로 나타날 것이다.
+HPT의 실행시간이 있을 때, 시간 지연은 요청한 것처럼 정확히 2개의 틱이 아니다. 사실 정확히 원하는만큼의 틱의 지연을 구하는 것은 사실상 불가능하다. 두 틱의 지연을 요청할 수도 있지만, 바로 다음 틱은 OSTimeDly()를 호출한 직후에 발생할 수 있다! 만약 모든 HPT가 실행하는 데 시간이 더 걸리고 (3)과 (4)를 오른쪽으로 더 밀어냈을 때 어떤 일이 일어날지 상상해 보아라. 이 경우 지연은 실제로 두 틱이 아니라 한 틱으로 나타날 것이다.
 
 # OSTimeDly() (3)
 OSTimeDly()는 L11-2와 같이, OS_OPT_TIME_PERIODIC 옵션으로 호출될 수도 있다. 이 옵션은 틱 카운터가 어떤 주기적 매치 값에 도달할 때까지 task를 지연시킬 수 있으며, 따라서 시간 내의 간격이 CPU 부하 변동의 영향을 받지 않으므로 항상 동일함을 보장한다.
@@ -138,7 +140,7 @@ OS_OPT_TIME_PERIODIC으로 지정하면, 틱 카운터가 이전 호출에서부
 요약하면, task는 OSTickCtr이 아래와 같은 값에 도달했을 때 깨어난다.
 
 ```c
-Value of “opt”          Task wakes up when
+Value of "opt"          Task wakes up when
 
 OS_OPT_TIME_DLY         OSTickCtr + dly
 

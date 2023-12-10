@@ -18,7 +18,7 @@ author_profile: true
 
 타이머는 프로토콜 스택(예를 들어, 재전송 타이머)에서 유용하며, 또한 미리 정의된 간격으로 I/O장치를 폴링하는데 사용될 수 있다.
 
-애플리케이션은 임의의 수의 타이머들을 가질 수 있다 (사용 가능한 RAM의 양에 의해서만 제한됨). μC/OS-III에서의 타이머 서비스들 (즉, 함수들)은 OSTmr????() 접두사로 시작하며, 애플리케이션 프로그래머가 사용 가능한 서비스들은 443페이지 Appendix A "μC/OS-III API Refernece"에 기술되어 있다.
+애플리케이션은 임의의 수의 타이머들을 가질 수 있다 (사용 가능한 RAM의 양에 의해서만 제한됨). μC/OS-III에서의 타이머 서비스들 (즉, 함수들)은 OSTmr????() 접두사로 시작하며, 애플리케이션 프로그래머가 사용 가능한 서비스들은 443페이지 Appendix A "μC/OS-III API Reference"에 기술되어 있다.
 
 μC/OS-III에 의해 관리되는 모든 타이머의 해상도는 헤르츠(Hz)로 표현되는 설정 상수 OS_CFG_TMR_TASK_RATE_HZ에 의해 결정된다. 따라서, timer task rate를 10으로 설정하면, 모든 타이머는 1/10초의 해상도(뒤에 다이어그램에서 틱)를 갖게 된다. 
 
@@ -129,7 +129,7 @@ struct os_tmr {
 .CallbackPtr은 타이머가 만료되면 호출되는 함수의 포인터이다. 타이머가 생성되고 이 argument에 NULL 포인터를 주면, 타이머가 만료되었을 때 콜백이 호출되지 않는다.
 
 ### L12-1(5)
-.CallbackPtr이 NULL이 아닌 경우, 애플리케이션 코드는 타이머가 만료될 때 argument와 함께 콜백이 호출되도록 지정할 수 있다. 즉 이 argument는 콜백 함수에 전달될 arugment이다.
+.CallbackPtr이 NULL이 아닌 경우, 애플리케이션 코드는 타이머가 만료될 때 argument와 함께 콜백이 호출되도록 지정할 수 있다. 즉 이 argument는 콜백 함수에 전달될 argument이다.
 
 ### L12-1(6)
 .NextPtr과 .PrevPtr은 타이머를 doubly linked list로 구성하는데 사용하는 포인터이다. 이것은 나중에 설명한다.
@@ -234,7 +234,7 @@ void MyTask (void *p_arg)
     while (DEF_ON) {
         :
         OSTmrCreate((OS_TMR *)&MyTmr1,
-                    (OS_CHAR *)“My Timer #1”,
+                    (OS_CHAR *)"My Timer #1",
                     (OS_TICK )1,
                     (OS_TICK )0,
                     (OS_OPT )OS_OPT_TMR_ONE_SHOT,
@@ -268,7 +268,7 @@ Index into OSCfg_TickWheel[] = 4
 ```
 테이블의 원형(circular) 특성(테이블의 크기를 이용하여 나머지 연산)때문에, 테이블은 timer wheel이라고 불리고, 각각의 항목은 wheel 내의 spoke이다.
 
-타이머는 timer wheel(OSCfg_TmrWheel[])의 인덱스 4에 들어간다. 이 경우, OS_TMR은 리스트의 맨 앞에 배치되고(즉, OSCfg_TmrWheel[4].FirstPtr이 가리키고 있음), 인덱스 4의 항목의 수는 1 증가한다(즉, OSCfg_TmrWheel[4].NbrEntry는 1이 될 것이다). "MatchValue"는 OS_TMR 필드 .Match에 입력된다. 이것은 timer list의 인덱스 4에 들어간 첫 번째 타이머이기 때문에, .NextPtr 및 .PrevPtr은 모두 NULL을 가리킨다.
+타이머는 timer wheel(OSCfg_TmrWheel[])의 인덱스 4에 들어간다. 이 경우, OS_TMR은 리스트의 맨 앞에 배치되고(즉, OSCfg_TmrWheel[4].FirstPtr이 가리키고 있음), 인덱스 4의 항목의 수는 1 증가한다(즉, OSCfg_TmrWheel[4].NbrEntries는 1이 될 것이다). "MatchValue"는 OS_TMR 필드 .Match에 입력된다. 이것은 timer list의 인덱스 4에 들어간 첫 번째 타이머이기 때문에, .NextPtr 및 .PrevPtr은 모두 NULL을 가리킨다.
 
 ![Figure 12-9 Inserting a timer in the timer list](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/3aafea5b-98c0-462a-a39b-68d622268cfe)
 
@@ -279,7 +279,7 @@ Index into OSCfg_TickWheel[] = 4
     :
     :
     OSTmrCreate((OS_TMR *)&MyTmr2,
-                (OS_CHAR *)“My Timer #2”,
+                (OS_CHAR *)"My Timer #2",
                 (OS_TICK )10,
                 (OS_TICK )0,
                 (OS_OPT )OS_OPT_TMR_ONE_SHOT,

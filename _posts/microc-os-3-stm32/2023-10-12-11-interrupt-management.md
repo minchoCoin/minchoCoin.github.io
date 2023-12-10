@@ -388,7 +388,7 @@ void OSTimeTick (void)
     OSTimeTickHook(); (1)
 #if OS_CFG_ISR_POST_DEFERRED_EN > 0u
     Get timestamp; (2)
-    Post “time tick” to the Interrupt Queue;
+    Post "time tick" to the Interrupt Queue;
 #else
     Signal the Tick Task; (3)
     Run the round-robin scheduling algorithm; (4)
