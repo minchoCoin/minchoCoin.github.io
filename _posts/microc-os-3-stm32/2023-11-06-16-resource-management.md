@@ -40,7 +40,7 @@ void TimeOfDay (void *p_arg)
                         0,
                         OS_OPT_TIME_HMSM_STRICT,
                         &err);
-        /* Examine “err” to make sure the call was successful */
+        /* Examine "err" to make sure the call was successful */
         Seconds++;
         if (Seconds > 59) {
             Seconds = 0;
@@ -190,7 +190,7 @@ void main (void)
                 "My Semaphore", (3)
                 1, (4)
                 &err); (5)
-    /* Check “err” */
+    /* Check "err" */
     :
     /* Create task(s) */
     :
@@ -234,7 +234,7 @@ void Task1 (void *p_arg)
                 OSSemPost(&MySem, (7)
                             OS_OPT_POST_1, (8)
                             &err); (9)
-                /* Check “err” */
+                /* Check "err" */
                 break;
             case OS_ERR_PEND_ABORT:
                 /* The pend was aborted by another task */
@@ -298,7 +298,7 @@ void Task2 (void *p_arg)
                 OSSemPost(&MySem,
                             OS_OPT_POST_1,
                             &err);
-                /* Check “err” */
+                /* Check "err" */
                 break;
             case OS_ERR_PEND_ABORT:
                 /* The pend was aborted by another task */
@@ -318,7 +318,7 @@ void Task2 (void *p_arg)
 공유 자원에 접근하려는 다른 task는 동일한 절차를 사용하여 공유자원에 접근해야한다.
 
 ## Binary Semaphores (4)
-세마포어는 task가 입출력 장치를 공유할 때 특히 유용하다. 두 작업이 동시에 프린터로 문자를 보내는 것을 허용한다면 어떤 일이 일어날지 상상해보라. 프린터에 각 task에서 인터리빙된 데이터가 들어있을 것이다. 예를 들어 task1에서 출력한 "I am Task 1"과 task2에서 출력한 "I am Task 2"는 “I Ia amm T Tasask k1 2”로 출력될 수 있다. 이 경우 1로 초기화한 세마포어를 사용할 수 있다. 규칙은 간단하다: 각 task는 프린터에 접근하려면 먼저 해당 리소스의 세마포어를 얻어야 한다. Fig 13-1은 프린터에 대한 독점적 접근을 얻기 위해 세마포어를 경쟁하는 task를 보여준다. 프린터를 사용하기 위해 각 task가 키를 얻어야함을 보여주고, 키는 세마포어를 상징적으로 나타낸다는 것에 주목하라.
+세마포어는 task가 입출력 장치를 공유할 때 특히 유용하다. 두 작업이 동시에 프린터로 문자를 보내는 것을 허용한다면 어떤 일이 일어날지 상상해보라. 프린터에 각 task에서 인터리빙된 데이터가 들어있을 것이다. 예를 들어 task1에서 출력한 "I am Task 1"과 task2에서 출력한 "I am Task 2"는 "I Ia amm T Tasask k1 2"로 출력될 수 있다. 이 경우 1로 초기화한 세마포어를 사용할 수 있다. 규칙은 간단하다: 각 task는 프린터에 접근하려면 먼저 해당 리소스의 세마포어를 얻어야 한다. Fig 13-1은 프린터에 대한 독점적 접근을 얻기 위해 세마포어를 경쟁하는 task를 보여준다. 프린터를 사용하기 위해 각 task가 키를 얻어야함을 보여주고, 키는 세마포어를 상징적으로 나타낸다는 것에 주목하라.
 
 ![Fig 13-1 Using a semaphore to access a printer](https://github.com/minchoCoin/minchoCoin.github.io/assets/62372650/ff1301f4-9147-43a5-bc59-83d8b077ee6f)
 
@@ -334,8 +334,8 @@ APP_ERR CommSendCmd (CPU_CHAR *cmd,
                     OS_TICK timeout)
 {
     Acquire serial port’s semaphore;
-    Send “cmd” to device;
-    Wait for response with “timeout”;
+    Send "cmd" to device;
+    Wait for response with "timeout";
     if (timed out) {
         Release serial port’s semaphore;
         return (error code);
@@ -423,7 +423,7 @@ OS_SEM 자료형 내부를 이해하더라도 애플리케이션 코드는 이 �
 
 앞서 언급한 바와 같이, 세마포어는 애플리케이션이 사용하기 전에 생성되어야 한다.
 
-task는 L13-11과 같이 OSSemPend()를 호출하여 공유 자원에 접근하기 전에 세마포어 상에서 대기한다(argument에 대한 자세한 내용은 443페이지의 Appendix A, “μC/OS-III API Reference” 참조)
+task는 L13-11과 같이 OSSemPend()를 호출하여 공유 자원에 접근하기 전에 세마포어 상에서 대기한다(argument에 대한 자세한 내용은 443페이지의 Appendix A, "μC/OS-III API Reference" 참조)
 
 ```c
 OS_SEM MySem;
@@ -442,12 +442,12 @@ void MyTask (void *p_arg)
                     &ts, /* Returned timestamp of when sem. was released */
                     &err); /* Pointer to Error returned */
         :
-        /* Check “err” */ /* (2) */
+        /* Check "err" */ /* (2) */
         :
         OSSemPost(&MySem, /* (3) Pointer to semaphore */
                     OS_OPT_POST_1, /* Option(s) ... always OS_OPT_POST_1 */
                     &err); /* Pointer to Error returned */
-        /* Check “err” */
+        /* Check "err" */
         :
         :
     }
@@ -611,13 +611,13 @@ void MyTask (void *p_arg)
                     (OS_OPT )OS_OPT_PEND_BLOCKING,
                     (CPU_TS *)&ts,
                     (OS_ERR *)&err);
-        /* Check ’err” */ (2)
+        /* Check ’err" */ (2)
         /* Acquire shared resource if no error */
         MyLibFunction(); (3)
         OSMutexPost((OS_MUTEX *)&MyMutex, (7)
                     (OS_OPT )OS_OPT_POST_NONE,
                     (OS_ERR *)&err);
-        /* Check “err” */
+        /* Check "err" */
     }
 }
 
@@ -631,12 +631,12 @@ void MyLibFunction (void)
                 (OS_OPT )OS_OPT_PEND_BLOCKING,
                 (CPU_TS *)&ts,
                 (OS_ERR *)&err);
-    /* Check “err” */
+    /* Check "err" */
     /* Access shared resource if no error */ (5)
     OSMutexPost((OS_MUTEX *)&MyMutex, (6)
                 (OS_OPT )OS_OPT_POST_NONE,
                 (OS_ERR *)&err);
-    /* Check “err” */
+    /* Check "err" */
 }
 ```
 
@@ -666,7 +666,7 @@ mutex가 다시 방출되고, 이번에는 nesting counter가 다시 0으로 감
 
 일반적으로, 임계 구역에서는 함수 호출을 하지 않는다. 모든 상호 배제 세마포어 호출은 소스코드의 leaf node(예를 들어, 실제 하드웨어에 접근하는 하위 레벨 드라이버 또는 다른 재진입 함수 라이브러리)에 있어야 한다.
 
-mutex에서 수행할 수 있는 명령은 표13-3에 정리된 바와 같이 여러 가지가 있다. 단, 여기서는 가장 많이 사용되는 세 가지 기능, 즉 OSMutexCreate(), OSMutexPend(), OSMutexPost()에 대해서만 논의하고자 한다. 그 외의 기능들은 443페이지의 Appendix A, “μC/OS-III API Reference”에 설명되어 있다.
+mutex에서 수행할 수 있는 명령은 표13-3에 정리된 바와 같이 여러 가지가 있다. 단, 여기서는 가장 많이 사용되는 세 가지 기능, 즉 OSMutexCreate(), OSMutexPend(), OSMutexPost()에 대해서만 논의하고자 한다. 그 외의 기능들은 443페이지의 Appendix A, "μC/OS-III API Reference"에 설명되어 있다.
 
 | Function Name | Operation |
 |---------------|-----------|
@@ -736,7 +736,7 @@ void MyTask (void *p_arg)
     OSMutexCreate(&MyMutex, (2)
                     "My Mutex", (3)
                     &err); (4)
-    /* Check “err” */
+    /* Check "err" */
     :
     :
 }
@@ -759,7 +759,7 @@ OSMutexCreate()는 결과에 따라 오류 코드를 반환한다. argument가 �
 
 mutex는 항상 이진 세마포어이므로, mutex counter를 초기화할 필요가 없다.
 
-task는 L13-15와 같이 OSMutexPend()를 호출하여 공유 자원에 접근하기 전에 mutual exclusion semaphore에서 대기한다(argument에 대한 자세한 내용은 443페이지의 Appendix A, “μC/OS-III API Reference” 를 참조한다).
+task는 L13-15와 같이 OSMutexPend()를 호출하여 공유 자원에 접근하기 전에 mutual exclusion semaphore에서 대기한다(argument에 대한 자세한 내용은 443페이지의 Appendix A, "μC/OS-III API Reference" 를 참조한다).
 
 ```c
 OS_MUTEX MyMutex;
@@ -777,12 +777,12 @@ void MyTask (void *p_arg)
                     &ts, /* Timestamp of when mutex was released */
                     &err); /* Pointer to Error returned */
         :
-        /* Check “err” (2) */
+        /* Check "err" (2) */
         :
         OSMutexPost(&MyMutex, /* (3) Pointer to mutex */
                     OS_OPT_POST_NONE,
                     &err); /* Pointer to Error returned */
-        /* Check “err” */
+        /* Check "err" */
         :
         :
     }
@@ -798,7 +798,7 @@ OSMutexPend()를 호출하는 task가 이미 mutex를 소유하고 있다면, OS
 
 mutex를 이미 다른 task가 소유하고 있고 OS_OPT_PEND_NON_BLOCKING이 지정된 경우, task가 mutex가 방출될 때 까지 기다리지 않기 때문에 OSMutexPend()는 바로 리턴된다.
 
-mutex를 낮은 우선수위의 task가 소유하게 되면, μC/OS-III는 mutex를 소유한 task의 우선순위를 현재 task의 우선순위와 일치하도록 올린다.
+mutex를 낮은 우선순위의 task가 소유하게 되면, μC/OS-III는 mutex를 소유한 task의 우선순위를 현재 task의 우선순위와 일치하도록 올린다.
 
 옵션으로 OS_OPT_PEND_BLOCKING을 지정하면, OSMutexPend()를 호출한 task는 해당 mutex를 대기하는 task 목록에 들어간다. task는 우선순위 순으로 목록에 들어가므로, mutex에 대기하는 가장 높은 우선순위의 task는 목록 시작부분에 있다.
 
@@ -818,7 +818,7 @@ OSMutexPend()가 리턴되면, OSMutexPend()를 호출한 task는 적절한 오�
 ### L13-15(2)
 OSMutexPend()가 err을 OS_ERR_NONE으로 설정한 상태로 리턴되면, OSMutexPend()를 호출한 task가 이제 해당 자원을 소유하고, 해당 자원에 접근할 수 있다고 생각한다. err에 다른 내용이 있으면 OSMutexPend()가 타임아웃되었거나(타임아웃 argument가 0이 아닌 경우), 다른 task에 의해 대기가 중단되었거나, mutex가 삭제되었다는 의미이다. 반환된 오류 코드를 검사하고 모든 것이 잘 진행되었다고 생각하지 않는 것이 항상 중요하다.
 
-err가 OS_ERR_MUTEX_NESTING이라면, OSMutexPend()를 호출한 task는 동일한 mutex에 대기를 시도한 것이다.
+err가 OS_ERR_MUTEX_OWNER이라면, OSMutexPend()를 호출한 task는 동일한 mutex에 대기를 시도한 것이다.
 
 ### L13-15(3)
 자원에 접근이 끝나면, OSMutexPost()를 호출하고 동일한 mutex를 지정해야한다. OSMutexPost()는 이 함수에 전달된 argument가 유요한 값인지 확인하는 것으로 시작한다(os_cfg.h에서 OS_CFG_ARG_CHK_EN이 1로 설정되었다고 가정).
