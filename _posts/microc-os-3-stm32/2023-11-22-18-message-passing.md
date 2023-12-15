@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 task나 ISR이 다른 task에게 정보를 전달하는 것이 때때로 필요하다. 이러한 정보전달을 task간 통신(inter-task communication)이라 불린다. 정보는 전역 데이터를 통해 또는 메시지를 전송하는 두 가지 방법으로 task끼리 주고 받을 수 있다.
 
 231쪽의 Chapter 13 "Resource Management"에서 본 것과 같이, 전역 변수를 사용할 때는 각 task나 ISR이 변수에 대한 배타적 접근을 보장해야한다. ISR이 있다면 공유 변수에 대한 배타적 접근을 보장하는 유일한 방법은 인터럽트를 비활성화하는 것이다. 두 task가 데이터를 공유한다면 인터럽트를 비활성화하거나 스케줄러를 잠그거나 세마포어를 사용하거나, 상호 배제 세마포어(mutex)를 사용하여 변수에 대한 배타적 접근 권한을 얻을 수 있다. task는 전역 변수를 사용해야만 정보를 ISR에 전달할 수 있다는 점에 유의한다. ISR이 task에 신호를 보내거나 task가 변수의 내용을 주기적으로 폴링하여 확인하지 않는 한, task는 ISR이 전역변수를 변경하여도 인식하지 못한다.

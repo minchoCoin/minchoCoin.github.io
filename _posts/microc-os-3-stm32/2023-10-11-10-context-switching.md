@@ -12,6 +12,9 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 # 서론
 
 μC/OS-III가 다른 task를 실행하기로 결정하면(151페이지의 7장 "Scheduling" 참조), 보통 CPU 레지스터로 구성되는 현재 task의 문맥(context)를 현재 task의 스택에 저장하고 새로운 task의 문맥을 복원하여 해당 task의 실행을 재개한다. 이 프로세스를 문맥 교환(context switch)라고 한다.

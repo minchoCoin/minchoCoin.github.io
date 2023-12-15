@@ -12,6 +12,9 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 # 서론
 인터럽트(interrupt)는 비동기 이벤트가 발생했음을 CPU에 알리기 위해 사용되는 하드웨어 매커니즘이다. 인터럽트가 발견되면, CPU는 문맥(즉, 레지스터)의 일부 또는 전부를 저장하고, 인터럽트 서비스 루틴(ISR)이라고 불리는 특별한 서브루틴으로 이동한다. ISR은 이벤트를 처리하고, ISR이 할 일을 다 끝냈으면, 인터럽트 때문에 일시 중단되었던 task로 복귀하거나, ISR이 (현재 task보다) 더 높은 우선 순위의 task를 ready-to-run 상태로 만든 경우 가장 높은 우선순위의 task로 복귀한다.
 

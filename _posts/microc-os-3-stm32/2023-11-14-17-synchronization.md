@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 이 장에서는 task가 ISR(Interrupt Service Routine) 또는 다른 task와 동기화할 수 있는 방법을 설명한다.
 
 ISR이 실행될 때, 이벤트가 발생했음을 task에게 신호를 줄 수 있다. task가 시그널링된 후(신호를 받은 후), ISR은 종료되고, 신호를 받은 task 우선순위에 따라 스케줄러가 실행된다. 신호를 받은 task는 이후 인터럽트를 발생시킨 디바이스를 서비스하거나 이벤트를 처리할 수 있다. 인터럽트를 발생시킨 디바이스를 task 레벨에서 서비스하는 것은 인터럽트가 비활성화되는 시간을 감소시키고 디버그하기 더 쉽기 때문에 task 레벨에서 서비스하는 것이 바람직하다.

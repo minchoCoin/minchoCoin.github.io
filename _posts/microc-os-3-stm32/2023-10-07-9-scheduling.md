@@ -12,6 +12,10 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
+
 dispatcher 라고 불리는 scheduler는 μC/OS-III의 한 부분으로, 어떤 task가 다음에 실행될지 결정하는 역할을 한다. μC/OS-III은 우선순위 기반의 선점형(preemptive)커널이다. 앞에서 살펴본 바와 같이 각 task에는 중요도에 따라 우선순위가 부여된다. 각 작업의 우선순위는 응용 프로그램에 따라 달라지며, μC/OS-III은 동일한 우선순위를 가진 여러 작업을 허용한다.
 
 선점형(preemptive)이라는 말의 의미는 event가 발생했을 때, 그리고 그 event가 더 중요한 task를 ready-to-run 상태로 만든다면 μC/OS-III는 즉시 그 task에 CPU를 부여할 것이라는 것을 의미한다. 따라서 task가 더 높은 우선 순위의 task에 신호를 보내면 현재 task는 중단되고 더 높은 우선순위의 task는 CPU를 제어할 수 있게 된다. 마찬가지로, Interrupt Service Roution(ISR)이 더 높은 우선순위의 task에 신호를 보내거나 매시지가 전송되었을 때, 중단된 task는 중단된 상태로 유지되고 새로운 더 높은 우선순위의 task가 실행된다.

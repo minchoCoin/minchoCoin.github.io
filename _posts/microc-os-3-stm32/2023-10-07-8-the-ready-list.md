@@ -13,6 +13,8 @@ author_profile: true
 
 ---
 
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 실행 준비가 된 task는 ready list에 배치된다. ready list는 두 부분으로 구성된다. 준비가 된 우선순위를 가지고 있는 비트맵과 실행 준비가 된 모든 task에 대한 포인터 테이블이다.
 
 # 6-1 Priority levels

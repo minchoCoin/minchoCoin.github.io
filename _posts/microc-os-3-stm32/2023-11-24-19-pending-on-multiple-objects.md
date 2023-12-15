@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 197페이지의 Chapter 10 "Pend Lists(or Wait Lists)"에서 어떻게 여러 task가 세마포어, 상호 배제 세마포어(mutex), 이벤트 플래그 그룹 또는 메시지 큐와 같은 단일 커널 객체에 대기할 수 있는지를 보았다. 이 장에서는 어떻게 task가 여러 객체에 대기할 수 있는지를 볼 것이다. 그러나 μC/OS-III는 여러 세마포어 및/또는 메시지 큐에만 대기를 허용한다. 즉, 여러 이벤트 플래그 그룹 또는 상호 배제 세마포어에 대기할 수 없다.
 
 Fig16-1과 같이 task는 여러 세마포어나 여러 메시지 큐에 동시에 대기할 수 있다. post된 첫 번째 세마포어나 메시지 큐는 task를 실행 준비 상태로 만들고 ready list의 다른 task와 CPU 시간을 경쟁한다. task는 OSPendMulti()를 호출하여 여러 객체에 대기하고, 선택적으로 타임아웃 값을 지정한다. 타임아웃은 모든 객체에 적용된다. 지정된 타임아웃 내에 객체들 중 어느 것도 post되지 않으면 타임아웃되었음을 나타내는 오류 코드와 함께 task가 재개된다.

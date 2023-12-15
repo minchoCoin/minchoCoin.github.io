@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 # 목적
 같은 우선순위의 task를 여러개 만들고 이 task를 round robin scheduling으로 각각 실행시킨다.
 

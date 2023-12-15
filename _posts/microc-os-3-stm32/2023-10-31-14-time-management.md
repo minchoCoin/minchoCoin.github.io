@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 μC/OS-III는 애플리케이션 프로그래머에게 시간 관련 서비스를 제공한다.
 
 175페이지의 9장 "Interrupt Management"에서, μC/OS-III는 일반적으로 (대부분의 커널들과 마찬가지로) 사용자가 time delay나 타임아웃을 사용하기 위해 주기적 인터럽트를 제공할 것을 요구한다. 이 주기적 시간 소스는 clock tick이라고 불리고 초당 10회 내지 1000회(또는 Hz) 사이에서 발생해야한다(os_cfg_app.h의 OS_CFG_TICK_RATE_HZ 참조). clock tick의 실제 주파수는 애플리케이션이 원하는 tick rate에 달려있다. 그러나, tick의 주파수가 높을 수록, 오버헤드가 크다.

@@ -12,6 +12,8 @@ toc_label: "My Table of Contents"
 author_profile: true
 
 ---
+이 글은 'uC/OS-III: The Real-Time Kernel For the STM32 ARM Cortex-M3, Jean J. Labrosse, Micrium, 2009'를 번역한 글입니다. 오역이 있을 수 있으며, 발견하시면 github에 issue나 댓글 남겨주시기 바랍니다.
+
 이 장에서는 공유 자원을 관리하기 위해 μC/OS-III에 의해 제공되는 서비스들에 대해 논의할 것이다. 공유 자원은 전형적으로 변수(정적변수 또는 전역변수), 자료 구조, 테이블(RAM 내), 또는 I/O 디바이스 내의 레지스터들이다.
 
 공유 자원을 보호할 때는, 이 장에서 설명될 것과 같이, 상호 배제 세마포어(mutual exclusion semaphore)를 사용하는 것이 바람직하다. 다른 방법들도 또한 제시될 것이다.
