@@ -383,7 +383,7 @@ clock tick 인터럽트는 시스템의 심장박동으로 볼 수 있다. clock
 
 clock tick 인터럽트를 통해 μC/OS-III는 clock tick 단위로 task를 지연시킬 수 있고, task가 이벤트를 기다리고 있을 때, 타임아웃 여부를 확인할 수 있다.
 
-clcok tick 인터럽트는 OSTimeTick()을 호출해야한다. OSTimeTick()의 의사코드는 L9-5와 같다.
+clock tick 인터럽트는 OSTimeTick()을 호출해야한다. OSTimeTick()의 의사코드는 L9-5와 같다.
 
 ```c
 void OSTimeTick (void)
@@ -417,7 +417,7 @@ time tick ISR은 hook 함수인 OSTimeTickHook()을 호출함으로써 시작된
 tick task는 timer의 시간 소스로 쓰인다(231쪽의 13장 "Resource Management" 참조)
 
 # The Clock Tick (Or System Tick)(2)
-일반적으로 많이 오해하는 것이 μC/OS-III는 system tick이 항상 필요하다는 것이다. 사실, 많은 저전력 애플리케이션들은 tick list를 유지하는데 필용한 전력 때문에, system tick을 구현하지 않을 수 있다. μC/OS-III preemptive 커널이기 때문에, 틱 인터럽트 이외의 이벤트는 키패드에서 키 누름 등으로 저전력 모드에 놓인 시스템을 꺠울 수 있다. system tick이 없다는 것은 사용자가 delay나 타임아웃을 사용하는 것을 허용하지 않는다는 것을 의미한다. 이는 저전력 제품의 설계자에 의해 결정된다.
+일반적으로 많이 오해하는 것이 μC/OS-III는 system tick이 항상 필요하다는 것이다. 사실, 많은 저전력 애플리케이션들은 tick list를 유지하는데 필요한 전력 때문에, system tick을 구현하지 않을 수 있다. μC/OS-III preemptive 커널이기 때문에, 틱 인터럽트 이외의 이벤트는 키패드에서 키 누름 등으로 저전력 모드에 놓인 시스템을 꺠울 수 있다. system tick이 없다는 것은 사용자가 delay나 타임아웃을 사용하는 것을 허용하지 않는다는 것을 의미한다. 이는 저전력 제품의 설계자에 의해 결정된다.
 
 # Summary
 μC/OS-III는 인터럽트를 관리하는 서비스를 제공한다. ISR은 짧아야 하며, 해당 인터럽트 장치 서비스를 담당하는 task에 신호를 보내거나 메시지를 보내야 한다.
