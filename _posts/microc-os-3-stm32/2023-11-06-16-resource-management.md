@@ -527,7 +527,7 @@ Task L은 Task M이 대기 중이던 이벤트가 발생한 이후, Task M에 �
 Task M이 이벤트를 처리한다.
 
 ### F13-4(10)
-Task M이 끝나면, 커널은 CPU를 Task L에게 다시 념겨준다.
+Task M이 끝나면, 커널은 CPU를 Task L에게 다시 넘겨준다.
 
 ### F13-4(11)
 Task L이 계속 해당 자원에 접근한다.
