@@ -14,7 +14,7 @@ $masthead-link-color: $text-color !default;
 $masthead-link-color-hover: $text-color !default;
 $navicon-link-color-hover: mix(#fff, $text-color, 80%) !default;
 
-/* dirt syntax highlighting (base16) */
+/* dirt syntax highlighting (base16) 
 $base00: #231e18 !default;
 $base01: #302b25 !default;
 $base02: #48413a !default;
@@ -31,3 +31,21 @@ $base0c: #6eb958 !default;
 $base0d: #88a4d3 !default;
 $base0e: #bb90e2 !default;
 $base0f: #b49368 !default;
+*/
+/* default syntax highlighting (base16) */
+$base00: #263238;
+$base01: #2e3c43;
+$base02: #314549;
+$base03: #546e7a;
+$base04: #b2ccd6;
+$base05: #eeffff;
+$base06: #eeffff;
+$base07: #ffffff;
+$base08: #f07178;
+$base09: #f78c6c;
+$base0a: #ffcb6b;
+$base0b: #c3e88d;
+$base0c: #89ddff;
+$base0d: #82aaff;
+$base0e: #c792ea;
+$base0f: #ff5370;
