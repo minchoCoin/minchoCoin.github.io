@@ -72,6 +72,10 @@ author_profile: true
 
 [영상 목록](https://namu.wiki/w/3Blue1Brown#s-3)
 
+## MIT OpenCourseWare
+[메인 채널.](https://www.youtube.com/@mitocw)
+
+MIT에서 제공하는 무료 강의들이다.
 
 # 프로그래밍 유튜버
 
