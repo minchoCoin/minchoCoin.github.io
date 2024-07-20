@@ -2,9 +2,9 @@
 title: "코딩을 도와주는 인공지능 챗봇 서비스"
 last_modified_at: 2024-06-21T17:53:13+09:00
 categories:
-    - technical-writing
+    - others
 tags:
-    - technical-writing
+    - others
 
 toc: true
 toc_label: "My Table of Contents"

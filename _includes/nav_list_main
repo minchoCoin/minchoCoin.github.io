@@ -100,6 +100,16 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+            <ul>
+                <!--Cpp 카테고리 글들을 모아둔 페이지인 /categories/cpp 주소의 글로 링크 연결-->
+                <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
+
+                {% for category in site.categories %}
+                    {% if category[0] == "others" %}
+                        <li><a href="/categories/others" class="">낙서장 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
 
             <span class="nav__sub-title">일반물리학</span>
             <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
@@ -113,7 +123,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-
+            '''
             <span class="nav__sub-title">test_subtitle</span>
             <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
             <ul>
@@ -131,6 +141,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+            '''
       </li>
   </ul>
 </nav>
