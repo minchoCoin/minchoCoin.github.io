@@ -77,6 +77,8 @@ author_profile: true
 
 MIT에서 제공하는 무료 강의들이다.
 
+{% include video id="xAcTmDO6NTI" provider="youtube" %}
+
 # 프로그래밍 유튜버
 
 ## freeCodeCamp.org
