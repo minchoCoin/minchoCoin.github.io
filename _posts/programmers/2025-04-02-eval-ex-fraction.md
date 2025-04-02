@@ -21,7 +21,7 @@ author_profile: true
 
 ## Lexical analysis with Flex
 token.l
-```flex
+```c
 %{
     #include <stdlib.h>
     #include "ast.h"
@@ -43,7 +43,7 @@ int yywrap()    {return 1;}
 
 ## Syntax analysis with Bison
 ast.y
-```bison
+```c
  %{  #include <stdio.h>
 #include <stdio.h>
 #include "ast.h"
