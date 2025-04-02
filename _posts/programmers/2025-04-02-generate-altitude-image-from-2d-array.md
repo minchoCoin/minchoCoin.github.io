@@ -237,6 +237,6 @@ matrix <---0x64
 ```
 즉 matrix는 0x64 라는 값을 가진다.
 
-matrix[1]은 $*(matrix + (1\times sizeof(int*)))=*(0x64+8)=*(0x72)$ 로서 0x228의 값을 가진다.
+matrix[1]은 $ *(matrix + (1\times sizeof(int*)))=*(0x64+8)=*(0x72) $ 로서 0x228의 값을 가진다.
 
-matrix[1][2]은 $*(matrix[1] + (2\times sizeof(int)))=*(0x228+64)=*(0x292)$ 로서, 해당 배열에 저장된 값을 출력한다.
+matrix[1][2]은 $ *(matrix[1] + (2\times sizeof(int)))=*(0x228+64)=*(0x292) $ 로서, 해당 배열에 저장된 값을 출력한다.
