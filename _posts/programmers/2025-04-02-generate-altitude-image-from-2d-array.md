@@ -165,6 +165,7 @@ with open("map-input-150-150.dat", "w") as f:
 [ppm 이미지를 png로](https://www.coolutils.com/online/PPM-to-PNG)
 
 ![Image](https://github.com/user-attachments/assets/06b095e2-0401-42ad-b0c7-696710500898)
+
 ![Image](https://github.com/user-attachments/assets/42163071-2bb5-44a3-80b4-894c2825645a)
 
 # Appendix
@@ -237,6 +238,6 @@ matrix <---0x64
 ```
 즉 matrix는 0x64 라는 값을 가진다.
 
-matrix[1]은 $ *(matrix + (1\times sizeof(int*)))=*(0x64+8)=*(0x72) $ 로서 0x228의 값을 가진다.
+matrix(1)은 $ *(matrix + (1\times sizeof(int*)))=*(0x64+8)=*(0x72) $ 로서 0x228의 값을 가진다.
 
-matrix[1][2]은 $ *(matrix[1] + (2\times sizeof(int)))=*(0x228+64)=*(0x292) $ 로서, 해당 배열에 저장된 값을 출력한다.
+matrix(1)(2)은 $ *(matrix[1] + (2\times sizeof(int)))=*(0x228+64)=*(0x292) $ 로서, 해당 배열에 저장된 값을 출력한다.
