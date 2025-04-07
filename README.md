@@ -104,3 +104,28 @@ sidebar_main: true
 # Lorem
 Lorem ipsum dolor sit amet...
  ```
+
+## add teaser image
+
+references: [https://www.janmeppe.com/blog/add-teaser-to-minimal-mistakes/](https://www.janmeppe.com/blog/add-teaser-to-minimal-mistakes/)
+
+```
+---
+title: "Post: Modified Date"
+last_modified_at: 2023-09-13T23:53:12+09:00
+categories:
+    - test_cat
+tags:
+    - test_tag
+
+toc: true
+toc_sticky: true
+toc_label: "My Table of Contents"
+author_profile: true
+sidebar_main: true
+header:
+  teaser: "/assets/2020-04-06-add-teaser-to-minimal-mistakes/before.png"
+---
+# Lorem
+Lorem ipsum dolor sit amet...
+```
