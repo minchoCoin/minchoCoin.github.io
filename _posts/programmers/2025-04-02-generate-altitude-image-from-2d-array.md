@@ -164,9 +164,9 @@ with open("map-input-150-150.dat", "w") as f:
 ## 이미지 생성
 [ppm 이미지를 png로](https://www.coolutils.com/online/PPM-to-PNG)
 
-![Image](https://github.com/user-attachments/assets/06b095e2-0401-42ad-b0c7-696710500898)
+![Image](/photo/map-input-100-100.dat.png)
 
-![Image](https://github.com/user-attachments/assets/42163071-2bb5-44a3-80b4-894c2825645a)
+![Image](/photo/map-input-150-150.dat.png)
 
 # Appendix
 ## 2차원 배열의 구조
