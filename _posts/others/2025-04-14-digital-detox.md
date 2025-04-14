@@ -77,6 +77,11 @@ author_profile: true
 ![](https://i.postimg.cc/g084j8Nz/Screenshot-20250414-071103-Modes-and-Routines.jpg)
 
 # 유튜브에서 디지털 디톡스하기(추천 영상 제거)
+유튜브 시청 기록 중지 및 시청 기록을 삭제하면 유튜브가 영상을 추천하지 않게 되고, 유튜브 영상이나 쇼츠 사용 시간이 줄어드는 것 같다.
+
+- 구글 계정 관리 - 데이터 및 개인 정보 보호 - YouTube 기록 - 사용 중지 에서 사용 중지 설정
+- 구글 계정 관리 - 데이터 및 개인 정보 보호 - YouTube 기록 - 기록 관리 - 모든 데이터 삭제에서 데이터 삭제
+
 아래 그림을 참고하여 유튜브 홈 화면을 클린하게 만들 수 있다.
 더 이상 유튜브가 나에게 추천해주는 영상이 아니라, 내가 필요할 때만 영상을 검색하여 시청할 수 있다. 공식 문서는 [여기](https://support.google.com/youtube/answer/95725?hl=ko&co=GENIE.Platform%3DAndroid) 서 볼 수 있다.
 
