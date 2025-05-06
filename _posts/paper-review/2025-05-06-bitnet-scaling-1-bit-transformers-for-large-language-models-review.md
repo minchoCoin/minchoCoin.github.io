@@ -94,8 +94,8 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w}\tilde{x})=n \textbf{E}[\tilde{w_\beta}^2]
 - Derivation of $\frac{1}{nm} \|\textbf{W}\|_1 \approx \frac{1}{\sqrt{n}}$
     - In a distribution with a mean of zero, the expected value of the absolute value can be approximated by the standard deviation(Kaiming, Xavier), $\textbf{E}[\|\textbf{W}\|] \approx \frac{1}{\sqrt{n}}$
         - For more derivation details, please see Appendix
-    - $\textbf{W}$ follow the law of large number because size of $Q,K,V$ matriX $12288 \times 128=1572864$ in GPT-3
-    - $\therefore \frac{1}{nm} \|\textbf{W}\|_1 = \frac{1}{nm} \sum_{i=1}^{nm} |w_i|=\textbf{E}[|W|] \approx \frac{1}{\sqrt{n}}$
+    - $\textbf{W}$ follow the law of large number because size of $Q,K,V$ matrix $12288 \times 128=1572864$ in GPT-3
+    - $ \therefore \frac{1}{nm} \|\textbf{W}\|_1 = \frac{1}{nm} \sum_{i=1}^{nm} |w_i|=\textbf{E}[|W|] \approx \frac{1}{\sqrt{n}} $
 
 - Role of $\beta$
     - With using standard initialization method, $\textbf{E}[\textbf{W}^2]=\frac{1}{n}$
@@ -335,11 +335,13 @@ Per-tensor quantization
 Per-token quantization
 
 ## Norm
-$$ \text{1-norm } \|x\|_1 = \sum_{i=1}^n |x_i| \\
+$$ 
+\text{1-norm } \|x\|_1 = \sum_{i=1}^n |x_i| \\
 
 \text{2-norm } \|x\|_2 = \sqrt{\sum_{i=1}^n x_i^2} \\
 
-\text{$\infty$-norm } \|x\|_{\infty} = \max_i |x_i|$$
+\text{$\infty$-norm } \|x\|_{\infty} = \max_i |x_i| \\
+$$
 
 ## Benchmark datasets
 - Winogrande(Sakaguchi et al., 2021)
