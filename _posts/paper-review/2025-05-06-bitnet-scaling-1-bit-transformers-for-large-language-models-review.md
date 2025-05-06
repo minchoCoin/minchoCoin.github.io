@@ -9,6 +9,8 @@ tags:
 toc: true
 toc_label: "My Table of Contents"
 author_profile: true
+header:
+  teaser: "/assets/images/bitnet1/thumbnail.PNG"
 ---
 This article is review and derivation of [Wang et al., BitNet: Scaling 1-bit Transformers for Large Language Models. 2023](https://arxiv.org/abs/2310.11453)
 
