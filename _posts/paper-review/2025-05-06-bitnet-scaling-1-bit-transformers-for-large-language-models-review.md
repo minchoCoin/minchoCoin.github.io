@@ -340,7 +340,7 @@ $$\text{1-norm } \|x\|_1 = \sum_{i=1}^n |x_i| $$
 
 $$\text{2-norm } \|x\|_2 = \sqrt{\sum_{i=1}^n x_i^2}$$
 
-$$\text{\infty-norm } \|x\|_{\infty} = \max_i |x_i|$$
+$$\infty\text{-norm } \|x\|_{\infty} = \max_i |x_i|$$
 
 
 ## Benchmark datasets
