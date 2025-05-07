@@ -372,3 +372,26 @@ $$\infty\text{-norm } \|x\|_{\infty} = \max_i |x_i|$$
 
 (Figure 14. Example HellaSwag questions answered by BERT-Large. Correct model predictions are in blue, incorrect model
 predictions are red. The right answers are bolded.)
+
+## Elastic
+- Introduced in “BiT: Robustly Binarized Multi-distilled Transformer”
+- Binarizes weights to (-1,1) and ReLU/Softmax output to (0,1) with an elastic binarization function using learnable parameters
+- Multi-distillation approach that gradually transfers knowledge from higher-precision models to lower-precision ones
+
+## Post-LN
+- Standard Transformer layer
+
+$$ h'= LN(h+Attention(h)) \\ o=LN(h'+FFN(h'))$$
+
+## Pre-LN
+$$ h'=h+Attention(LN(h)) \\ o=h'+FFN(LN(h'))$$
+
+## BMT
+- Adds extra layernorm operation to dynamically normalize the outputs of binarized layer
+- Adds extra shortcut connections around output projection layer in attention mechanisms
+- This approach helps stability of binarized transformer
+
+![fig15](/assets/images/bitnet1/fig19.png)
+
+(Figure 15. BMT Multi-Head Attention — Differences from the original Transformer are highlighted (in yellow). All linear projections and einsums can be binarized
+)
