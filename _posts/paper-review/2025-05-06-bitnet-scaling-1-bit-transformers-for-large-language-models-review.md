@@ -344,6 +344,20 @@ $$\text{2-norm } \|x\|_2 = \sqrt{\sum_{i=1}^n x_i^2}$$
 
 $$\infty\text{-norm } \|x\|_{\infty} = \max_i |x_i|$$
 
+## Why $\text{Var}(y) = n\text{Var}(wx)$
+
+In a neural network, the output $y$ is typically computed as a sum of products
+
+$$ y=\sum_{i=1}^n w_i x_i$$
+
+According to probability theory, when we have independent random variables, the variance of their sum equals the sum of their variances
+
+$$ \text{Var} (\sum_{i=1}^n X_i) = \sum_{i=1}^n \text{Var}(X_i)$$
+
+If we asuume each term $w_ix_i$ has the same variance, and all terms are independent, then
+$$ \text{Var}(y) = \text{Var} (\sum_{i=1}^n w_ix_i) = \sum_{i=1}^n \text{Var}(w_ix_i) = n\cdot \text{Var}(wx)$$
+
+'n' represent the number of independent terms being summed together, which typically corresponds to the number of input neurons or features in the network
 
 ## Benchmark datasets
 - Winogrande(Sakaguchi et al., 2021)
