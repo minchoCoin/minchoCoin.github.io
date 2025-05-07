@@ -334,10 +334,11 @@ $$ \therefore E[|W|]=0.7979\sigma \approx \sigma = \frac{1}{\sqrt{n}}$$
 However, GPT-3 small has size of 768 feature dimension (n=768), 𝜎=0.03 and still low but this is cause of gap between FP16 transformer and BitNet at small model size
 
 ## Quantizaiton
-Per-tensor quantization
-
-Per-token quantization
-
+- Per-tensor quantization
+    - Apply a single scaling factor across an entire tensor, offering computational efficiency but potentially lower accuracy when values vary widely
+- Per-token quantization
+    - Apply different quantization parameters for each token, allowing for more precise representation of varying data distributions
+    
 ## Norm
 
 $$\text{1-norm } \|x\|_1 = \sum_{i=1}^n |x_i| $$
