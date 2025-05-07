@@ -98,7 +98,7 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w_\beta}\tilde{x})=n \textbf{E}[\tilde{w_\be
 - Derivation of $\frac{1}{nm} \|\textbf{W}\|_1 \approx \frac{1}{\sqrt{n}}$
     - In a distribution with a mean of zero, the expected value of the absolute value can be approximated by the standard deviation, $\textbf{E}[\|\textbf{W}\|] \approx \frac{1}{\sqrt{n}}$
         - For more derivation details, please see Appendix
-    - $\textbf{W}$ follow the law of large number because size of $ Q,K,V$ matrix $12288 \times 128=1572864 $ in GPT-3
+    - $\textbf{W}$ follow the law of large number because input size of$ Q,K,V$ matrix is 12288 in GPT-3
     - $$ \therefore \frac{1}{nm} \|\textbf{W}\|_1 = \frac{1}{nm} \sum_{i=1}^{nm} |w_i|=\textbf{E}[|W|] \approx \frac{1}{\sqrt{n}} $$
 
 - Role of $\beta$
