@@ -82,7 +82,9 @@ $$ \tilde{x} = Quant(x) = Clip\left((x - \eta) \times \frac{Q_b}{\gamma}, \epsil
 - The matrix multiplication can be written as $y=\tilde{\mathbf{W}}\tilde{x}$
 
 ### Dequantization
-- A scaling factor $$ \beta=\frac{1}{nm}\|W\|_{1}\approx \frac{1}{\sqrt{n}} $$ ,is used after binarization to reduce the l2 error between the real-valued and the binarized weights, $$\tilde{w_\beta}=\beta \cdot \tilde{w}$$
+- A scaling factor $$ \beta=\frac{1}{nm}\|W\|_{1}\approx \sigma_W=\frac{1}{\sqrt{n}} $$ ,is used after binarization to reduce the l2 error between the real-valued and the binarized weights, $$\tilde{w_\beta}=\beta \cdot \tilde{w}$$
+
+- $W$ is initialized with Kaiming (or Xavier method), which initialize weight $N(0,\frac{1}{\sqrt{n}})$
 
 - Elements in $\mathbf{W} \in \mathbb{R}^{n \times m}$ and $x$ are mutually independent and share the same distribution, the variance of the output $y$ is
 $$ \text{Var}(y)=n\text{Var}(\tilde{w}\tilde{x})=n \textbf{E}[\tilde{w_\beta}^2]\textbf{E}[\tilde{x}^2]=n\beta^2 \textbf{E}[\tilde{x}^2] \approx \textbf{E}[\tilde{x}^2]$$
@@ -94,7 +96,7 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w}\tilde{x})=n \textbf{E}[\tilde{w_\beta}^2]
     - With scaling parameter $\beta$, $\textbf{E}[\tilde{w_\beta}^2]=\beta$
 
 - Derivation of $\frac{1}{nm} \|\textbf{W}\|_1 \approx \frac{1}{\sqrt{n}}$
-    - In a distribution with a mean of zero, the expected value of the absolute value can be approximated by the standard deviation(Kaiming, Xavier), $\textbf{E}[\|\textbf{W}\|] \approx \frac{1}{\sqrt{n}}$
+    - In a distribution with a mean of zero, the expected value of the absolute value can be approximated by the standard deviation, $\textbf{E}[\|\textbf{W}\|] \approx \frac{1}{\sqrt{n}}$
         - For more derivation details, please see Appendix
     - $\textbf{W}$ follow the law of large number because size of $ Q,K,V$ matrix $12288 \times 128=1572864 $ in GPT-3
     - $$ \therefore \frac{1}{nm} \|\textbf{W}\|_1 = \frac{1}{nm} \sum_{i=1}^{nm} |w_i|=\textbf{E}[|W|] \approx \frac{1}{\sqrt{n}} $$
