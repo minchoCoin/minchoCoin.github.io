@@ -87,7 +87,7 @@ $$ \tilde{x} = Quant(x) = Clip\left((x - \eta) \times \frac{Q_b}{\gamma}, \epsil
 - $W$ is initialized with Kaiming (or Xavier method), which initialize weight $N(0,\frac{1}{\sqrt{n}})$
 
 - Elements in $\mathbf{W} \in \mathbb{R}^{n \times m}$ and $x$ are mutually independent and share the same distribution, the variance of the output $y$ is
-$$ \text{Var}(y)=n\text{Var}(\tilde{w}\tilde{x})=n \textbf{E}[\tilde{w_\beta}^2]\textbf{E}[\tilde{x}^2]=n\beta^2 \textbf{E}[\tilde{x}^2] \approx \textbf{E}[\tilde{x}^2]$$
+$$ \text{Var}(y)=n\text{Var}(\tilde{w_\beta}\tilde{x})=n \textbf{E}[\tilde{w_\beta}^2]\textbf{E}[\tilde{x}^2]=n\beta^2 \textbf{E}[\tilde{x}^2] \approx \textbf{E}[\tilde{x}^2]$$
 
 - $\because \text{Var}(A)=\textbf{E}[A^2] - \textbf{E}[A]^2$, where $\textbf{E}[A]= \sum_x xp(x)$ (expectation value)
     - Average of $\tilde{w}$ is 0, because $\textbf{W}$ is initialized with random number with average=0
