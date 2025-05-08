@@ -316,9 +316,12 @@ Xavier initialization
 
 $$ \textbf{W} = N(0, \frac{1}{n}) $$
 
-## Derivation of $E[|W|] \approx \frac{1}{\sqrt{n}}$
+## Derivation of $E[|W|] \approx \sigma = \frac{1}{\sqrt{n}}$
+
+Note that average of W is almost 0
 
 $$
+
 E[|W|] = \int_{-\infty}^{\infty} |w| \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{w^2}{2\sigma^2}\right) dw \\
 
 \text{Since it is even, } E[|W|] = 2 \int_{0}^{\infty} w \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{w^2}{2\sigma^2}\right) dw \\
@@ -332,7 +335,11 @@ Since GPT-3 175B has size of 12288 feature dimension(n=12288), standard deviatio
 
 $$ \therefore E[|W|]=0.7979\sigma \approx \sigma = \frac{1}{\sqrt{n}}$$
 
+Note that initial variance of $W$ is $\frac{1}{\sqrt{n}}$, this variance can be changed during training.
+
 However, GPT-3 small has size of 768 feature dimension (n=768), 𝜎=0.03 and still low but this is cause of gap between FP16 transformer and BitNet at small model size
+
+Despite the average of W can be changed during training, average of W is so small that it's negligible(the average of weight is -0.01 to 0.01 in pre-trained GPT2)
 
 ## Quantizaiton
 - Per-tensor quantization
