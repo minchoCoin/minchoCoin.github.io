@@ -110,6 +110,8 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w_\beta}\tilde{x})=n \textbf{E}[\tilde{w_\be
     $$ \because \textbf{E}[\tilde{w_\beta}^2]=\textbf{E}[\beta^2\tilde{w}^2]=\beta^2\textbf{E}[\tilde{w}^2]=\frac{1}{n}$$
     - Note that $ \beta=\frac{1}{nm}\|W\|_{1}\approx \sigma_W$ will be changed during training, however, $ \textbf{E}[\tilde{w}^2]$ is always 1. Therefore, to maintain the variance of W after binarization, $\beta$ is important since $$ \because \textbf{E}[\tilde{w_\beta}^2]=\textbf{E}[\beta^2\tilde{w}^2]=\beta^2\textbf{E}[\tilde{w}^2]=\sigma_W^2$$
 
+    - Since $\alpha$ is subtracted from original $W$, $E[\tilde w]=0$
+
 ### Layer Normalization
 - For the full-precision computation, the variance of the output $\text{Var}(y)$ is at the scale of 1 with the standard initialization methods like Kaiming or Xavier initialization
     - These methods have a great benefit to the training stability
@@ -121,7 +123,7 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w_\beta}\tilde{x})=n \textbf{E}[\tilde{w_\be
 - The output activations are rescaled with (𝛽,𝛾)
     - 𝛽 for scaling weights, 𝛾 for dequantization
 $$ y = \tilde{\textbf{W}}\bar{x} = \tilde{\textbf{W}} \, Quant(LN(x)) \times \frac{\beta\gamma}{Q_b} \\
-LN(x) = \frac{x-E(x)}{\sqrt{Var(x)+\epsilon}}, \; \beta = \frac{1}{nm}\|\tilde{\textbf{W}}\|_1$$
+LN(x) = \frac{x-E(x)}{\sqrt{Var(x)+\epsilon}}, \; \beta = \frac{1}{nm}\|\textbf{W}\|_1$$
 
 # Model parallelism
 - Technique to scale up large language models is model parallelism, which partitions the matrix multiplication on multiple devices
@@ -339,7 +341,23 @@ Note that initial variance of $W$ is $\frac{1}{\sqrt{n}}$, this variance can be 
 
 However, GPT-3 small has size of 768 feature dimension (n=768), 𝜎=0.03 and still low but this is cause of gap between FP16 transformer and BitNet at small model size
 
-Despite the average of W can be changed during training, average of W is so small that it's negligible(the average of weight is -0.01 to 0.01 in pre-trained GPT2)
+Despite the average of W can be changed during training, average of W is so small that it's negligible(the average of weight is -0.01 to 0.01 in pre-trained GPT2) because of Weight decay
+
+### if average is not zero...
+
+$$ E[|X|] = \mu \cdot (2\Phi(\frac{\mu}{\sigma}) - 1) + \sigma \cdot \sqrt{\frac{2}{\pi}} \cdot \exp(-\frac{\mu^2}{2\sigma^2})$$
+
+where $\Phi(z)$ is cumulative distribution function (CDF) of the standard normal distribution
+
+if $\mu \gg \sigma$, expectation of absolute value is almost $\mu$. 
+if $\mu \ll \sigma$, expectation of absolute value is almost $\sigma \cdot \sqrt{\frac{2}{\pi}}$
+
+if $\mu == \sigma,$ expectation of absolute value is $$  \sigma \cdot (2\Phi(1) - 1) + \sigma \cdot \sqrt{\frac{2}{\pi}} \cdot \exp(-0.5)$$
+
+$$ =\sigma \cdot (2 \cdot 0.84134 - 1) + 0.6065\cdot \sigma \sqrt{\frac{2}{\pi}} \approx 1.03\sigma $$
+
+however, in BitNet, $\mu$ is not much bigger than $\sigma$, therefore we can ignore the $\mu$
+
 
 ## Quantizaiton
 - Per-tensor quantization
