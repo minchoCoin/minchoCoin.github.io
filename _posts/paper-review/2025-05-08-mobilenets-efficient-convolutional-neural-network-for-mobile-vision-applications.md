@@ -91,7 +91,7 @@ $$ p_i = \frac{\exp(\frac{z_i}{T})}{\sum_j \exp(\frac{z_i}{T})}$$
 - Perform spatial convolution independently on each input channel
 - Extract feature without channel information combination
     - Channel dimensions are remained
-- For $M\times D_F \times D_F$ input feature map, there are $M 1\times D_k \times D_k$ filters
+- For $M\times D_F \times D_F$ input feature map, there are $M$ of $ 1\times D_k \times D_k$ filters
 
 ![alt text](/assets/images/mobilenet/fig6.png)
 
@@ -104,7 +104,7 @@ $$ p_i = \frac{\exp(\frac{z_i}{T})}{\sum_j \exp(\frac{z_i}{T})}$$
 ### Pointwise convolution
 - uses $M\times 1\times 1$ convolution to combine across channels : $M\times W\times H$ input to $1\times W\times H$
 - combine the output the depthwise convolution
-- From $M\times D_G\times D_G$ input, there are $N M\times 1\times 1$ filters for $N\times D_G \times  D_G$ output
+- From $M\times D_G\times D_G$ input, there are $ N $ of $ M\times 1\times 1$ filters for $N\times D_G \times  D_G$ output
 
 ![alt text](/assets/images/mobilenet/fig8.png)
 
