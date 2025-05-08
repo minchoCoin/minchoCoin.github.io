@@ -350,7 +350,8 @@ $$ E[|X|] = \mu \cdot (2\Phi(\frac{\mu}{\sigma}) - 1) + \sigma \cdot \sqrt{\frac
 where $\Phi(z)$ is cumulative distribution function (CDF) of the standard normal distribution
 
 if $\mu \gg \sigma$, expectation of absolute value is almost $\mu$. 
-if $\mu \ll \sigma$, expectation of absolute value is almost $\sigma \cdot \sqrt{\frac{2}{\pi}}$
+
+if $\mu \ll \sigma$, and $\mu$ is almost zero, expectation of absolute value is almost $\sigma \cdot \sqrt{\frac{2}{\pi}}$
 
 if $\mu == \sigma,$ expectation of absolute value is $$  \sigma \cdot (2\Phi(1) - 1) + \sigma \cdot \sqrt{\frac{2}{\pi}} \cdot \exp(-0.5)$$
 
