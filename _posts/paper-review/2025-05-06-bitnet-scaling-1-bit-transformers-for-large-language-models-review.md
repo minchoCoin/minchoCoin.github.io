@@ -106,8 +106,9 @@ $$ \text{Var}(y)=n\text{Var}(\tilde{w_\beta}\tilde{x})=n \textbf{E}[\tilde{w_\be
         - For matching variance of y and variance of x because $\text{Var}(y)=n\text{Var}(wx)=n\text{Var}(w)\text{Var}(x)$
         - Standard initialization method initialize weights with $N(0,\frac{1}{n})$
     - Since square of both -1 and 1 is 1, $\textbf{E}[\tilde{w}^2]=1$
-    - To maintain the variance after binarization, $\beta$ is important
+    - To maintain the variance of W after binarization, $\beta$ is important
     $$ \because \textbf{E}[\tilde{w_\beta}^2]=\textbf{E}[\beta^2\tilde{w}^2]=\beta^2\textbf{E}[\tilde{w}^2]=\frac{1}{n}$$
+    - Note that $ \beta=\frac{1}{nm}\|W\|_{1}\approx \sigma_W$ will be changed during training, however, $ \textbf{E}[\tilde{w}^2]$ is always 1. Therefore, to maintain the variance of W after binarization, $\beta$ is important since $$ \because \textbf{E}[\tilde{w_\beta}^2]=\textbf{E}[\beta^2\tilde{w}^2]=\beta^2\textbf{E}[\tilde{w}^2]=\sigma_W^2$$
 
 ### Layer Normalization
 - For the full-precision computation, the variance of the output $\text{Var}(y)$ is at the scale of 1 with the standard initialization methods like Kaiming or Xavier initialization
