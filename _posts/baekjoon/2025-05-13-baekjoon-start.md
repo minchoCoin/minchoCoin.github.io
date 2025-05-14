@@ -20,3 +20,5 @@ author_profile: true
 solved.ac 링크는 아래와 같습니다.
 
 [https://solved.ac/profile/bigteach](https://solved.ac/profile/bigteach)
+
+[![Solved.ac프로필](http://mazassumnida.wtf/api/v2/generate_badge?boj=bigteach)](https://solved.ac/profile/bigteach)
