@@ -37,9 +37,10 @@ cd BitNet
 ```
 
 2. Install the dependencies
-(Recommended) Create a new conda environment
-```
 
+(Recommended) Create a new conda environment
+
+```
 conda create -n bitnet-cpp python=3.9
 conda activate bitnet-cpp
 
