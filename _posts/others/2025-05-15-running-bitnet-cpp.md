@@ -37,8 +37,9 @@ cd BitNet
 ```
 
 2. Install the dependencies
+(Recommended) Create a new conda environment
 ```
-# (Recommended) Create a new conda environment
+
 conda create -n bitnet-cpp python=3.9
 conda activate bitnet-cpp
 
@@ -52,8 +53,9 @@ After install dependency you should add below code to 3rdparty/llama.cpp/common/
 ```
 
 3. Build the project
+Manually download the model and run with local path
 ```
-# Manually download the model and run with local path
+
 huggingface-cli download microsoft/BitNet-b1.58-2B-4T-gguf --local-dir models/BitNet-b1.58-2B-4T
 python setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
 
@@ -61,8 +63,9 @@ python setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
 
 # basic usage
 below code is run bitnet chat mode
+Run inference with the quantized model
 ```
-# Run inference with the quantized model
+
 python run_inference.py -m models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf -p "You are a helpful assistant" -cnv
 ```
 
@@ -157,7 +160,7 @@ Some of the well-known large language models include:
 
 These models are typically implemented as a neural network, which allows them to learn patterns and relationships in the data they're trained on. This enables them to generate coherent and contextually appropriate responses to a wide range of inputs.
 
->
+
 llama_perf_sampler_print:    sampling time =       9.79 ms /   197 runs   (    0.05 ms per token, 20128.74 tokens per second)
 llama_perf_context_print:        load time =     575.88 ms
 llama_perf_context_print: prompt eval time =   79965.76 ms /    62 tokens ( 1289.77 ms per token,     0.78 tokens per second)
