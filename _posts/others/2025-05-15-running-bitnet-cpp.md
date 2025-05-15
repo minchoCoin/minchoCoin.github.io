@@ -54,7 +54,9 @@ After install dependency you should add below code to 3rdparty/llama.cpp/common/
 ```
 
 3. Build the project
+
 Manually download the model and run with local path
+
 ```
 
 huggingface-cli download microsoft/BitNet-b1.58-2B-4T-gguf --local-dir models/BitNet-b1.58-2B-4T
@@ -64,18 +66,22 @@ python setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
 
 # basic usage
 below code is run bitnet chat mode
+
 Run inference with the quantized model
+
 ```
 
 python run_inference.py -m models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf -p "You are a helpful assistant" -cnv
 ```
 
 you can set token length using the prompt below
+
 ```
 
 python run_inference.py -m models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf -p "You are a helpful assistant" -cnv -n 1000
 
 ```
+
 run inference.py usage
 
 ```
