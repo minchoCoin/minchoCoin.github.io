@@ -22,6 +22,13 @@ HumanEval 벤치마크 기준 92%의 성능을 보여준다(Cluade 3.5 sonnet).
 
 [출처](https://x.com/AnthropicAI/status/1803790676988920098)
 
+# Gemini
+[https://gemini.google.com/](https://gemini.google.com/)
+
+Humanity's Last Exam에서 18.8 성능을 달성하였다.
+
+[출처](https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/#gemini-2-5-pro)
+
 # Perplexity
 [https://www.perplexity.ai/](https://www.perplexity.ai/)
 
