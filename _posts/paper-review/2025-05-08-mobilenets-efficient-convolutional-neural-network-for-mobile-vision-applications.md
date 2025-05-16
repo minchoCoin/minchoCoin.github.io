@@ -346,6 +346,28 @@ Using the distillation to MobileNet architecture)
 
 # Appendix
 
+## Running MobileNets with Tensorflow
+- You can run Mobilenet pretrained wiht Imagenet on Tensorflow
+- Some parameters
+    - Alpha for width multiplier
+    - Depth_multiplier for resolution multiplier
+- Less inference time and higher accuracy than VGG16
+
+[tf.keras.applications.MobileNet docs](https://www.tensorflow.org/api_docs/python/tf/keras/applications/MobileNet)
+
+![mobilenet api](/assets/images/mobilenet/fig21.png)
+
+(Figure 21. MobileNet on Tensorflow)
+
+(Table 13. Inference results of pre-trained MobileNet and VGG16 on 1,000 ImageNet images using a CPU(Intel Xeon 2.20GHz) on Colab.)
+
+![table13](/assets/images/mobilenet/Table13.PNG)
+
+you can download the Colab code on the link below
+
+[Click this link to view the code](https://colab.research.google.com/drive/1GohXGb5C-sPx9LXPGEsEWschnSQRnUXJ?usp=sharing)
+
+
 ## Standard convolution layer
 - Takes as input a $M\times D_F\times D_F$ feature map $F$, M is number of input channel, $D_F$ is width and height of input feature map
 - Produces a $N\times D_G\times D_G $ feature map $G$, N is number of channel and $D_G$ is width and height of output feature map
@@ -356,7 +378,7 @@ Using the distillation to MobileNet architecture)
 
 ![alt text](/assets/images/mobilenet/fig18.png)
 
-(Figure 13. Standard convolution filters)
+(Figure 14. Standard convolution filters)
 
 ### Computational cost of standard convolution layer
 - assuming one stride and same padding, input spatial size and output spatial size are same
@@ -416,7 +438,7 @@ $$ BN(X) = \gamma \left( \frac{X-\mu_{batch}}{\sigma_{batch}} \right) + \beta$$
 
 ![alt text](/assets/images/mobilenet/fig19.png)
 
-(Figure 14. RPN(left) and Faster R-CNN(right))
+(Figure 15. RPN(left) and Faster R-CNN(right))
 
 ## SSD
 - Employs multi scale feature maps for detecting objects of different sizes
@@ -428,4 +450,4 @@ $$ BN(X) = \gamma \left( \frac{X-\mu_{batch}}{\sigma_{batch}} \right) + \beta$$
 
 ![alt text](/assets/images/mobilenet/fig20.png)
 
-(Figure 15. SSD structure (left) and Default boxes (right))
+(Figure 16. SSD structure (left) and Default boxes (right))
