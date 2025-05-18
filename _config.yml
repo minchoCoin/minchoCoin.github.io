@@ -108,7 +108,7 @@ author:
   avatar           : "/assets/images/programming-3647303_1280.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Just Do it"
   location         : "Somewhere"
-  email            : "taehun5508@gmail.com"
+  email            : 
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
