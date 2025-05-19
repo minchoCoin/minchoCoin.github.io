@@ -108,7 +108,7 @@ author:
   avatar           : "/assets/images/programming-3647303_1280.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Just Do it"
   location         : "Somewhere"
-  email            :
+  email            : 
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -125,6 +125,9 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/minchoCoin"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-file"
+      #url: "https://www.linkedin.com/in/taehun-kim-351185350/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
