@@ -95,7 +95,7 @@ align vector $\textbf{a}_t(s)$ indicates the proportion of attention that the de
 
 
 
-$$ \textbf{a}_t(s) = \frac{\exp (\textbf{score}(\textbf{h}_t, \textbf{h}_s))}{\sum_{s'}\exp (\textbf{score}(\textbf{h}_t, \textbf{h}_{s'}))} $$
+$$ \textbf{a}_t(s) = align(\textbf{h}_t, \textbf{h}_s)=\frac{\exp (\textbf{score}(\textbf{h}_t, \textbf{h}_s))}{\sum_{s'}\exp (\textbf{score}(\textbf{h}_t, \textbf{h}_{s'}))} $$
 
 ![fig2](/assets/images/attention_nmt/fig2.PNG){: .align-center}
 
@@ -125,3 +125,36 @@ $$ \textbf{a}_t = softmax(\textbf{W}_a \textbf{h}_t)$$
 Given the alignment vector as weights, the context vector is computed as the weighted average over all the source hidden states in each top layer of encoder $E$
 
 $$ \textbf{c}_t=\sum_{i \in E} \textbf{a}_t(i)\textbf{h}_i$$
+
+## Local Attention
+
+The global attention ahs a drawback that it has to attend to all words on the source(encoder) side for each target word, which is expensive and can potentially render it impractical to translate longer sequences
+
+The author proposes a local attention mechanism that chooses to focus only on a small subset of the source positions per target word.
+
+![fig3](/assets\images/attention_nmt/fig3.PNG){: .align-center}
+
+The local attention mechanism selectively focuses on a small window of context and is differentiable.
+
+The model first generates an aligned position $p_t$ for each target word at time $t$. The context vector $c_t$ is then derived as a weighted average over the set of source hidden states within the window $[p_t−D, p_t+D]$.  $D$ is empirically selected.
+
+Unlike the global approach, the local alignment vector $\textbf{a}_t$ is now fixed-dimensional, i.e., size of window $R^{2D+1}$. The authors consider two variants of the model as below
+
+$Monotonic$ alignment (local-m): simply set $p_t=t$, assuming that source and target sequences are roughly monotonically aligned. The alignment vector $\textbf{a}_t$ is defined same as global attention. this means that the word at position $t$ in source sentence appears at position $t$ in target sentence.
+
+$Predictive$ alignment (local-p): The model predicts an aligned position(i.e., the encoder hidden state aligned with the decoder time step $t$) as follows
+
+$$ p_t = S\cdot sigmoid(\textbf{v}_p^\top \tanh (\textbf{W}_p \textbf{h}_t))$$
+
+$\textbf{v}_p$ and $\textbf{W}_p$ are the learnable parameters(model parameters). and $S$ is the source sentence length. Since output of sigmoid function is in 0 to 1, $p_t \in [0,S]$
+
+Alignment weights are now defined as
+
+$$\textbf{a}_t = align(\textbf{h}_t, \textbf{h}_s) \exp -(\frac{(s-p_t)^2}{2\sigma^2})$$
+
+align function is same as in global attention, and the standard deviation $\sigma$ is empirically set as $\frac{D}{2}$
+
+By multiplying exp term, we can pay more attention to aligned position.
+
+## Input-feeding approach
+
