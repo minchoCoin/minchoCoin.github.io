@@ -68,8 +68,9 @@ Training objective is
 
 $$ J_t=\sum_{(x,y)\in D} - \log p(y|x) $$
 
+with D being parallel training corpus, $ x $ being input sentence, $ y $ being target sentence. 
 
-with D being parallel training corpus, $ x $ being input sentence, $ y $ being target sentence. The higher the probability the model gives the correct answer, the smaller the $ -\log p(y|x) $ value
+The higher the probability the model gives the correct answer, the smaller the $ -\log p(y|x) $ value
 
 By minimizing the sum of these values in all training data, the performance of the model is improved.
 
