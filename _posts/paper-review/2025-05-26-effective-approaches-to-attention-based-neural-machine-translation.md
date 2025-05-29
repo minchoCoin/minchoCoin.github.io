@@ -157,4 +157,38 @@ align function is same as in global attention, and the standard deviation $\sigm
 By multiplying exp term, we can pay more attention to aligned position.
 
 ## Input-feeding approach
+In above global and local attention, the attentional decisions are made independently(the model can't recognize the previous attentional decision and attentional hidden state).
+
+Whereas, in standard machine translation, a coverage set is often maintained during the translation process to keep track of which source words have been translated.
+
+Likewise, in attentional NMTs, alignment decisions should be made considering the past alignment(attention) information
+
+To address that, the authors propose an input-feeding approach in which attentional vectors $\tilde{h}_t$ are concatenated with inputs at the next steps
+
+$$ input_{cur} = [\tilde{h}_{prev};output_{prev}]$$
+
+![fig4](/assets/images/attention_nmt/fig4.PNG){: .align-center}
+
+In figure 4, input is concatenation of previous attentional vector $\tilde{h}_t$ and previous output $X$
+
+# Experiments
+Evaluate the effectiveness of the models on the [WMT translation tasks](https://machinetranslate.org/wmt) between English and German in both directions
+
+performances are reported in case-sensitive BLEU on newstest2014 and 2015.
+
+quality are reported in two types of BLEU, tokenized BLEU and NIST BLEU.
+
+BLEU measure how many n-grams appear in the machine translation result are included in the reference.
+
+In Case sensitive BLEU, 'The' and 'the' is different word.
+
+Tokenized BLEU measure the BLEU based on the tokenized text
+
+```
+The cat's toy is red.
+
+(the, cat, 's, toy, is, red, .)
+```
+
+In NIST BLEU, rare n-grams are considered more important information and give higher scores
 
