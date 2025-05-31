@@ -192,3 +192,70 @@ The cat's toy is red.
 
 In NIST BLEU, rare n-grams are considered more important information and give higher scores
 
+## Training details
+- All models are trained on the WMT 14 training data consisting of 4.5M sentences pairs with 116M English words and 110M German words
+
+- Limit vocabularies to be the top 50k most frequent words for both languages.
+    - Words not in these shortlisted vocabularies are converted into a universal token
+- Stacking LSTM models have 4 layers, each with 1000 cells, and 1000-dimensional embeddings
+
+```py
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+model = Sequential()
+model.add(LSTM(1000, return_sequences=True, input_shape=(100, 1000)))
+model.add(LSTM(1000, return_sequences=True))
+model.add(LSTM(1000, return_sequences=True))
+model.add(LSTM(1000))
+```
+
+- Empirically set the window sizeD = 10.
+
+## English-German Results
+
+![table1](/assets/images/attention_nmt/table1.PNG){: .align-center}
+
+![table2](/assets/images/attention_nmt/table2.PNG){: .align-center}
+
+## German-English Results
+
+![table3](/assets/images/attention_nmt/table3.PNG){: .align-center}
+
+# Analysis
+
+## Learning curves
+
+Perplexity(ppl) is a metric that measures how well a language model predicts next token based on previous words
+
+$$ PPl = \exp (-\frac{1}{N} \sum_{i=1}^N \log P(w_i | w_1, ..., w_{i-1})) $$
+
+Lower perplexity means the model is more confident and accurate in its prediction.
+
+For example, perplexity is low if the model predicts 'apple' as 95% and 'melon' as 5%. On the other hands, it is high if the model predicts 'apple' as 55% and 'melon' as 45%.
+
+![fig5](/assets/images/attention_nmt/fig5.PNG){: .align-center}
+
+## Effects of Translating Long Sentences
+![fig6](/assets/images/attention_nmt/fig6.PNG){: .align-center}
+
+## Choices of Attentional Architectures
+
+![table4](/assets/images/attention_nmt/table4.PNG)
+
+## Alignment Quality
+
+Evaluate the alignment quality using the alignment error rate (AER) metric
+
+Decoding attentional status between words in English sentences and words in German sentences
+
+![table6](/assets/images/attention_nmt/table6.PNG)
+
+![fig7](/assets/images/attention_nmt/fig7.PNG)
+
+## Conclusion
+- propose two simple and effective
+attentional mechanisms for neural machine translation: global attention and local attention
+
+- local attention yields
+large gains of up to 5.0 BLEU over non-attentional models
