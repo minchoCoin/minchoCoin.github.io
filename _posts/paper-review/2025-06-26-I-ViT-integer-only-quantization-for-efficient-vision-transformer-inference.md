@@ -109,7 +109,8 @@ We apply simplest symmetric uniform quantization as follows
 - $R\approx S\cdot I$, where $I=\lfloor \frac{clip(R,-m,m)}{S} \rceil, S=\frac{2m}{2^k-1}$
 - Where $R$ and $I$ denote the floating point values and the quantized integer values, respectively
 - $S$ is the is the scaling factor of quantization, $k$ is the quantization bit-precision, and $\lfloor \rceil$ is the round operator
-- m is the clipping value determined by the min-max method, $m=max(|R|)$
+
+- m is the clipping value determined by the min-max method, $m=\max(|R|)$
 
 To avoid dequantization and achieve integer-only inference, we apply the dyadic arithmetic pipeline for linear operations
 - Since this is based on the homogeneity condition, $Matmul(S_Q\cdot I_Q, S_K\cdot I_K)=S_Q\cdot I_Q \cdot Matmul(I_Q,I_K)$, it is not applicable to the case of non-linearity, e.g., $Softmax(S_A \cdot I_A) \neq S_A \cdot Softmax(I_A)$
@@ -121,7 +122,7 @@ When the inputs are $Q=(S_Q,I_Q)$ and $K=(S_K, I_K)$, the attention matrix is ca
 - $A'= S_Q\cdot S_K\cdot (I_Q \times I_K^T)$, where $I_Q \times I_K^T$ performs integer-only arithmetic
 
 However, $I_Q \times I_K^T$ can exceed INT8 range, so we need to requantize as follows
-- $A=S_A\cdot I_A$, $I_A=\lfloor \frac{A'}{S_A} \rceil=\lfloor \frac{S_Q\cdot S_K}{S_A}\cdot (I_Q\times I_K^T) \rceil$, where $S_A=\frac{2m}{2^k-1}, m=max(|A'|)$
+- $A=S_A\cdot I_A$, $I_A=\lfloor \frac{A'}{S_A} \rceil=\lfloor \frac{S_Q\cdot S_K}{S_A}\cdot (I_Q\times I_K^T) \rceil$, where $S_A=\frac{2m}{2^k-1}, m=\max(|A'|)$
 - Multiplication and division of scaling factors can be avoided by converting the rescaling to a dyadic number as follows: $DN(\frac{S_Q\cdot S_K}{S_A})=\frac{b}{2^c}$
 - To summarize, the integer-only arithmetic pipeline of MatMul can be denoted as follows: $I_A=(b\cdot (I_Q\times I_K^T))\gg c$
 
