@@ -175,7 +175,7 @@ Let $I_p=(I_\Delta+(I_\Delta \gg 1)-(I_\Delta \gg 4))$, the power term is denote
 - $I_0=\lfloor \frac{1}{S_\Delta} \rceil$, $q=\lfloor \frac{I_p}{-I_0} \rfloor$, $r=-(I_p-q\cdot (-I_0))$
 - $S_\Delta \cdot (-r) \in (-1,0]$
     - $\because q=\lfloor \frac{I_p}{-I_0} \rfloor \approx \lfloor -S_\Delta\cdot I_p \rfloor$
-    - $\therefore S_\Delta \cdot (-r)=S_\Delta \cdot (I_p+q\cdot I_0)\approx S_\Delta \cdot I_p + (S_\Delta \cdot \lfloor -S_\Delta \cdot I_p \rfloor \cdot I_0) \approx S_\Delta \cdot I_p + \lfloor S_\Delta \cdot I_p \rfloor$
+    - $\therefore S_\Delta \cdot (-r)=S_\Delta \cdot (I_p+q\cdot I_0)\approx S_\Delta \cdot I_p + (S_\Delta \cdot \lfloor -S_\Delta \cdot I_p \rfloor \cdot I_0) \approx S_\Delta \cdot I_p + \lfloor -S_\Delta \cdot I_p \rfloor$
 
 - $2^{S_\Delta\cdot (-r)}\approx \frac{S_\Delta \cdot (-r)}{2}+1=S_\Delta\cdot((-r)\gg 1 +I_0)$
 - $S_\Delta \cdot I_{exp}=S_\Delta \cdot ((-r) \gg 1)\approx e^{S_\Delta\cdot I_\Delta}$
