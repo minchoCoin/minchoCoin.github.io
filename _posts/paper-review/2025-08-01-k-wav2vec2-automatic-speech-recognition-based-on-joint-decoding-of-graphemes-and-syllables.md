@@ -68,7 +68,7 @@ $$sim=\frac{a^Tb}{\mid\mid a\mid\mid\mid\mid b\mid\mid} $$
 
 # Method
 Multi-task hierarchical architecture
-- In the grapheme encoder, a linear layer and softmax is adopted to project the encoded features into a grapheme vocabulary $g\in G = \left\{ ㄱ,ㄴ,ㄷ,...,ㅏ,ㅑ,...\right\}, p(g_f\mid c_f)$
+- In the grapheme encoder, a linear layer and softmax is adopted to project the encoded features into a grapheme vocabulary $g\in G =  (ㄱ,ㄴ,ㄷ,...,ㅏ,ㅑ,...), p(g_f\mid c_f)$
 
 - In the syllable encoder, a stack of transformer encoder is adopted for converting the encoded features to a sequence of hidden vector ℎ to capture the relationship between low-level and high-level information
 
