@@ -30,7 +30,7 @@ In the Korean writing system, letters are written in syllabic blocks, where one 
 - However, syllable-based models also have data sparseness problem for infrequently used syllables and the Out-Of-Vocabulary(OOV) problem when the training data is insufficient
     - OOV problem arises when syllables that do not appear in the training set appear in the test set
 
-![fig1](/assets/images/kwav2vec/fig1.PNG)
+![fig1](/assets/images/kwav2vec/fig1.png)
 
 (Figure 1. Figure 1. Grapheme(자소) and syllables(음절) in korean)
 
@@ -62,7 +62,7 @@ $$sim=\frac{a^Tb}{\mid\mid a\mid\mid\mid\mid b\mid\mid} $$
 - In fine-tuning, randomly initialized linear layer is added
     - Takes the contextualized representation and generate the words
 
-![fig2](/assets/images/kwav2vec/fig2.PNG)
+![fig2](/assets/images/kwav2vec/fig2.png)
 
 (Figure 2. Wave2Vec2.0 architecture)
 
