@@ -16,6 +16,8 @@ This is where I post summaries of my assignments and things I've studied on my o
 
 If you notice any mistakes in the content or grammar, feel free to leave a comment—I'd really appreciate it!
 
+[CV](https://drive.google.com/file/d/1JYDOlHIi1sUihe_GqZPXk8bQAlrz8i6m/view?usp=drive_link)
+
 # Contact
 Please feel free to reach out
 
