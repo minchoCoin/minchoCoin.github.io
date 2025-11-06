@@ -33,9 +33,14 @@ $$\Psi (x,t) = e^{i(kx-\omega t)}$$
 
 $$ \frac{\partial}{\partial t}\Psi = -i\omega e^{i(kx-\omega t)} = -\frac{iE}{\hbar}\Psi(\because E=\hbar \omega)$$
 
+양변에 $i\hbar$ 를 곱하면
+
 $$ \therefore i\hbar \frac{\partial}{\partial t} \Psi = E\Psi$$
 
-$$ \frac{\partial}{\partial x}\Psi = -ik e^{i(kx-\omega t)} = -\frac{ip}{\hbar}\Psi(\because p=\hbar k)$$
+$$ \frac{\partial}{\partial x}\Psi = ik e^{i(kx-\omega t)} = \frac{ip}{\hbar}\Psi(\because p=\hbar k)$$
+
+
+양변에 $-i\hbar$ 를 곱하면
 
 $$ \therefore -i\hbar \frac{\partial}{\partial x} \Psi = p\Psi$$
 
