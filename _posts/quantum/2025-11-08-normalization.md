@@ -35,3 +35,7 @@ $$\int_{0}^{a} (A(x/a))^2 dx + \int_{a}^{b} (A(b-x)/(b-a))^2 dx = 1 $$
 $$ \therefore \frac{A^2a}{3} + \frac{A^2(b-a)}{3} = 1 $$
 
 $$\therefore A = \sqrt{\frac{3}{b}} $$
+
+$x$ 의 기댓값은 다음과 같다.
+
+$$\int_{0}^{a} (A(x/a))^2 x dx + \int_{a}^{b} (A(b-x)/(b-a))^2 xdx = A^2 \frac{b(2a+b)}{12} = \frac{2a+b}{4} $$
