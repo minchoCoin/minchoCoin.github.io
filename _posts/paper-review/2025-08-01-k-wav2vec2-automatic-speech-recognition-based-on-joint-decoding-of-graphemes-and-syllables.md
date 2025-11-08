@@ -92,7 +92,7 @@ To leverage the ASR performance with limited data, we explore cross-lingual tran
 The join decoder combines low-level and high-level beam search results to find the best sequence within a limited amount of time
 - We used the CTC beam search decoder, which decodes iteratively to find candidates over time-steps of CTC output and scores them with given probability of each time-step
 - The objective of the joint decoder is to find the most probable sequence 𝑌 ̂ among the candidates
-    - $\hat {Y} = argmax_{\hat {Y} \in \hat{S} \cup\hat{G}} (\gamma p_{syll}^{ctc}(Y\mid X) + (1-\gamma)p_{grap}^{ctc}(Y|X))$
+    - $\hat {Y} = argmax_{\hat {Y} \in \hat{S} \cup\hat{G}} (\gamma p_{syll}^{ctc}(Y\mid X) + (1-\gamma)p_{grap}^{ctc}(Y\vert X ))$
     - Non-overlapped candidates of the grapheme beam search exist $\hat G - (\hat S \cap \hat G)$, alleviating the OOV problem
         - There isn’t ‘깄‘ in syllable, but grapheme can generate ‘깄’ via ㄱ+ㅣ+ㅆ
     - In Wav2Letter, KenLM was utilized for beam searching
