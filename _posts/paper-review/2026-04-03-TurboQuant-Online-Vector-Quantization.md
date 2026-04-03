@@ -769,6 +769,22 @@ This is the main summary figure for comparing the two quantizers as compression 
 
 ![Final TurboQuant comparison](/assets/images/turboquant/10.TurboQuant_final_simulation_fix.png)
 
+### 9. Quantized-Only Similarity and QK Softmax
+
+This experiment validates two practical points:
+
+- similarity can be estimated directly from quantized vectors (index/codebook domain) without reconstructing to the original space
+- when $Q$ is not quantized but $K$ is quantized, the resulting softmax distribution is still close to full precision
+
+The figure includes:
+
+- true similarity vs quantized-only similarity scatter
+- quantized-only similarity error distribution across bit widths
+- one-query softmax distribution comparison ($Q$ full precision, $K$ quantized)
+- JS-divergence of softmax distributions versus bit width
+
+![Quantized-only similarity and softmax](/assets/images/turboquant/11.TurboQuant_quantizaiton_simulation.png)
+
 ## My Conclusion
 
 After implementing and testing the main components of the paper, my overall conclusion is that the random-rotation viewpoint is the key idea that makes the whole framework work. Once the vector is rotated, the coordinate distribution becomes predictable, and that allows a scalar codebook to be designed in a principled way rather than heuristically.
