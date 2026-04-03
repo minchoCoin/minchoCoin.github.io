@@ -18,6 +18,8 @@ This article explained the TurboQuant paper.
 
 TurboQuant paper: [https://arxiv.org/abs/2504.19874](https://arxiv.org/abs/2504.19874)
 
+My TurboQuant practice experiment code: [https://github.com/minchoCoin/TurboQuant_practice](https://github.com/minchoCoin/TurboQuant_practice)
+
 ## Lemma 1 Explanation
 
 Lemma 1 in `TurboQuant/main.tex` states the following:
