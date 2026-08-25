@@ -36,12 +36,12 @@ In this presentation, we propose a parameter-efficient attractor tuning method t
 - Only the LoRA weights and the attractor module are trained to improve the reasoning performance of the pretrained SLM
 
 # Related Works
-## Attractor[2]
+## Attractor(2)
 Attractor Models consist of two modules: the backbone module and attractor module
 - The backbone module is typically a larger Transformer network, which generate initial output embedding
 - The attractor module is typically a smaller Transformer network, which refines the initial output until convergence
 
-## Attractor module[2]
+## Attractor module(2)
 - Starting from the backbone proposal $\tilde{y}_0$, it repeatedly refines the output embedding
   - $ \tilde{y}_{t+1} = T_{\theta_a}(\tilde{y}_t,\tilde{y}_0), where \tilde{y}_0 = T_{\theta_b}(x) $
   - Persistently inject the initial guess at every refinement step
