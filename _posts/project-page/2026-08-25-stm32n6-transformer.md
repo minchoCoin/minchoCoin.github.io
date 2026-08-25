@@ -2,9 +2,9 @@
 title: "Implementation and Performance Evaluation of Vision Transformer Model Based on MCU-NPU(STM32N6)"
 last_modified_at: 2026-08-25T12:53:13+09:00
 categories:
-    - others
+    - project-page
 tags:
-    - others
+    - project-page
 
 toc: true
 toc_label: "My Table of Contents"
