@@ -86,6 +86,7 @@ We use the nanochat[5] training recipe, training on FineWeb-Edu[6].
 We train LoRA and Attractor module while freezes the SmolLM2-135M[7] backbone
 
 (Table 1. Training details)
+
 | Parameter | Value |
 |---|---:|
 | Backbone model | SmolLM2-135M |
