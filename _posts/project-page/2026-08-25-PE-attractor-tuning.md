@@ -43,11 +43,11 @@ Attractor Models consist of two modules: the backbone module and attractor modul
 
 ## Attractor module[2]
 - Starting from the backbone proposal $\tilde{y}_0$, it repeatedly refines the output embedding
-  - $ \tilde{y}_{t+1} = T_{\theta_a}(\tilde{y}_t,\tilde{y}_0)$, where $\tilde{y}_0 = T_{\theta_b}(x) $
+  - $ \tilde{y}_{t+1} = T_{\theta_a}(\tilde{y}_t,\tilde{y}_0), where \tilde{y}_0 = T_{\theta_b}(x) $
   - Persistently inject the initial guess at every refinement step
 
 - Rather than rolling out recurrent steps to reach a fixed point, attractor solve for the convergence
-  - $\mathcal{A}_{\theta_a}(\tilde{y}^{\star};\tilde{y}_0) := T_{\theta_a}(\tilde{y}^{\star},\tilde{y}_0) - \tilde{y}^{\star} = 0\Rightarrow \tilde{y}^{\star} = \mathrm{RootFind}(\mathcal{A}_{\theta_a}(\cdot;\tilde{y}_0); y_0)$
+  - $\mathcal{A}_{\theta_a}(\tilde{y}^{*};\tilde{y}_0) := T_{\theta_a}(\tilde{y}^{*},\tilde{y}_0) - \tilde{y}^{*} = 0\Rightarrow \tilde{y}^{*} = \mathrm{RootFind}(\mathcal{A}_{\theta_a}(\cdot;\tilde{y}_0); y_0)$
 
 - The **RootFind** algorithm uses Anderson acceleration, which combines a small window of past iterates and residuals to reach the fixed point faster than plain recursion
   - $y_{t+1} = \sum \alpha_i y_i$
