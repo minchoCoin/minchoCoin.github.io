@@ -534,7 +534,7 @@ Every problem whose solution can be verified in polynomial time could also be so
 
 For example, NP-complete problems such as SAT and 3-SAT would have polynomial-time algorithms.
 
-Instead of relying on exponential-time approaches such as (O(2^n)), these problems could theoretically be solved in (O(n^k)) time for some fixed constant (k).
+Instead of relying on exponential-time approaches such as $O(2^n)$, these problems could theoretically be solved in $O(n^k)$ time for some fixed constant (k).
 
 As of now, neither P = NP nor P ≠ NP has been proven. Although most complexity theorists believe that P ≠ NP, the question remains open.
 
@@ -550,9 +550,10 @@ However, two distinctions are important:
 
 P = NP does not imply that every exponential-time algorithm automatically becomes polynomial-time. Rather, it establishes the existence of polynomial-time algorithms for problems in NP.
 
-Polynomial time does not necessarily mean practical efficiency. An algorithm with complexity (O(n^{100})), for example, is polynomial-time but may still be computationally infeasible.
+Polynomial time does not necessarily mean practical efficiency. An algorithm with complexity $O(n^{100})$, for example, is polynomial-time but may still be computationally infeasible.
 
 Therefore, proving P = NP would fundamentally change our understanding of computational complexity and undermine the theoretical foundations of much of modern computational cryptography, even if the discovered polynomial-time algorithms were not immediately practical.
+
 ---
 
 
