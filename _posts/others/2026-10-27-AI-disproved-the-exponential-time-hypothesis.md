@@ -486,7 +486,76 @@ even if ETH and SETH are false.
 
 Consequently, the new algorithms do not resolve the P vs. NP problem.
 
+### 6.1 And then what is P vs NP problem?
+The P vs. NP problem is one of the most fundamental unsolved problems in theoretical computer science. It asks whether every problem whose solution can be efficiently verified can also be efficiently solved.
+
+To understand this question, we first need to distinguish between two complexity classes: P and NP.
+
+#### P (Polynomial Time)
+
+P is the class of decision problems that can be solved by a deterministic algorithm in polynomial time.
+
+An algorithm runs in polynomial time if its time complexity is bounded by (O(n^k)), where (n) is the input size and (k) is a fixed constant.
+
+#### NP (Nondeterministic Polynomial Time)
+
+NP is the class of decision problems for which a proposed solution (also called a certificate or witness) can be verified in polynomial time.
+
+A problem may be difficult to solve, but if a candidate solution is provided, checking whether it is correct can be computationally efficient.
+
+#### The Relationship Between P and NP
+
+Every problem in P also belongs to NP because a solution that can be found in polynomial time can also be verified in polynomial time.
+
+Therefore:
+
+$$
+\boxed{P\subseteq NP}
+$$
+However, whether the reverse inclusion holds remains unknown.
+
+The central question is:
+
+$$
+\boxed{P\overset{?}{=}NP}
+$$
+
+There are two possibilities:
+
+1. If P ≠ NP
+
+Some problems have solutions that can be verified in polynomial time but cannot be solved in polynomial time.
+
+This would establish a fundamental distinction between efficiently finding solutions and efficiently verifying them.
+
+2. If P = NP
+
+Every problem whose solution can be verified in polynomial time could also be solved in polynomial time.
+
+For example, NP-complete problems such as SAT and 3-SAT would have polynomial-time algorithms.
+
+Instead of relying on exponential-time approaches such as (O(2^n)), these problems could theoretically be solved in (O(n^k)) time for some fixed constant (k).
+
+As of now, neither P = NP nor P ≠ NP has been proven. Although most complexity theorists believe that P ≠ NP, the question remains open.
+
+#### What if P=NP?
+
+If P = NP were proven, polynomial-time algorithms would exist for all problems in NP, including NP-complete problems.
+
+This would also have profound consequences for cryptography. In particular, cryptographic security based on the existence of computationally hard one-way functions would no longer be possible in the usual asymptotic sense.
+
+Problems that currently appear to require exponential or subexponential computational effort could, in principle, become solvable in polynomial time.
+
+However, two distinctions are important:
+
+P = NP does not imply that every exponential-time algorithm automatically becomes polynomial-time. Rather, it establishes the existence of polynomial-time algorithms for problems in NP.
+
+Polynomial time does not necessarily mean practical efficiency. An algorithm with complexity (O(n^{100})), for example, is polynomial-time but may still be computationally infeasible.
+
+Therefore, proving P = NP would fundamentally change our understanding of computational complexity and undermine the theoretical foundations of much of modern computational cryptography, even if the discovered polynomial-time algorithms were not immediately practical.
 ---
+
+
 
 ## 7. Why Does This Matter?
 
